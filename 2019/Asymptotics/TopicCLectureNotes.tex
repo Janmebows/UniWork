@@ -1,0 +1,1804 @@
+\documentclass{/home/janmebows/Documents/LatexTemplates/myassignment}
+
+%%Document info
+\title{Practical Asymptotics (App Topic C)}
+\begin{document}
+
+\maketitle
+
+
+%%%Document starts here
+
+
+\section{Introduction}
+This course looks into finding `approximately analytic' solutions - this will be like truncating taylor series kinda stuff afaik.
+
+In practice we will use this to make the approximately analytic solutions and then apply it to computation for numerical solutions
+We will develop a tool-kit of asymptotic techniques and apply them to real-world modelling problems
+The plan is:
+\begin{itemize}
+    \item Intro to asymptotics
+    \item Perturbation/asymptotic methods
+    \item Boundary layer theory and asymptotic matching
+    \item Multiscale methods and homogenisation theory
+    \item TBD probably asymptotic approximation of integrals or asymptotics beyond-all-orders
+\end{itemize}
+
+\section{Introduction to asymptotics}
+\subsection{Fun example:}
+Heres a `difficult problem':\\
+Lets find the real solution to the quintic equation
+\[x^5 + x =1\]
+We know that there are 5 roots since $x^5$ is the highest power (some of which are probably complex)
+There are no exact solutions for these roots (only works up to $x^4$).
+We could easily solve this numerically, but another approach is to consider a related problem:\\
+\[x^5 + \epsilon x = 1\]
+Where the parameter $\epsilon$ will be small (and to go back to the previous equation we have to set $\epsilon=1$).
+
+Denote the real root $x=a(\epsilon)$. Where $a(\epsilon=1)$ will be the solution to the original equation.  This is a `perturbation' problem, it features a parameter which when set to $0$ is easily solvable. We care about when $\epsilon\neq 0$ however.
+Set $\epsilon=0$:
+\begin{align*}
+    x^5 + 0(x) &= 1\\
+    a_0^5 = 1 &\implies a_0 = 1\\
+\end{align*}
+
+Perturbation series (ansatz)
+\begin{align*}
+    a(\epsilon) &= \sum_{n=0}^\infty a_n \epsilon^n\\
+    &= a_0 + \epsilon a_1 + \epsilon^2 a_2 + \hdots\\
+    &= 1 + \epsilon a_1 + \epsilon^2 a_2 + \epsilon^3a_3 + \hdots\\
+\end{align*}
+Sub this series into the equation we want to solve:
+\begin{align*}
+    x^5 + \epsilon x =1\\
+    \left(1 + \epsilon a_1 + \epsilon^2 a_2 + \epsilon^3 a_3 + \hdots \right)^5  + \epsilon\left(1 + \epsilon a_1 + \epsilon^2 a_2 + \epsilon^3 a_3 + \hdots \right) = 1\\
+\end{align*}
+Expanding the 5th power use the binomial theorem, i.e.
+\[(A+B)^5 = A^5 + 5A^4B + 10A^3B^2 + 10A^2B^3 + 5AB^4 +  B^5\]
+\begin{align*}
+    &\left(1 + \epsilon a_1 + \epsilon^2 a_2 + \epsilon^3 a_3 + \hdots \right)^5\\
+    &= \left(1 + \epsilon (a_1 + \epsilon a_2 + \epsilon^2 a_3 + \hdots) \right)^5\\
+    &=(1 + 5\epsilon (a_1 + \epsilon a_2 + \epsilon^2 a_3 + \hdots)\\
+    &+ 10 (\epsilon (a_1 + \epsilon a_2 + \epsilon^2 a_3 + \hdots))^2\\
+    &+ 10\epsilon (a_1 + \epsilon a_2 + \epsilon^2 a_3 + \hdots)^3 \\
+    &+ 5\epsilon (a_1 + \epsilon a_2 + \epsilon^2 a_3 + \hdots)^4\\
+    &+ \epsilon (a_1 + \epsilon a_2 + \epsilon^2 a_3 + \hdots)^5)\\
+    &= 1 + \epsilon(5a_1) + \epsilon^2 (5a_2 + 10a_1^2) + \epsilon^3(5a_3 + 20a_1a_2 + 10a_2) + \hdots
+\end{align*}
+Which means:
+\begin{align*}
+    1 + \epsilon(5a_1) + \epsilon^2 (5a_2 + 10a_1^2) + \epsilon^3(5a_3 + 20a_1a_2 + 10a_2) + \hdots + \epsilon(1+\epsilon a_1 + \epsilon^2 a_2 + \epsilon^3 a_3 + \hdots) = 1\\
+    \epsilon(5a_1 +1) + \epsilon^2 (5a_2 + 10a_1^2 + a_1) + \epsilon^3(5a_3 + 20a_1a_2 + 10a_1^2 + a_2) + \hdots =0\\
+\end{align*}
+Equating powers:
+\[\epsilon^n \text{ gives:} \begin{cases}
+1=1&n=0\\
+5a_1 +1 =0 \implies a_1 = -\frac15 & n=1\\
+5a_2 + 10a_1^2 + a_1 = 0 \implies a_2 = -\frac1{25} & n=2\\
+5a_3 + 20a_1a_2 + 10a_1^3 + a_2 = 0 \implies a_3 = -\frac{1}{125}
+\end{cases}\]
+We also find $a_4 = 0$ for some reason. So the pattern doesn't fit
+This means:
+\[a(\epsilon) = 1 - \frac15 \epsilon - \frac1{25} \epsilon^2 - \frac1{125} \epsilon^3 + \hdots\]
+\[a(1) \approx 0.752 \quad a_{numerical} = 0.7549...\]
+
+We find that the solution actually moves away from the actual solution on the 8th and 9th terms
+
+We require the value of epsilon to be quite small such to converge to relatively accurate answers.\\
+
+We tried to convert the hard problem into several smaller easy(ish) problems. We will extend this to DEs and real-world applications soon.
+
+\subsection{Notation}
+$\sim$ (asymptotic) and $\ll$ (negligible)\\
+Say we have $f(x)$ and $g(x)$ then:
+\[f(x) \sim g(x), \quad x\to x_0\]
+This means that $f(x)$ is asymptotic to $g(x)$, and approaches it as $x$ goes to $x_0$
+This statement is equivalent to saying:
+\[\lim_{x\to x_0} \frac{f(x)}{g(x)} = 1\]
+There are two parts to this notation: the expression with the $\sim$ and the associated limit ($x\to x_0$). Strictly speaking, both of these are necessary for this to make sense.\\
+
+Example:
+\[\sin(x) \sim x, \quad x\to 0\]
+Which is equivalent to
+\[\lim_{x\to 0} \frac{\sin(x)}{x} = \lim_{x\to 0} \frac{\cos(x)}{1} = 1\]
+This is a way to check for asymptotic relationships.
+
+More examples: 
+\[e^x \sim 1, \quad x\to0\]
+\[\frac1{\epsilon} \sim \frac1\epsilon + 1, \quad \epsilon\to 0\]
+\[\epsilon^2 \sim \epsilon^2 + \epsilon^3, \quad \epsilon\to 0\]
+\[x^{1/3} \sim 2, \quad x \to 8\]
+\[e^x \sim e^x + 2, \quad x\to\infty\]
+Of course for many of these you could use equality\\
+Similarly there is non-asymptotic statements:
+\[\epsilon^2 \not\sim \epsilon, \quad \epsilon\to 0\]
+\[\sin(x) \not\sim x^2, \quad x\to 0\]
+
+Cannot say things like:
+\[x^2 \sim 0, \quad x\to 0\]
+That would be very dumb\\
+Other notation
+\[f(x) \ll g(x), \quad x\to x_0\]
+Means that
+\[\lim_{x\to 0} \frac{f(x)}{g(x)} = 0\]
+I.e. it means $f(x)$ becomes much smaller than $g(x)$ as $x\to x_0$.\\
+Examples:
+\[\epsilon\ll \frac1\epsilon, \quad \epsilon\to 0\]
+\[\lim_{\epsilon\to 0} \frac{\epsilon}{\frac{1}{\epsilon}} = \lim_{\epsilon\to 0} \epsilon^2 = 0\]
+\[\frac1x \ll x, \quad x\to \infty\]
+\[\sqrt{x} \ll \sqrt[3]{x},\quad x\to 0^+\]
+Slightly less trivial example:
+\[\log(x)^5 \ll x^{1/4}, \quad x\to\infty\]
+\[x << -10, \quad x\to 0^+\]
+\[\lim_{x\to0^+}\frac{x}{-10} = 0\]
+So some counterintuitive cases work...
+\[af(x) \ll bg(x), \quad x\to x_0\]
+\[\text{if }f(x)\ll g(x), x\to x_0\]
+\[\text{since }\lim_{x\to x_0}\frac{af(x)}{bg(x)} = \frac{a}{b} \lim_{x\to x_0} \frac{f(x)}{g(x)} = 0 \]
+
+Asymptotic relations work like equations, normal arithmetic( +,-,/,$\times, \dd{}{},\int$) work but sometimes it may not be valid. For example it may not be valid to exponentiate both sides
+
+Switching between asymptotic and exact relations:\\
+Say we have 3 functions $f(x)$, $g(x)$ and $h(x)$
+\[f(x) = g(x) + h(x)\]
+With
+\[h(x) \ll g(x), \quad x\to x_0\]
+Then we have
+\[f(x) \sim g(x), \quad x\to x_0\]
+We could go the other way, starting with:
+\[f(x) \sim g(x), \quad x\to x_0\]
+Then:
+\[f(x) = g(x) + h(x), \quad \text{with } h(x)\ll g(x), \quad x\to x_0\]
+
+
+More examples:
+\[e^x \sim 1, \quad x\to0\]
+\[e^x = 1 + h(x), \quad h(x)\ll 1, \quad x\to0\]
+
+Unfortunately we can't infer much about $h(x)$ from this.
+
+If we consider the quintic again, but put the epsilon over the $x^5$ instead of the $x$.
+\[\epsilon x^5 + x =1\]
+This is an example of a \textbf{singular perturbation} problem, since the behaviour of this equation is fundamentally different in the limit $\epsilon\to 0$. 
+
+\section*{Method of dominant balance}
+A systematic way to analyse the behaviour of the equation in the limit $\epsilon\to0$ and converting the equation into a simpler asymptotic relation.
+Method:
+The three possibilities for $\epsilon x^5 + x =1 $ are
+\begin{enumerate}
+    \item $x\sim 1$ as $\epsilon\to 0$ (neglect $\epsilon x^5$)\\
+    This is saying $\epsilon x^5 \ll x$ and $\epsilon x^5 \ll 1$ as $\epsilon\to 0$
+    Starting with the first, this is equivalent to
+    \[\epsilon x^4 \ll 1, \quad \epsilon\to 0\]
+    Since $x\sim 1$:
+    \[\epsilon \ll 1, \epsilon\to 0\]
+    By the same token the second term is good.\\
+    So this first set looks good (i.e. one root near $x=1$).
+    \item $\epsilon x^5 \sim 1$ as $\epsilon\to 0$ (neglect $x$)\\
+    Saying $x \ll \epsilon x^5$ and $x\ll 1$ as $\epsilon\to0$. Starting with the asymptotic equation:
+    \begin{align*}
+        \epsilon x^5 &\sim 1,\quad \epsilon\to 0\\
+        x^5 &\sim \frac1\epsilon, \quad \epsilon\to 0\\
+        x &\sim \frac{\omega}{\epsilon^{1/5}}, \quad \epsilon\to 0
+    \end{align*}
+    Where $\omega^5 =1$\\
+    Note that the RHS gets infinitely large very quickly as $\epsilon\to0$, which is a contradiction since we have assumed $x \ll 1$, as $\epsilon\to 0$.\\
+    This logical inconsistency means this is not a valid balance.
+    \item $\epsilon x^5 \sim -x$ as $\epsilon\to 0$ (neglect $1$)\\
+    We are saying $1\ll \epsilon x^5$ and $1\ll x$ (we can drop the minus as it is a constant) as $\epsilon\to 0$ 
+    Look at the initial expression
+    \begin{align*}
+        \epsilon x^5 \sim -x, \quad \epsilon\to 0\\
+         x^4\sim -\frac{1}{\epsilon},\quad \epsilon\to0\\
+         x \sim \frac{\omega}{\epsilon^{1/4}}, \quad \epsilon\to0
+    \end{align*}
+    Where $\omega^4 = -1$. RHS blows up as $\epsilon\to 0$, but this is okay since we have said $1\ll -x$! I.e. $1$ is negligible compared to $x$ as $\epsilon\to0$.
+    For $1\ll \epsilon x^5, \quad \epsilon\to 0$
+    \begin{align*}
+         x \sim \frac{\omega}{\epsilon^{1/4}}, \quad \epsilon\to0\\
+         x^5 \sim \frac{\omega^5}{\epsilon^{5/4}},\quad \epsilon\to0\\
+         \epsilon x^5 \sim \frac{w^5}{\epsilon^{1/4}},\quad \epsilon\to 0
+    \end{align*}
+    The RHS blows up (again) which satisfies what we want.
+    We actually find that the $RHS$ has 4 roots, which makes up for the other 4 roots to the quintic
+    \end{enumerate}
+    
+    Consider a linear second-order homogeneous de in standard form:
+    \[y'' + a(x)y' + b(x) y = 0\]
+    Say we want to know about the \textbf{local behaviour} around $x=x_0$, and construct an approximate solution. This depends on the behaviour of $a(x)$ and $b(x)$ near $x=x_0$
+    \begin{enumerate}
+        \item $x=x_0$ is an ordinary point: use a Taylor series expansion
+        \[y = \sum_{n=0}^\infty a_n(x-x_0)^n\]
+        \item $x=x_0$ is a regular singular point: use a Frobenius expansion
+        \[y = (x-x_0)^\alpha \sum_{n=0}^\infty a_n\]
+        \item $x=x_0$ is an irregular singular point: use asymptotics. Start by assuming
+        \[y(x) = e^{S(x)}\]
+        And then construct a solution by repeatedly using the method of dominant balance.
+    \end{enumerate}
+    Example:
+    \[\frac{dy}{dx} - \frac12 y = 0\]
+    Use the $x=1/t$ transformation:
+    \[\frac{dy}{dt} + \frac{y}{2t^2} = 0\]
+    All points of the equation are ordinary, except $t=0$ ($x\to\infty$) which is an irregular singular point 
+    
+    \[\frac{dy}{dx} - \frac1{2x} y = 0\]
+    This has a regular singular point at $x=0$. What happens at $x=\infty$.
+
+    
+    \[\frac{dy}{dx} - \frac{1}{2x^2} y =0 \]
+    This has an irregular singular point at $x=0$. What happens at $x=\infty$?
+
+    Example:
+    The DE:
+    \[x^3 y'' = y\]
+    Lets look at the local behaviour as $x\to 0$. 
+    Solve with the method of dominant balance
+    Rearrange as
+    \[y'' = \frac1{x^3} y\]
+Irregular single point at $x=0$.
+I.e. $x^2\frac{1}{x^3} = \frac1x$ ... not analytic at $x=0$.
+
+Try forming solution of the form
+\begin{align*}
+	y&=e^{S(x)}\\
+	y'&=S' e^{S(x)}\\
+	y''&= S'' e^{S} + (S')^2 e^S\\
+	&= (S'' + (S')^2)e^S
+\end{align*}
+Where $S = S(x)$.
+
+Equation becomes:
+\[S'' + (S')^2 = \frac{1}{x^3}\]
+Now use the method of dominant balance.
+
+\begin{enumerate}
+	\item Neglect $(S')^2$:\\
+	$S'' \sim \frac{1}{x^3}$, $x\to 0$.
+	Integrate once:
+	\[S' \sim \frac{-1}{2x^2} \implies (S')^2 \sim \frac{1}{4x^4}, \quad x\to 0\]
+	But we have assumed $(S')^2 \ll \frac{1}{x^3}$, $x\to 0$. Contradiction since $\frac{1}{4x^4}$ grows faster than $\frac{1}{x^3}$ as $x\to 0$.
+
+	\item Neglect $S''$:\\
+	$(S')^2 \sim \frac{1}{x^3}$, $x\to 0$.
+	\[S' \sim \pm x^{-3/2}, \quad x\to 0\]
+	\[\implies S'' \sim \mp \frac32 x^{-5/2} \ll x^{-3}, \quad x\to 0\]
+	So the assumption is valid.\\
+
+
+	\item Neglect $\frac{1}{x^3}$:\\
+	$S'' \sim -(S')^2$, $x\to 0$\\
+	Let $T= S'$. Then the equation i s$T' \sim -T^2$ as $x\to 0$. Rearranging then integrating gives:
+	\[-\frac1{T^2} T' \sim 1\]
+	\[T^{-1} \sim x+a \sim a, \quad x\to 0 \]
+	\[(S')^2 \sim \frac{1}{a^2} \ll \frac{1}{x^3},\quad x\to 0\]
+	Which is a contradiction since we assumed that $\frac{1}{x^3}$ was negligible.
+
+\end{enumerate}
+
+
+So the valid balance is
+\begin{align*}
+	(S')^2 &\sim \frac{1}{x^3}, \quad x\to 0\\
+	\implies S' &\sim \pm x^{-3/2}, \quad x\to 0\\
+	S &\sim \mp 2x^{-1/2}, \quad x\to 0
+\end{align*}
+(we don't need the constant of integration since it will be negligible as $x\to 0$).\\
+
+We can convert this to an exact relation:
+	\[S = \mp 2x^{-1/2} + C(x)\]
+Where $C(x) \ll x^{-1/2}$, $x\to 0$.\\
+
+Now put this back into the S DE
+\begin{align*}
+S'' + (S')^2 &= \frac1{x^3}\\
+\mp \frac32 x^{-5/2} + C''(x) + (\pm x^{-3/2}) + C'(x))^2 = x^{-3}\\
+\mp \frac32 x^{-5/2} + C''(x) + x^{-3}) \pm 2 C'(x)x^{-3/2} + C'(x)^2 = x^{-3}\\
+\mp \frac32 x^{-5/2} + C''(x) \pm 2 C'(x)x^{-3/2} + C'(x)^2 = 0\\
+\end{align*}
+Use some dominant balance again. But fortunately we already know $C \ll x^{-1/2}$ as $x\to0$.
+Which means $C' \ll x^{-3/2}$ as $x\to0$ (can drop the constant) and $C'' \ll x^{-5/2},$ as $x\to 0$.
+This last statement simplifies our equation and it becomes
+\[\mp \frac32 x^{-5/2} \pm 2 C'(x)x^{-3/2} + C'(x)^2 = 0\]
+
+We also get (using the $C'\ll x^{-3/2}$) gives
+\[(C')^2 \ll C' x^{-3/2}\]
+Meaning that we can drop the $(C')^2$ term. Giving
+\[\mp \frac32 x^{-5/2} \pm 2 C'(x)x^{-3/2} = 0\]
+Solve $C$ now:
+\begin{align*}
+	2C' x^{-3/2} \sim \frac32 x^{-5/2}, \quad x\to 0\\
+	C' \sim \frac34 x^{-1} x\to 0\\
+	C \sim \frac34 \log(x), \quad x\to 0
+\end{align*}
+Again neglecting the constant of integration for the same reason as before
+
+\[S\sim \mp 2x^{-1/2} + \frac34 \log(x), \quad x\to 0\]
+
+But if we want to be exact again we would have to say
+\[C = \frac34 \log x + D(x)\]
+Where $D(x) \ll \log(x)$.
+Gives:
+\[C' = \frac34 \frac1x + D'\]
+\[C''= -\frac34 x^{-2} + D''\]
+Plugging this into the exact $C$ equation:
+
+\[\mp \frac32 x^{-5/2}  -\frac34 x^{-2} + D'' \pm 2x^{-3/2} (\frac34 \frac1x + D') + (\frac34 \frac1x + D')^2 = 0\]
+\[\mp  -\frac34 x^{-2} + D'' \pm 2x^{-3/2} D' + (\frac34 \frac1x + D')^2 = 0\]
+You end up with:
+\[0 = - \frac34 x^{-2} + D'' \pm 2D 'x^{-3/2} + (D')^2 + \frac{9}{16} x^{-2} + \frac32 x^{-1}D' \]
+\[0= -\frac3{16} x^{-2} + D'' + (\pm2x ^{-3/2} + \frac32 x^{-1})D' + (D')^2\]
+Can immediately neglect the $\frac32 x^{-1} D'$ term since $x^{-1} \ll x^{-3/2}$ as $x\to 0$ (this is easy to spot since they're both just x terms)
+We know the following about $D$:
+\begin{align*}
+    D &\ll \log x\\
+    D' &\ll x^{-1}\\
+    D'' &\ll -x^{-2}
+\end{align*}
+As $x\to 0$.
+
+The last of these means we can neglect the $D''$ term since theres an $x^{-2}$ term.
+\[0\sim -\frac3{16} x^{-2} + (\pm2x ^{-3/2} + \frac32 x^{-1})D' + (D')^2\]
+Multiplying the second line by D' gives $(D')^2 \ll x^{-1} D'$. And since we have already neglected the $x^{-1}D'$ term, we can neglect the $(D')^2$ term
+The remaining balance is then
+\[2x^{-3/2} D' \sim \pm \frac3{16} x^{-2}\]
+\[D' \sim \pm \frac{3}{32} x^{-1/2}, \quad x\to 0\]
+We need to integrate this BUT WE HAVE TO KEEP THE CONSTANT OF INTEGRATION. Since the right hand side vanishes as $x\to 0$ i.e. $x^{1/2} \ll 1$.
+
+\[D(x) - d \sim \pm \frac{3}{16} x^{1/2}\]
+Where $d$ is the constant of integration.
+So now we have 
+\[D(x) = d + \delta(x)\]
+Where $\delta(x) \sim \pm \frac3{16} x^{1/2}$
+
+So we could keep going but lets just consider
+\[S(x) \sim \mp 2x^{-1/2} + \frac34 \log x + d\]
+Exponentiating both sides gives
+\begin{align*}
+    y(x) \sim \exp\left(\mp 2x^{-1/2} + \frac34 \log x + d\right)\\
+    \sim c_1 x^{3/4} e^{2x^{-1/2}} = c_1 x^{3/4} e^{2x^{-1/2}} + c_2 x^{3/4} e^{-2x^{-1/2}}
+\end{align*}
+Where $c_1 =e^d$\\
+We can actually drop the $c_2$ term since that will get very small
+
+By plotting this and dividing it through gives a constant of about $0.15$
+Why could we exponentiate this???
+
+
+Procedure summary:
+\begin{enumerate}
+    \item Assume a solution of form
+    \[y= e^{S(x)}\]
+    Approximate $S(x)$ by:
+    \item Drop all negligible terms as $x\to 0$ (or whatever)
+    \item Solve the simpler asymptotic relation (verify assumptions about negligible terms)
+    \item Replace the asymptotic relation with an equation by introducing an arbitrary function which is $\ll$ than what we already found.
+    \item Repeat
+    \item When a 'controlling factor' is found - enough terms in the approximation to $S(x)$ that when we put them back into $y=e^{S(x)}$, adding additional terms will make no difference
+\end{enumerate}
+    
+    
+    
+\begin{align*}
+     2x^{-1/2} \sim 2x^{-1/2} + \frac34 \log x, \quad x\to 0\\
+     e^{2x^{-1/2}} \sim e^{2x^{-1/2}} x^{3/4}
+\end{align*}
+That second line is absolutely garbage.
+\[\lim_{x\to 0} \frac{e^{2x^{-1/2}}x^{3/4}}{e^{2x^{-1/2}} } = \lim_{x\to 0}\]
+In general if you have 
+\[f(x) \sim g(x), \quad x\to x_0\]
+And want to exponentiate:
+\[e^{f(x)} \sim e^{g(x)}, \quad x\to x_0\]
+This is only valid if:
+\[f(x) - g(x) \ll 1,\quad x\to x_0\]
+
+
+Example: solve the airy equation as $x\to \infty$ using the method of dominant balance
+\[y'' = xy\]
+Check $x\to \infty$ is an irregular singular point. Lets sub $x=1/t$ to get
+\[\frac{d^2y}{dt^2} + \frac2t \frac{dy}{dt} = \frac1{t^5}y\]
+The $y$ term is divided by $t^5$ and $5>t$ so $t=0$ is an irregular singular point (so $x \to \infty$ is too)
+Make the substitution $y = e^{S(x)}$
+\[S'' + (S')^2 = x\]
+Now use dominant balance:
+\begin{enumerate}
+    \item $S''\sim x$, neglect $(S')^2$
+    Integration gives $S' \sim \frac12 x^2$ which implies $(S')^2 \sim \frac14 x^4$ as $x\to \infty$. But we assumed $(S')^2 \ll x$ so this is a contradiction
+    \item $(S')^2 \sim x$ and neglect $S''$
+    Square root and differentiate gives $S'' \sim \pm \frac12 x^{-1/2}$ and $x^{-1/2} \ll x$ as $x\to \infty$ so this is valid.
+    \item $S'' \sim -(S')^2$ neglecting $x$
+    Integration gives $S'\sim 1/(x+1) \sim 1/x$ but we assumed $x \ll (S')^2$ so this is a contradiction
+\end{enumerate}
+So we use $2$. 
+We then get the distinguished limit as:
+\[(S')^2 \sim x \implies S \sim \pm \frac23 x^{3/2}, \quad x\to \infty\]
+Proceeding (and just taking the positive bit) we get
+\[S(x) = \frac23 x^{3/2} + C(x)\]
+Where $C(x) \ll x^{3/2}$ as $x\to\infty$
+Sub back into the DE for $S$ t oget
+\[S'' + (S')^2 = x\]
+\[\frac12 x^{-1/2} + C'' + (x^{1/2} + C' )^2 = x\]
+\[\frac12 x^{-1/2} + C'' + 2C'x^{1/2} + (C')^2=0\]
+\[\frac12 x^{-1/2} + C'' + C'(2x^{1/2} + C')=0\]
+Now convert to an asymptotic relation:
+C and its derivatives:
+\begin{align*}
+    C(x) \ll x^{3/2}\\
+    C'(x) \ll x^{1/2}\\
+    C''(x) \ll x^{-1/2}
+\end{align*}
+So we can immediately drop the $C''$ term since there is a $x^{-1/2}$ term. We can drop the $C'$ term in the brackets, giving
+\[2C' x^{1/2} \sim - \frac12 x^{-1/2}, \quad x\to \infty\]
+\[C' \sim -\frac14 x^{-1} \implies C \sim - \frac14 \log x\]
+as $x\to \infty$.\\
+Meaning
+\[C(x) = -\frac14 \log x + D(x), \quad D(x) \ll \log x\]
+as $x\to \infty$
+
+Sub this into $C$'s equation (before it became asymptotic):
+\[\frac12 x^{-1/2} + \frac14 x^{-2} + D'' + 2x^{1/2} (-\frac14 x^{-1} + D') + (-\frac14 x^{-1} + D')^2 = 0\]
+Which simplifies to
+\[\frac5{16}x^{-2} + D'' + D'(2x^{1/2} - \frac12 x^{-1}) + (D')^2 = 0\]
+Now make it asymptotic:
+\begin{align*}
+    D \ll \log x\\
+    D' \ll x^{-1}\\
+    D'' \ll x^{-2}
+\end{align*}
+As $x\to \infty$
+So we can neglect $D''$ and $(D')^2$ since we have already neglected $x^{-1} D'$.
+We also have in the brackets 2 powers of $x$, so we drop the smaller $(\frac12 x^{-1})$
+\[2D' x^{1/2} \sim - \frac5{16} x^{-2} \implies D' \sim -\frac{5}{32} x^{-5/2}\]
+\[D\sim d+ \frac5{48} x^{-3/2} \sim d\]
+As $x\to\infty$. We have to drop the $x^{-3/2}$ since it becomes negligible compared to a constant
+
+Now since we ended up with a constant we dump it into our $S$ equation:
+\begin{align*}
+    S \sim \frac23 x^{3/2} - \frac14 \log x + d \quad x\to \infty\\
+    \implies y = e^S \sim c_1 e^{2/3 x^{3/2}} x^{-1/4}, \quad x \to \infty
+\end{align*}
+Where $c_1 = e^d$
+We can see clearly that the other solution is
+\[y = c_2 e^{-2/3 x^{3/2}} x^{-1/4}\]
+From where we dropped the sign.
+
+The Airy function approximations are defined as:
+\begin{align*}
+    & Ai(x) \sim \frac{1}{2\sqrt{\pi}} e^{-2/3 x^{3/2}} x^{-1/4}\\
+    & Bi(x) \sim \frac{1}{\sqrt{\pi}} e^{2/3 x^{3/2}} x^{-1/4}
+\end{align*}
+
+This makes us want to talk about: sub-dominance and behaviour of asymptotic relations in the complex plane.
+
+Sub-dominance is basically saying that one of the linearly independent solutions might dominate and have a greater effect than the other.
+
+Example:
+\[\sinh(x) := \frac12 (e^x - e^{-x}\]
+
+For $x\to \infty$
+\[\sinh(x) \sim \frac12 e^x, \quad x\to\infty\]
+Here $e^x$ dominates $e^{-x}$ so we will say $-\frac12 e^{-x}$ is subdominant.
+
+If we instead go $x\to-\infty$
+\[\sinh(x) \sim -\frac12 e^{-x}, \quad x\to-\infty\]
+So $\frac12 e^{x}$ is subdominant
+
+
+If we consider the Airy equation $y'' = xy$ and enforced a boundary condition.
+\[y = c_1 Ai(x) + c_2 Bi(x)\]
+Subject to
+\[\lim_{x\to\infty} y(x) :=y(\infty) = 0\]
+Then we find $c_2$ comes out as $0$, since $Bi(x)$ blows up towards infinity
+
+
+But we have just been assuming $x$ is real. What if we start considering $z$ (complex numbers)?
+\[\sinh(z) = \frac12 (e^{z} - e^{-z})\]
+In the complex $z$ we now have to consider arg and magnitude.
+(if we take $\arg(z) = 0$ then we get the previous problem to $+\infty$ and $\arg(z)=\pi$ then we get the $-\infty$ case)
+So we would write this as
+\[\sinh(z) \sim \frac12 e^{z}, \quad z\to \infty,\quad  -\pi/2 <\arg(z) < \pi/2 \]
+\[\sinh(z) \sim -\frac12 e^{-z}, \quad z\to -\infty,\quad  \pi/2 <\arg(z) < 3\pi/2 \]
+
+This behaviour we call Stoke's phenomenon (where the change of behaviour changing in different regions of the complex plane)
+
+Note we only have strict inequalities. When we have \[arg(z) = \pi/2, 3\pi/2\]
+Then we get $e^{z} = e^{x+iy} = e^{iy}$. So we have purely oscillatory behaviour. These lines (we will call) Stoke's lines. The regions where there is no oscillatory behaviour (in this case $\arg(z) = 0,\pi$) we call anti-Stokes lines.
+These names will sometimes swap based on literature. Really useful.
+
+
+Big $O$ and small $o$ notation.
+\begin{itemize}
+    \item $\bigo(x)$: A function of order of the argument $x$ and HIGHER. 
+    \item $o(x)$: we stopped when we reached order $x$. 
+\end{itemize}
+E.g. Taylor series for cos
+\[\cos(x) = 1 - \frac{x^2}{2!} + \frac{x^4}{4!} + \hdots\]
+Then we can write
+\[\cos(x) = 1 - \frac{x^2}{2!} + \bigo(x^4)\]
+Or
+\[\cos(x) = 1 - \frac{x^2}{2!} + o(x^2)\]
+
+We actually define $\bigo$ such that:
+\[f(x) = \bigo(G(x)), \quad x\to x_0\]
+\[\lim_{x\to x_0} \frac{f(x)}{g(x)} = A\]
+Or alternatively write
+\[|f(x)| \leq A |g(x)|\]
+For some constant $A$.
+
+We won't really use $o$ but its useful to know.
+\[f(x) = o(g(x)), \quad x\to x_0\]
+If $f(x) \ll g(x)$
+
+If we have
+\[x \sim \delta_0 x_0 + \delta_1 x_1 + \delta_2 x_2\]
+
+
+\[x = \delta_0 x_0 + \delta_1 x_1 + \bigo(\delta_2)\]
+Or as an example of little $o$
+\[x = \delta_0 x_0 + \delta_1 x_1 + o(\delta_1)\]
+
+
+
+\section{Sequences and Series}
+Recall that a series
+\[\sum_{n=0}^\infty f_n(z)\]
+Converges at some fixed value of $z$ if for an arbitrary $\epsilon >0$ it is possible to find a number $N_0(z,\epsilon)$ such that
+\[\left|\sum_{n=M}^N f_n(z)\right| < \epsilon, \text{ for all }M,N>N_0\]
+The series converges to a function $f(z)$ at some fixed value of $z$ if for an arbitrary $\epsilon >0$ it is possible to find a number $N_0(z,\epsilon)$ such that
+\[\left|f(z) - \sum_{n=M}^N f_n(z)\right| < \epsilon, \text{ for all }M,N>N_0\]
+
+Equivalently we can think of series converging as its terms decaying sufficiently quickly as $N\to \infty$
+
+
+Consider the error function, defined as
+\[erf(z) := \frac2{\sqrt{\pi}} \int_0^z e^{-t^2}dt\]
+
+Lets get a series representation (lets expand that exponential)
+I.e. use
+\[e^{-t^2} = \sum_{0}^\infty \frac{(-t^2)^n}{n!}\]
+\begin{align*}
+    erf(z) &= \frac{2}{\sqrt{\pi}} \int_0^z e^{-t^2}dt\\
+    &=\frac{2}{\sqrt{\pi}} \int_0^z \sum_{0}^\infty \frac{(-t^2)^n}{n!} dt\\
+    &=\frac{2}{\sqrt{\pi}}  \sum_{0}^\infty \int_0^z\frac{(-t^2)^n}{n!} dt\\
+    &= \frac2{\sqrt{\pi}} \sum_{n=0}^\infty \frac{(-1)^n z^{2n+1}}{(2n+1)n!}\\
+    &= \frac2{\sqrt{\pi}}z( - \frac{z^3}{3} + \frac{z^5}{10} - \frac{z^7}{42} + \frac{z^9}{216} - \hdots )
+\end{align*}
+Which is convergent (can show this using radius of convergence). But is it useful?
+
+Alternatively
+\begin{align*}
+        erf(z) &= \frac{2}{\sqrt{\pi}} \int_0^z e^{-t^2}dt\\
+        &= \frac{2}{\sqrt{\pi}} \left(\int_0^\infty e^{-t^2} dt - \int_z^\infty e^{-t^2} dt\right)\\
+        &= \frac{2}{\sqrt{\pi}} \int_0^\infty e^{-t^2} dt - \frac{2}{\sqrt{\pi}}\int_z^\infty e^{-t^2} dt\\
+        &= 1 - \frac{2}{\sqrt{\pi}}\int_z^\infty e^{-t^2} dt\\
+\end{align*}
+Integration by parts:
+\begin{align*}
+    \int_z^\infty e^{-t^2}dt &= \int_z^\infty \frac{e^{-t^2}}{2t}dt\\
+    &= \frac{e^{-z^2}}{2z}- \int_z^\infty \frac{e^{-t^2}}{2t^2}\\
+    &= \frac{e^{-z^2}}{2z} - \int_z^\infty \frac{2te^{-t^2}}{4t^3}\\
+    &= \frac{e^{-z^2}}{2z} - \frac{e^{-z^2}}{4z^3} - \int_z^\infty \frac{e^{-t^2}}{12t^2}\\
+    erf(z)&=1- \frac{1}{z\sqrt{\pi}}e^{-z^2}\left(1 - \frac{1}{2z^2} + \frac{1*3}{(2z^2)^2} - \frac{1*3*5}{(2z^2)^3} \right)\\
+\end{align*}
+Even though this is a divergent series, it converges for small values of $n$ (so if we only take say the first like 3 terms). This makes it an asymptotic sequence.\\
+Introduces a concept called `optimal truncation'
+
+A sequence $\{f_n(\epsilon)\}$ is an asymptotic sequence as $\epsilon\to 0$ if
+\[f_{n+1}(\epsilon) \ll f_n(\epsilon), \quad \epsilon\to0\]
+For all $n$.
+
+
+Some examples:
+\[\epsilon^{-1},1,\epsilon,\epsilon^2,\hdots, \quad \epsilon\to0\]
+\[1, \frac1x,\frac1{x^2},\hdots, \quad x\to\infty\]
+If we have a function $f(\epsilon)$, a series $\sum_{n=0}\infty f_n(\epsilon)$ is an asymptotic expansion (or approximation) to this function if
+\[f(\epsilon) - \sum_{n=0}^N f_n(\epsilon) \ll f_N(\epsilon)\]
+I.e. the remainder between the approximation and the function is smaller than the last included term. This can be written as
+\[f(\epsilon) \sim \sum_{n=0}^\infty f_n(\epsilon), \quad \epsilon\to 0\]
+The main example of this is an asymptotic power series in $\epsilon$
+\[f(\epsilon) \sim \sum_{n=0}^\infty a_n \epsilon^n, \quad \epsilon\to 0\]
+The power of $\epsilon$ in that sum can kinda be anything though.
+
+Asymptotic approximations are interesting since you can have many correct asymptotic approximations. E.g. $tan(\epsilon), \quad \epsilon\to 0$
+\begin{align*}
+    \tan(\epsilon)&\sim \epsilon + \frac{\epsilon^3}{3} + \frac{2\epsilon^5}{15} + \hdots\\
+    &\sim \sin\epsilon + \frac12 (\sin \epsilon)^3 + \frac{3}{8}(\sin\epsilon)^5 +\hdots
+\end{align*}
+The course is pretty much going to be about developing expansions in the form $f(x;\epsilon)$, i.e. involving an independent variable $x$ and a parameter $\epsilon$.
+
+The most general form is
+\[f(x;\epsilon) \sim \sum_{n=0}^\infty a_n(x) \delta_n(\epsilon), \quad \epsilon\to0\]
+We usually take $\delta_n(\epsilon) = \epsilon^n$.
+
+We only want to take a few terms to get an accurate answer - too many terms will start to diverge.
+
+
+
+Optimal truncation, a.k.a superasymptotic representation - terminating the series before the series starts to diverge. The usual method is to look for an increase in magnitude and then terminate that term and all following terms.
+
+Some numerical methods can improve the convergence of divergent series to the `right' answer (in certain circumstances). This might involve alternative ways of summing the terms in a series - adding the terms is nearly the most inefficient method. E.g. Shanks transformation and Pad\'e summation
+
+
+\section{Perturbation Methods}
+
+This section looks at global behaviour rather than local solutions (what the last section looked at). We will look at boundary-layer problems, where the solution might be significantly different in a thin region compared to the rest of the domain. 
+
+In most terms a perturbation is a small kick via a small parameter $\epsilon$. These parameters can be introduced into modelling problems in a variety of ways. E.g.
+\begin{itemize}
+    \item Initial conditions: a usually stable physical situation can be given a small 'kick' and look at the response
+    \item Boundary conditions, a perturbation can be introduced at a boundary (inhomogeneity or shape to the boundary)
+    \item Variable scaling - different characteristic length scales in different directions - rescaling is necessary
+    \item Parameter scaling - assumptions around dominant physical processes to simplify analysis. e.g. changing Reynolds number! 
+\end{itemize}
+There are other situations when you might introduce perturbations as well.
+
+We have already been essentially using some perturbation methods. There are 2 types of problems
+\begin{itemize}
+    \item Regular perturbation problems: the structure of the problem is unchanged in the limit $\epsilon\to 0$
+    \[x^5 + \epsilon x =1\]
+    \[y'' + 2\epsilon y = 1\]
+    \item Singular perturbation problems: The solution behaves differently in the limit $\epsilon\to 0$. Usually the highest power/derivative is what is multiplied by $\epsilon$ these one may change the number of solutions. These are common in Boundary-layer problems. 
+    \[\epsilon x^5 + x =1\]
+    \[\epsilon y'' + 2y =1\]
+\end{itemize}
+
+In general we will seek solutions of form
+\[y(x) = \sum_{n=0}^\infty \epsilon^n y_n(x) = y_0(x) + \epsilon y_1(x) + \epsilon^2 y_2(x) + \bigo(\epsilon^2)\]
+This is typically iterative. We find the leading order solution $y_0(x)$ and then solve for $y_1(x)$ (which usually depends on $y_0$). Then repeat to continually get the next correcting terms (until you get sick of it basically). Usually we only care about the leading order term, or sometimes the first-order correction.
+
+
+\subsection{ODEs}
+Lets try solve some ODE examples!
+
+Projectile motion:
+\[\frac{d^2x}{dt^2} = - \frac{1}{(1+\epsilon x)^2}, \quad x(0)=1, \quad x'(0) = \alpha\]
+Where $\epsilon\to 0$ is the ratio of the length scale of interest to that of the radius of the Earth. So this is valid so long as the projectile doesn't go ludicrously high.
+
+So assume $x(t) = x_0(t) + \epsilon x_1(t) + \epsilon^2 x_2(t) + \bigo(\epsilon^3)$. And sub it in:
+\[x'' = x_0'' +\epsilon x_1'' + \epsilon^2 x_2 '' +\bigo(\epsilon^3)\]
+Note the right hand side is a binomial expansion with a negative power rather than positive.
+\[-\frac{1}{(1+\epsilon x)^2} = \sum_{k=0}^\infty\ncr{-2}{k} (\epsilon x)^k = -1 + 2\epsilon x - 3\epsilon^2 x^2 + \bigo(\epsilon^3)\]
+Now using the series form for $x$:
+\[RHS = -1 + 2\epsilon(x_0 + \epsilon x_1 + \bigo(\epsilon^2)) - 3\epsilon^2(x_0 + \epsilon x_1 + O(\epsilon^2))^2 + \bigo(\epsilon^3)\]
+Now we collect like powers of epsilon
+\[RHS = -1 + \epsilon(2x_0) + \epsilon^2(2x_1 -3 x_0^2 ) + \bigo(\epsilon^3)\]
+Now we must make sure the ICs/BCs are satisfied:
+\[x(0) = x_0(0) + \epsilon x_1(0) + \epsilon^2 x_2 (0) +\bigo(\epsilon^3) = 1\]
+\[x'(0) = x_0'(0) + \epsilon x_1'(0) + \epsilon^2 x_2' (0) +\bigo(\epsilon^3) = \alpha\]
+So now we want the $LHS = RHS$ and we do this by equating like terms (powers of $\epsilon$).
+\begin{align*}
+    x_0'' &= -1, \quad x_0(0) = 1, \ x_0'(0) = \alpha\\
+    x_1'' &= 2x_0\quad x_1(0) = 0, \ x_1'(0) = 0\\
+    x_2'' &= 2x_1 - 3x_0^2\quad x_2(0) = 0, \ x_2'(0) = 0\\
+    &\vdots
+\end{align*}
+Now using the ICs, start solving $x_0$.
+\begin{align*}
+    x_0'' &= -1\\
+    x_0' &= -t + c,\quad x(0)'= \alpha  x_0' =-t+ \alpha\\
+    x_0 &= \frac{-t^2}{2} + \alpha t + c_2, \quad x(0) = 1\\
+    \implies x_0 &= -\frac12 t^2 + \alpha t +1
+\end{align*}
+Now $x_1$ (and we repeat for the other ones) 
+Note we can ignore constants in this case since they are all $0$.
+\begin{align*}
+    x_1'' = 2x_0 &= -t^2 + 2\alpha t + 2\\
+    \implies x_1' &= -\frac13 t^3 + \alpha t^2 + 2t\\
+    x_1 &= -\frac1{12} t^4 + \frac{1}{3} \alpha t^3 + t^2
+\end{align*}
+
+Since this is still an asymptotic series, the solution will only be valid if
+\[\epsilon(-\frac12 t^4 + \frac{\alpha}{3} t^3 + t^3) \ll -\frac12 t^2 + \alpha t + 1, \quad \epsilon\to 0\]
+So this assumption may not hold when $t$ gets quite large, since the left hand side has higher order powers of $t$.
+
+So it will hold well given:
+\[x_k \epsilon^k \ll x_{k-1}\epsilon^{k-1} \ll \hdots \ll x_1\epsilon \ll x_0\]
+So when $\epsilon$ and $t$ get reasonably big, this assumption breaks for us.
+I.e. we want
+\[\epsilon t^4 \ll t^2\]
+Or rearrange for $t \ll \frac{1}{\sqrt{\epsilon}}$ 
+So we lose validity when (in order notation) $t = \bigo(\epsilon^{-1/2})$
+
+Another example: shape of a diving board (depression of it)
+The diving board protrudes out the $x$ axis, with $y=0$. Apply weight to the end, and it depresses.
+The governing equation is.
+\[B \frac{d^2\theta}{ds^2} = W \cos\theta, \quad \theta(0) = \frac{d\theta}{ds}(L) = 0\]
+$\theta$ is the angle of depression, $S$ is the length of the board (protruded from the wall), and $W$ is the weight applied. And $B$ is the `bending stiffness' of the board.
+If we want to use it in terms of $x,y$
+\[\frac{dx}{ds} = \cos\theta, \quad \frac{dy}{dx} = \sin\theta\]
+
+This is a dimensional problem, so we non-dimensionalise it (get rid of $B,W,L$): let $s = L\hat{s}$
+\begin{align*}
+    B \frac{d^2\theta}{ds^2} = W \cos\theta, \quad \theta(0) = \frac{d\theta}{ds}(L)\\
+    \frac{B}{L^2} \frac{d^\theta}{d\hat{s}^2} = W \cos\theta\\
+    \frac{d^\theta}{d\hat{s}^2} = \frac{WL^2}{B} \cos\theta
+\end{align*}
+So let $\delta = WL^2/B$ and lazily drop the hats to get
+\[\frac{d^2\theta}{ds^2} = \delta \cos\theta, \quad \theta(0) = \frac{d\theta}{ds}(1) = 0\]
+(also apply to the boundary conditions)
+
+
+Assume $\delta$ small. So we would expect something like a short board, a small weight or a very stiff board (or some combination of these).
+Equation and $\delta$ assumption imply $\theta$ is small. Use change of variables:
+\[\theta = \delta\phi\]
+Gives
+\[\frac{d^2\phi}{ds^2} = \cos(\delta\phi), \quad \phi(0) = \frac{d\phi}{ds} (1) = 0\]
+\[\frac{d^2\phi}{ds^2} = 1 - \frac12 (\delta\phi^2) + \frac1{24}(\delta\phi)^4 + \hdots, \quad \phi(0) = \frac{d\phi}{ds} (1) = 0\]
+
+Perturbation series for $\psi$
+Basically if you run through, you find that there are no odd powers of $\delta$.
+\[\phi = \phi_0 + \delta^2 \phi_1 + \delta^4 \phi_2 + \delta^6\phi_3 + \hdots\]
+
+Leading order term
+\[\frac{d\phi_0}{ds^2} = 1, \quad \phi_0(0) = \frac{d\phi_0}{ds} = 0\]
+So $\frac{d\phi_0}{ds} = s+c \implies c=-1$
+\[\phi_0 = \frac12 s^2 - s + c_2, \quad c_2 = 0 \]
+So we have
+\[\phi_0 = \frac12 s^2 -s\]
+We could continue to get the next term but basically theres no point.
+If we want to get $x,y$
+\[\frac{dx}{ds} = \cos\theta, \quad \frac{dy}{dx} = \sin\theta\]
+\[\frac{dx}{ds} = \cos\delta\phi, \quad \frac{dy}{ds} = \sin\delta\phi\]
+For $x$:
+\[\cos\delta\phi = \cos(\delta(\frac12 s^2 - s)) \sim 1 + \bigo(\delta^2)\]
+So to leading order
+\[x \sim s\]
+For $y$:
+\[\sin(\delta\phi) \sim \delta\phi + \bigo(\delta^3) = \delta (\frac12 s^2 -s)\]
+\[y \sim \delta \frac16 s^3 - \frac{\delta}{2} s^2 \]
+
+
+For flow around a cylinder and an exact solution
+Uniform flow speed $U$ and cylinder has radius $a$
+\[\nabla^2 \phi = 0\]
+Where $r>a$
+With boundary conditions (no slip)
+\[n \cdot \nabla \phi = 0\]
+At $r=a$ and
+\[\phi \sim Ur\cos\theta, \quad r\to\infty\]
+The exact solution is
+\[\phi(r,\theta) = U (r + a^2/r) \cos\theta\]
+
+Now if we consider a perturbed cylinder (so its not a circle but slightly squashed).
+An ellipse given by
+\[r = a(1+\epsilon\cos2\theta)\]
+Problem is now
+\[\nabla^2 \phi = 0 ,\quad r > a(1+\epsilon\cos2\theta)\]
+With the boundary conditions
+\[n\cdot \nabla\phi = 0, \quad r=a(1+\epsilon\cos2\theta)\]
+And the same uniform flow as before asymptotically as $r\to\infty$
+
+We essentially want to linearise around the boundary with an equivalent problem with $r>a$ instead of $r>a(1+\epsilon\cos2\theta)$
+
+Solve:\\
+Say you have $f(x,y)$ on $y=a + h(x)$. Now take the taylor expansion of $f(x,a+h(x))$ about $y=a$.
+\begin{align*}
+f(x,a+h(x)) &= f(x,a)\\
+&+(a+h(x)-a) f'(x,a)\\
+&+(a+h(x)-a)^2 f''(x,a) + \hdots
+\end{align*}
+
+Gives
+\[f(x,a+h(x)) = f(x,a) + h(x)f'(x,a) + h^2(x) f''(x,a)\]
+
+Let the surface of the ellipse be represented by
+\[g(r,\theta) = r - a(1+\epsilon f(\theta))\]
+We need to obtain the normal vector, $n$
+\[n = \frac{\nabla G}{|\nabla G|} \]
+Note that $\nabla$ in cylindrical coordinates is
+\[\nabla \dd{}r e_r + \frac1r \dd{}\theta e_\theta\]
+\[\nabla G = \nabla(r - a(1+\epsilon f(\theta))) = e_r - a\epsilon f'(\theta) e_\theta\]
+On $r = a(1+\epsilon f(\theta))$
+\[\therefore \nabla G_{r=\cdot} = e_r - \frac{a \epsilon f'(\theta)}{a(1+\epsilon f(\theta))} = e_r - \frac{\epsilon f'(\theta)}{1+\epsilon f(\theta)}\]
+Now use the geometric series
+\[\nabla G_{r=\cdot} = e_r - \epsilon f'(\theta) (1-\epsilon f(\theta) + \bigo(\epsilon^2))\]
+\[|\nabla G_{r=\cdot}| = \sqrt{1^2 + \frac{\epsilon^2 f'^2(\theta)}{(1+\epsilon f(\theta))^2}}\]
+Use a binomial expansion
+\[\frac1{|\nabla G|} = 1 - \frac12 \epsilon^2 f'^2(\theta)(1-\epsilon f(\theta) + \hdots)^2 + \bigo(\epsilon^4)\]
+\[n = \frac{\nabla G}{|\nabla G|} = (e_r - \epsilon f'(\theta) (1-\epsilon f(\theta) + \bigo(\epsilon^2) e_\theta) \times (1- \bigo(\epsilon^2)\]
+\[n = e_r - \epsilon f'(\theta)e_\theta + \bigo(\epsilon^2)\]
+
+So the no slip condition gives
+\[n \cdot \nabla \phi|_{r = a(1+\epsilon f(\theta))} = 0\]
+
+\begin{align*}
+    LHS &= (e_r - (\epsilon f'(\theta) + \bigo(\epsilon^2))e_\theta) \cdot (e_r \dd\phi r + \frac1r \dd\phi \theta e_\theta )\\
+    &= \dd\phi r - \epsilon f'(\theta) \dd\phi\theta \frac1a(1-\epsilon f(\theta) + \bigo(\epsilon^2))\\
+    &=\dd\phi r - \epsilon \frac{f'(\theta)}{a} \dd\phi\theta + \bigo(\epsilon^2)
+\end{align*}
+Since $\frac1r = \frac1{a(1+\epsilon f(\theta))}$ use geom series
+\[\frac1r = \frac1a (1-\epsilon f(\theta) + \hdots)\]
+
+
+Unfortunately this is still on $r=a(1+\epsilon f)$. So we have to taylor expand the two partial derivatives
+\[\dd\phi r\Bigm|_{r=a(1+\epsilon f(\theta))} = \dd\phi r\Bigm|_{r=a} + \epsilon a f(\theta) \ddn \phi r2\Bigm|_{r=a} + \bigo(\epsilon^2)\]
+\[\dd\phi \theta \Bigm|_{r=a(1+\epsilon f(\theta))} = \dd\phi\theta\Bigm|_{r=a} + \bigo(\epsilon) \]
+
+Now the boundary condition becomes, and sub in $f(\theta) = \cos2\theta$
+\begin{align*}
+    LHS &= \dd\phi r - \epsilon \frac{f'(\theta)}{a} \dd\phi\theta + \bigo(\epsilon^2)\\
+    &=\dd\phi r\Bigm|_{r=a} + \epsilon a f(\theta) \ddn \phi r2\Bigm|_{r=a}  - \epsilon \frac{f'(\theta)}{a}\dd\phi\theta\Bigm|_{r=a} + \bigo(\epsilon^2)\\
+    &=\dd\phi r\Bigm|_{r=a} + \epsilon a \cos2\theta \ddn \phi r2\Bigm|_{r=a}  + \epsilon \frac{2\sin2\theta}{a}\dd\phi\theta\Bigm|_{r=a} + \bigo(\epsilon^2)\\
+\end{align*}
+On $r = a$. So now the boundary condition is just on something simple (not perturbed).
+
+
+Now to solve $\phi$ we use a perturbation series about $\phi$.
+\[\phi = \phi_0 + \epsilon \phi_1 + \bigo(\epsilon^2)\]
+Subject to the condition we got before and
+\[\nabla^2 \phi = 0, \quad r>a\]
+Leading order:
+\[\nabla^2 \phi_0 = 0,\quad r>a\]
+With
+\[\dd{\phi_0}r = 0, \quad r=a, \quad \phi \sim Ur\cos(\theta)\]
+Which is identical to the unperturbed problem
+\[\phi_0 = U(r + \frac{a^2}{r})\cos(\theta)\]
+
+
+At order $\epsilon$
+\[\nabla^2 \phi_1 = 0, \quad r >a\]
+Subject to the BC:
+\[\dd{\phi_1}r +a \cos2\theta \ddn{\phi_0}r2 + \frac{2}{a} \sin2\theta \dd{\phi_0}{\theta} = 0, \quad r=a\]
+With $\phi_1 \sim o(1)$ at $r=a$.
+
+Rewrite the first BC:
+\begin{align*}
+    \dd{\phi_1}{r} &= - a\cos2\theta \ddn{\phi_0}r2 - \frac2a \sin2\theta \dd{\phi_0}\theta\\
+    &= -a\cos2\theta  U\frac{2a^2}{r^3}\cos\theta + \frac2a \sin2\theta \sin\theta U\left(r + \frac{a^2}{r}\right)\\
+    \dd{\phi_1}r \Bigm|_{r=a} &= -2U \left(\cos2\theta \cos\theta - 2\sin2\theta \sin\theta\right)\\
+    &= -2U \left(\cos2\theta \cos\theta - 2\sin2\theta \sin\theta\right)\\
+    &= U \left(\cos(\theta) - 3\cos(3\theta)\right)
+\end{align*}
+Last step obtained using:
+\begin{align*}
+    &\cos\theta \cos2\theta - 3\cos\theta \cos2\theta + \sin\theta \sin 2\theta +3\sin\theta \sin 2\theta\\
+    &=\left(\cos\theta \cos2\theta + \sin\theta\sin2\theta \right) -3 \left(\cos\theta \cos2\theta - \sin\theta\sin2\theta\right)\\
+    &= \cos(2\theta -\theta) -3 \cos(2\theta + \theta)\\
+    &= \cos(\theta) - 3\cos(3\theta)
+\end{align*}
+
+So our boundary condition is now
+\[\dd{\phi_1}{r}\Bigm|_{r=a} = U \left(\cos(\theta) - 3\cos(3\theta)\right)\]
+Use separation of variables $\phi_1 = R(r) T(\theta)$
+\begin{align*}
+    \nabla^2 \phi_1 = \ddn{\phi_1}r2 + \frac1r \dd{\phi_1}r + \frac1{r^2} \ddn{\phi_1}r2 &=0, \quad r\geq a\\
+    R'' T + \frac1r R'T + \frac1{r^2} RT'' &= 0\\
+    \frac{T''}{T} = -r^2 \frac{R''}{R} + -r \frac{R'}{R} + R = c^2\\
+    T'' = -c^2 T ,\quad & \quad r^2 \ddn Rr2 + r\dd Rr - c^2 R = 0
+\end{align*}
+Solve the $T$ equation
+\[\dd Rr\Bigm|_{r=a} \implies T(\theta) = U(\cos\theta - \cos 3\theta)\]
+(the sine coefficients are trivially zero)
+Which gives
+\[c^2 = 1^2 , \quad or \quad 3^2\]
+
+For $c=\pm 1$
+\[R_1(r) = c_1 r + \frac{c_2}r\]
+For $c=\pm3$
+\[R_2(r) = c_3 r^3 + \frac{c_4}{r^3}\]
+
+So $\phi_1$:
+\[\phi_1 = (c_1 r + \frac{c_2}r) \cos\theta + (c_3 r^3) + \frac{c_4}{r^3}) \cos3\theta\]
+Note we had the far field condition, $\phi_1 \sim o(1)$ as $r\to \infty$ So the $r$ and $r^3$ coefficients must be zero.
+\[\phi_1 = \frac{c_2}{r} \cos\theta + \frac{c_4}{r^3} \cos3\theta\]
+\begin{align*}
+    \dd{\phi_1}{r} \Bigm|_{r=a} = -\frac{c_2}{r^2}\cos\theta - 3\frac{c_4}{r^3}\cos3\theta\\
+    = -\frac{c_2}{a^2} \cos\theta - \frac{3c_4}{a^3} \cos3\theta &=U(\cos\theta - 3\cos3\theta)
+\end{align*}
+So $-c_2/a^2 = U$ and $c_4/a^3 = U$. So $c_2 = -Ua^2$ and $c_4 = Ua^4$.
+
+Therefore
+\[\phi_1 = \frac{-Ua^2}{r} \cos\theta + \frac{Ua^4}{r^3} \cos3\theta\]
+And so we have
+\[\phi = \phi_0 + \epsilon\phi_1 + \bigo(\epsilon^2)=  U(r + \frac{a^2}{r})\cos(\theta) + \epsilon\left(\frac{-Ua^2}{r} \cos\theta + \frac{Ua^4}{r^3} \cos3\theta\right)+ \bigo(\epsilon^2)\]
+We can't really see what the error is here since we don't have a canonical solution to compare to. 
+We want to know when $\phi_1 = \bigo(\phi_0)$
+
+
+
+Deep water waves in 1D (free surface problem):
+%Kelvin helmholtz in the assignment?
+So considering a water bed with small amplitude waves on the surface of the water. This is a prototypical example of a free-surface problem. Where the shape of the boundary is determined as part of the solution. 
+So the surface instead of $y=0$ we will have
+\[y = \epsilon h(x,t)\]
+
+So assume $\epsilon \ll 1$ and $h = \bigo(1)$. The velocity is described by laplaces equation
+\[\nabla^2 \phi = 0, \quad y < \epsilon h(x,t)\]
+The boundary conditions on the free-surface are a kinematic condition
+\[\dd\phi y = \epsilon\left(\dd ht + \dd\phi x \dd hx\right),\quad y=\epsilon h(x,t)\]
+Which states the normal to the velocity of the water is equal to the normal velocity if the surface. We also have the bernoulli equation as a condition
+\[\dd\phi t + \frac12 |\nabla \phi|^2 + gy = 0,\quad y=\epsilon h(x,t)\]
+Lets take a perturbation series solution: expand $\phi$ as a perturbation series - change the domain $y = \epsilon h(x,t)$ to be more usable (transform into the normal one), and then solve recursively.
+
+\[\phi = \phi_0 + \epsilon \phi_1 + \bigo(\epsilon^2)\]
+Using the kinematic condition, we get (collect powers of $\epsilon$)
+\[\dd{\phi_0}{y} = 0 \implies \phi_0 = 0\]
+
+Now obtaining $\phi_1$ (start with the kinematic equation at order $\epsilon$)
+\[\dd{\phi_1}{y} = \dd ht, \quad y = \epsilon h(x,t)\]
+Expand (linearise) about the unperturbed interface, $y=0$.
+\begin{align*}
+    \dd{\phi_1}y \Bigm|_{y=h(x,t)} = \dd{\phi_1}{y}\Bigm|_{y=0} + \epsilon h(x,t) \ddn{\phi_1}y2\Bigm|_{y=0}\\
+    \dd{\phi_1}{y} = \dd ht + \bigo(\epsilon^2),\quad y=0
+\end{align*}
+
+Now the bernoulli condition. Note that we are collecting orders $\epsilon^1$
+\[\dd{\phi_1}t + gh(x,t) =0,\quad y = \epsilon h(x,t) \]
+So taylor series on $\dd{\phi_1}t$
+\[\dd{\phi_1}t\Bigm|_{y=\epsilon h(x,t)} = \dd{\phi_1}dt\Bigm|_{y=0} + \epsilon h(x,t) \dd{^2\phi_1}{y\partial t} + \bigo(\epsilon^2)\]
+Since we are doing this to leading order
+\[\dd{\phi_1}t\Bigm|_{y=\epsilon h(x,t)} = \dd{\phi_1}dt\Bigm|_{y=0}\]
+So the bernoulli condition becomes
+\[\dd{\phi_1}{t} + gh = 0 ,\quad y=0\]
+
+Let $h = ae^{i(kx - \omega t)}$. And seek a solution to the problem for this $h$.\\
+Implies
+\[\phi_1 = f(y)e^{i(kx - \omega t)} \]
+Put this into laplace's equation
+\begin{align*}
+    \nabla^2 \phi_1 = (-k^2f + f'')e^{i(kx - \omega t)} =0\\
+    (-k^2f + f'') = 0\\
+    \implies f''/f = k^2\\
+    \implies f = be^{|k|y}
+\end{align*}
+For physical solutions, we can't have $\phi$ blow up.
+So we have o find $\omega$ given $a,k$ such that it doesn't.
+
+Using the kinematic condition
+\begin{align*}
+    \dd{\phi_1}y &= \dd ht, \quad y=0\\
+    b |k| e^{|k|y} e^{i(kx-\omega t)} &= -i\omega a e^{i(kx - \omega t)}\\
+    b|k| & = -i\omega a\\
+    b &= -\frac{i\omega a}{|k|}
+\end{align*}
+So 
+\[\phi_1 = -\frac{i\omega a}{|k|} e^{|k|y} e^{i(kx-\omega t)} \]
+Now using the bernoulli condition
+\begin{align*}
+    \dd{\phi_1}{t} + gh &= 0\\
+    -\frac{\omega^2 a}{|k|} e^{|k|y} e^{i(kx-\omega t)} + gae^{i(kx-\omega t)}&=0\\
+    -\frac{\omega^2}{|k|} + g&=0\\
+    \omega &= \sqrt{g|k|}
+\end{align*}
+
+So $\omega$ has no dependence on $b,a$. $\omega$ is real. So $h$ will be purely oscillatory.
+We would expect the term to die down over time if we included surface tension (waves would decay) which is the realistic analogue.
+
+Interpretation is that disturbances neither grow or decay.
+
+
+
+Case study: hollow fibre bioreactor.
+
+An important application area in mathematical biology is tissue engineering - making artificial tissues. It consists of a hollow outer tube and an inner permeable tube. Cells are seeded around the outside of the inner tube. Fluid containing nutrients is passed inside the inner tube. The idea is that the nutrients will pass through the permeable tube wall into the space containing the cells.
+Note the relative lengths mean the length of the tube is really large versus very small relative heights. 
+
+The approach is to develop a model for fluid flow in the inner tube and then couple it into a model for the nutrient transfer.
+
+Find conditions etc.
+
+Reduce the model, and non-dimensionalise.
+
+Assumption of slenderness; aspect ratio of the tube is small
+\[\epsilon = d/L \approx 2 \times 10^{-3} \ll 1\]
+
+Full equations
+    \[\nabla \cdot \vec u_l = 0, \quad \rho \left(\dd{\vec u_l}t + (\vec u_l \cdot \nabla )\vec u_l\right) = -\nabla p_l + \mu \nabla^2 \vec u_l\]
+Apply the scalings $i = l,m,e$ and $\epsilon = d/L$
+\[r = d\tilde{r}, \quad z= L \tilde{z}, \quad u_{i,z} = U \tilde{u}_{i,z},\quad u_{i,r} = \epsilon U \tilde{u}_{i,r}, \quad p = P_i \tilde{p} + P_0\]
+Dropping the tildes and get the reduced equations:
+\[\frac1r \dd{}r(r u_{l,r}) + \dd{u_{l,z}}{z}=0, \quad \frac1r \dd{}r(r \dd{u_{l,z}}r) = \frac{dp_l}{dz}\]
+
+
+
+
+\textbf{Project}: 
+Find a research paper which uses asymptotic and/or perturbation methods (ideally in an area you're interested in) and write a `brief' report
+\begin{itemize}
+    \item Background - provide some background to the application
+    \item Summary - summarise the mathematical approach
+    \item Use of asymptotics/perturbation methods - give some detail on the usage
+    \item Redo some working - repeat a few steps of working from the paper (fill in gaps)
+\end{itemize}
+Should be short - 2-3 pages.
+
+
+
+
+\section{Boundary Layers and Matching}
+Recall the dominant balance for singular perturbation problems. E.g.
+\[\epsilon x^5 + x =1\]
+Which changes the behaviour of the solutions. Note that the real was `small' and the complex roots were `big'
+
+
+A similar kind of `multi-scale' structure is often seen in the solutions to singularly perturbed DEs. We use these problems where there is a rapid change of behaviour in one region, but slowly in another. Hence the idea of a boundary layer. We usually impose the no slip condition at the boundary to avoid this problem.
+
+A different distinguished limit of a governing equation is valid in different regions of the solution domain. To solve these problems we need to
+\begin{enumerate}
+    \item Construct solutions which are (asymptotically) valid in the various parts of the domain. Typically an \textbf{inner solution} near the edge of a domain, and an \textbf{outer solution} in the rest of the domain
+    \item Join these solutions by using \textbf{asymptotic matching} - use the fact that their regions of validity overlap.
+    
+\end{enumerate}
+Not all singularly perturbed DEs exhibit boundary layers but it is common. Asymptotic matching can be used in other contexts, and not just for boundary layers.
+
+Consider the ODE
+\[\epsilon \frac{d^2y}{dx^2} + 2\frac{dy}{dx} +y =0\]
+As $\epsilon \to 0$ with BCs
+\[y(0) = 0,\quad y(1)=1\]
+This is singularly perturbed since setting $\epsilon = 0$ changes the order of the problem.
+The full 2nd order DE has an exact closed form solution
+\[y(x) = \frac{e^{ax} - e^{bx}}{e^a - e^b}\]
+Where
+\[a = \frac{-1+\sqrt{1-\epsilon}}\epsilon , \quad b = \frac{-1-\sqrt{1-\epsilon}}\epsilon \]
+Which features an $e^{-x/\epsilon}$ type dependence which is characteristic of boundary layer problems.
+
+Lets try solving this to leading order using our asymptotic expansion
+\[y = y_0 + \epsilon y_1 + \bigo(\epsilon^2)\]
+\begin{align*}
+    \bigo(1):\quad 2 \frac{dy_0}{dx} + y_0 = 0,\quad y_0(0) = 0,\quad y_0(1)=1\\
+    \bigo(\epsilon):\quad \frac{d^2y_0}{dx^2} + 2 \frac{dy_1}{dx} + y_1 = 0,\quad y_1(0)=y_1(1)=0
+\end{align*}
+But we won't bother using $y_0(0)=0$ and same for $y_1(0)=0$ since they are outside of the region we're working with (we will show why we can do this later)
+Solving the first order:
+\[y_0(x) = e^{(1-x)/2}\]
+This is the "outer solution" since it does not work on the boundary layer, but works away from it.
+
+To obtain the "inner solution" we need to rescale. In this case we will use $x = \epsilon X$, and let $y = Y(X)$. This will work the same way as nondimensionalisation.
+
+\begin{align*}
+    \epsilon \frac{d^2y}{dx^2} + 2\frac{dy}{dx} + y= 0\\
+    \epsilon \frac1{\epsilon^2}\frac{d^2Y}{dX^2} + 2 \frac{1}{\epsilon} \frac{dY}{dX} + Y = 0\\
+    \frac{d^2Y}{dX^2} + 2 \frac{dY}{dX} + \epsilon Y = 0\\
+\end{align*}
+This is no longer a singularly perturbed problem. And our solutions will only really be valid in the inner region.
+
+Now do the same thing we did for the outer region:
+\[Y = Y_0 + \epsilon Y_1 + \bigo(\epsilon^2)\]
+At order 1:
+\begin{align*}
+    \frac{d^2Y_0}{dX^2}& + 2 \frac{dY_0}{dX} =0\\
+    Y_0' &= ae^{-2X}\\
+    Y_0 &= Ae^{-2X} + B\\
+    Y_0 &= A\left(1- e^{-2X} \right)\\
+\end{align*}
+
+How do we determine $A$? This is where the asymptotic matching comes in - we impose an extra condition. In this case we impose the \textbf{Matching condition}:
+\[\lim_{x\to 0} y_0(x) = \lim_{X\to \infty} Y_0(X) \]
+
+\begin{align*}
+    \lim_{X\to \infty} e^{(1-x)/2} = \lim_{x \to 0} e^{(1-x)/2}\\
+    A = e^{1/2} 
+\end{align*}
+So our solution for $Y_0$ becomes
+\[Y_0 = e^{1/2}\left(1- e^{-2X} \right)\\\]
+
+Note that $A$ is the $y_{overlap}$ which is used in the composite solution too.\\
+Now we have 2 functions separately. We want to join them by taking advantage of the fact they overlap. We do this by constructing a \textbf{composite solution}.
+
+\begin{align*}
+    y_{comp} &= Y(X) + y(x) - y_{overlap}\\
+    y_{comp,0} &= Y_0(X) + y_0(x) - y_{overlap}\\
+    &=e^{(1-x)/2} + e^{1/2}\left(1-e^{-2X}\right) - e^{1/2}\\
+    &=e^{(1-x)/2} + e^{-1/2 - 2X}\\
+    &=e^{(1-x)/2} + e^{-1/2 - 2x/\epsilon}
+\end{align*}
+But if we plug in $x=1$
+\[y_{comp,0}(1) = e^{0} - e^{1/2 -2/\epsilon} \neq 1 \]
+Which means the boundary solution at $x=1$ is no longer satisfied. Although, for $\epsilon \to 0$, it does approach $1$.
+
+
+
+
+Step-by-step process
+\begin{itemize}
+    \item Find outer solution:
+    Try a regular perturbation solution
+    \[y(x) = y_0(x) + \epsilon y_1(x) + \ldots\]
+    If (as in this example) we cant satisfy all boundary conditions via this method, then we have boundary layers and require further analysis
+    \item Determine the \textbf{distinguished limits}: Use a dominant balance analysis to determine appropriate scalings - each balance corresponds to either the outer solution, or an inner solution. In the previous example we rescaled only the independent variable $(x = \epsilon X)$, but sometimes it is necessary to do the same for the dependent variable.
+    \item Having determined the presence (and location) of a boundary layer, seek a regular perturbation series solution to the rescaled problem. 
+    \[Y(x) = Y_0 + \epsilon Y_1(x) + \ldots\]
+    \item Matching: Apply an asymptotic mathing to connect the two solutions. The outer limit of the inner solution has to be equal to the inner limit of the outer solution. More sophisticated conditions are necessary at higher order
+    \item Construct composite solution
+\end{itemize}
+
+Another Second-order ODE problem
+\[\epsilon \frac{d^2y}{dx^2} + \frac{dy}{dx} = \cos x\]
+With $\epsilon \to 0$ over $0\leq x \leq \pi$ and the BCs
+\[y(0) = 2, \quad y(\pi) = -1\]
+
+Start with the outer solution:
+\[y = y_0 + \epsilon y_1 + \ldots\]
+To leading order:
+\[\frac{dy_0}{dx} = \cos x\]
+Subject to $y_0(0) = 2$ and $y_0(\pi) = 1$
+Gives
+\[y_0 = \sin x + A\]
+Which boundary condition do we apply here?
+Either $A = 2$ (apply $x=0$ bc) and there is a boundary layer at $x=\pi$, or\\
+$A = -1$ (apply $x=\pi$ bc) and there is a boundary layer at $x = 0$
+
+But we can't have both. So lets determine the distinguished limit:
+
+Let $x - x^* = \delta_1(\epsilon) X$ (where $x^*$ is the location of the boundary layer, and $\delta_1$ is some power function of $\epsilon$) 
+\[x = x^* + \delta_1 X\]
+Also let $y = \delta_2(\epsilon)Y$
+
+Equation and BCs become
+\[\epsilon \frac{\delta_2}{\delta_1^2} \frac{d^2 Y}{dX} + \frac{\delta_2}{\delta_1} \frac{dY}{dX} = \cos(x^* + \delta_1 X)\]
+BCs:
+\[\delta_2 Y(0) = 2,\quad \delta_2 Y(\pi) = -1\]
+Since the the left and right hand sides of the BCs have no epsilon dependence on the RHS, we have
+\[\delta_2 = 1\]
+
+So now rewrite the equation with $\delta_2 = 1$ and multiply by $\delta_1$
+\[\epsilon \frac{d^2 Y}{dX} + \delta_1 \frac{dY}{dX} = \delta_1^2\cos(x^* + \delta_1 X)\]
+So we want to find $\delta_1$ to give at least a 2 term balance. 
+\begin{itemize}
+    \item $\delta_1 Y' \sim \delta_1^2 \cos(\cdot) $ neglect $\epsilon Y''$
+    This implies
+    \[\delta_1 \sim  \delta_1^2 \implies \delta_1 \sim 1\]
+    This is the outer solution case that we have already done!
+    \item $\epsilon Y'' \sim \delta_1^2 \cos(\cdot)$, neglect $\delta_1 Y'$
+    This implies
+    \[\epsilon \sim \delta_1^2 \implies \delta_1 \sim \epsilon^{1/2}\]
+    But then we have a contradiction since the $\delta_1 Y'$ term will now dominate the balance.
+    \item $\epsilon Y'' \sim -\delta_1 Y'$, neglect $\delta_1^2 \cos(\cdot)$
+    \[\delta_1 \sim \epsilon \implies \delta_1^2 \sim \epsilon^2\]
+    Which is valid.
+
+\end{itemize}
+So we let $\delta_1 = \epsilon$ (we could scale this by a constant, but its not necessary).
+
+\[\frac{d^2Y}{dX^2} + \frac{dY}{dX} = \epsilon \cos(x^* + \epsilon X)\]
+Subject to 
+\[Y(0) = 2,\quad Y(\pi) = -1\]
+
+Inner solution
+\[Y(X) = Y_0 + \epsilon Y_1 + \ldots\]
+To leading order:
+\[Y_0'' + Y_0' = 0\]
+Gives
+\[Y_0 = B + Ce^{-X}\]
+
+We need to determine $x^*$ before we can apply one of the BCs to this.
+I.e. $x^* = 0$ or $x^* = \pi$. We have 2 potential outcomes. Usually you can observe which one will be blatently wrong, but we will show both:
+
+\begin{itemize}
+    \item $x^* = 0$
+    \[\lim_{x\to 0} y_0 = \lim_{X\to \infty} Y_0\]
+    BL is at $x^* =0$
+
+    \item $x^* = \pi$
+    \[\lim_{x\to \pi}y_0 = \lim_{X\to -\infty} Y_0\]
+
+Note that $X \to -\infty$ of $Y_0$ will shoot off to infinity as $e^{-(-\infty)} =\infty$
+\end{itemize}
+
+
+
+So we have
+\[y_0(x) =\sin(x) -A ,\quad Y_0(X) = B + Ce^{-X}\]
+\[y_0(\pi) = -1, \quad Y_0(0) = 2\]
+\begin{align*}
+    A = -1\\
+    B = 2-C
+\end{align*}
+Gives
+\[y_0(x) = \sin(x) -1,\quad Y_0(X) = 2 + C(e^{-X}-1)\]
+Now use the matching condition to find $C$.
+\begin{align*}
+    \lim_{x\to 0} y_0(x) &= \lim_{X\to\infty} Y_0(X)\\
+    \lim_{x\to 0} sin(x) -1&= \lim_{X\to\infty} 2 + C(e^{-X}-1)\\
+    -1&= 2 - C\\
+    C &= 3
+\end{align*}
+Note this means $y_{overlap} = -1$
+So 
+\[Y_0(X) = 2 + 3(e^{-X} -1)\]
+
+Now get the composite solution
+\begin{align*}
+    y_{comp} &= y_0(x) + Y_0(X) - y_{overlap}\\
+    &= \sin x - 1 + 3e^{-X} -1 + 1\\
+    &= \sin x + 3e^{-\frac x\epsilon}-1 
+\end{align*}
+
+Mike says that apparenly
+\[e^{-f(x)/\epsilon}\]
+Is really common boundary layer behaviour
+
+
+Validity?
+So why does this stuff work? What are the regions of validity for $y_0$ and $Y_0$?
+Well $y_0$ is valid when its asymptotic to the behaviour in the overlap (apparently)
+I.e. in the region of $x$ where
+(Outer)
+\begin{align*}
+    \sin x -1 \sim -1\\
+    x -1 \sim -1\\
+    x \ll 1
+\end{align*}
+
+What about for $Y_0$?
+
+(Inner)
+\begin{align*}
+    3e^{-x/\epsilon} -1 \sim -1\\
+    3(1 - \frac{x}{\epsilon} + \ldots) -1 \sim -1\\
+    \epsilon \ll x
+\end{align*}
+So the overlap region is valid when
+\[\epsilon \ll x \ll 1 \]
+
+
+One more second-order ODE example
+\[\epsilon \ddn yx2 - (2-x^2) y = -1, \quad \epsilon \to 0\]
+Subject to $y'(0) =0$ and $y(1) = 0$
+Outer solution:
+\[(2-x^2) y_0 = -1 \implies y_0(x) = \frac{1}{2-x^2}\]
+this already satisfies $y_0'(0) =0$ automatically. So this means there is no boundary layer at $y=0$, and since there are no parameters to change to suit the other boundary condition, there must be a BL at $x^* =1$.
+
+Set $x = 1+ \delta_1(\epsilon) X$ and $y = \delta_2(\epsilon) X$. Since $y(1) = 0$ gives no information about the order of the function at the boundary, we have to use the matching condition to find $\delta_2$.
+\[\lim_{x\to 1} y_0 = \lim_{X\to -\infty} \delta_2 Y\]
+Implies that $\delta_2 =1$ since $\lim_{x\to 1} y_0 = 1 = \bigo(1)$.
+
+So now if we continue
+\begin{align*}
+    \frac{\epsilon}{\delta_1^2} Y'' - (2-(1+\delta_1 X)^2)Y=-1\\
+    \frac{\epsilon}{\delta_1^2} Y'' - ((1- 2\delta_1 X - \delta_1^2 X^2)Y=-1\\
+\end{align*}
+Since we are looking at a boundary layer, it is perfectly reasonable (and recommended) to make the assumption that $\delta_1$ is small, i.e. Assuming that $\delta_1 \ll 1$ we write
+
+\[\frac{\epsilon}{\delta_1^2}  Y'' - Y \sim -1 \implies \delta_1 = \epsilon^{1/2}\]
+The rescaled problem is then
+\[Y'' - (1-2\epsilon^{1/2} X - \epsilon X^2) Y =-1,\quad Y(0)=0\]
+Since we have $\epsilon^{1/2}$ in this, we seek a perturbation series solution of form
+\[Y = Y_0(X) + \epsilon^{1/2} Y_1(X) +\epsilon Y_2(X) + \ldots\]
+So to leading order
+\[Y_0'' - Y_0 =-1, \quad Y_0(X =0) = 0\]
+(the boundary condition is since $x = 1+ \delta_1 X$)
+Which has general solution
+\[Y_0(X) = Ae^{-X} + Be^{X} +1\]
+
+Hold off on satisfying the BC until after matching.
+
+\begin{align*}
+    \lim_{x\to 1} y_0(x) = \lim_{X\to -\infty} Y_0\\
+    1 = \lim_{X\to-\infty} Ae^{-X} + Be^{X} + 1
+\end{align*}
+We strictly require $A=0$ or else the RHS will diverge. And note that $y_{overlap} = 1$ here.
+
+
+Applying the final BC now gives $B=-1$ and hence
+\[Y_0(X) = 1 -e^{X}\]
+Now note $X = (x-1)/\delta_1 = (x-1)/\sqrt{\epsilon}$
+So the composite solution is:
+\begin{align*}
+    y_{comp} &= y_0 + Y_0 - y_{overlap} \\
+    &= \frac{1}{2-x^2} + 1-e^X - 1\\
+    &= \frac{1}{2-x^2} - e^{(x-1)/\sqrt{\epsilon}}
+\end{align*}
+
+
+
+\textbf{How can we improve these solutions?}
+
+
+\textbf{Higher-Order Matching}
+
+We have been using the matching condition of form
+\[\lim_{X\to\infty} Y_0(X) = \lim_{x\to0} y_0(x)\]
+If we include more terms in the series, we have to use  another procedure/rule known as Van Dyke matching. This rule is stated:
+
+\begin{verse}
+The $m$-term inner expansion of the $n$-term outer solution \\
+\textbf{matches with} \\
+the $n$ term inner expansion of the $m$-term outer solution.        
+\end{verse}
+
+The process is effectively for the first line:
+\begin{enumerate}
+    \item Find $n$ terms in the outer solution
+    \item Rewrite the expression in terms of the inner variable
+    \item Simplify/Expand as necessary
+    \item Retain the first $m$ terms 
+\end{enumerate}
+And the third line says
+\begin{enumerate}
+    \item Find $m$ terms in the inner solution
+    \item Rewrite it in terms of the outer variable
+    \item Simplify/Expand as necessary
+    \item Retain the first $n$ terms 
+\end{enumerate}
+Matching will then involve equating the two expressions to determine any unknown coefficients.
+
+Consider an example
+\[\epsilon \frac{d^2y}{dx^2} - \frac{dy}{dx} + y = 2x,\quad \epsilon\to 0\]
+With $y(0)= -2$
+\begin{align*}
+    -y_0' + y_0 = 2x, \quad y_0(0) = -2,\quad y_0(1) = 1\\
+    y_0'' - y_1' + y_1 = 0,\quad y_1(0) = 0,\quad y_1(1)=0
+\end{align*}
+To leading order:
+\[y_0 = A_0e^x + 2x +2\]
+And then hence
+\[y_1 = A_1e^{x} + A_0x e^x\]
+(this involves method of undetermined coefficients)
+Inner problem:
+Let $x  = x_* + \delta_1 X$ and $y = \delta_2 Y$. BCs gives $\delta_2 =1$.
+Hence
+\begin{align*}
+    \epsilon \frac{d^2Y}{dX^2} - \delta_1 \frac{dY}{dX} + \delta_1^2 Y = \delta_1^2 2(x_* + \delta_1 X)
+\end{align*}
+Distinguished limit is for $\delta_1 = \epsilon$ i.e.
+\[\frac{d^2 Y}{dX^2} - \frac{dY}{dX} + \epsilon Y = \epsilon 2(x_* + \epsilon X)\]
+
+
+Giving the problems
+\begin{align*}
+    &Y_0'' - Y_0' = 0,\quad Y_0(0)=-2 \ or \ Y_0(0)=1\\
+    &Y_1 '' - Y_1' + Y_0 = 2x_*,\quad Y_1(0)=0
+\end{align*}
+Leading order:
+\[Y_0 = C_0e^X - B_0\]
+
+Diverges if the outer limit is $X\to +\infty$. So we require $X\to -\infty$. I.e. the boundary layer is on the right at $x_* = 1$. Applying this BC gives $B_0 = C_0 -1$ hence
+\[Y_0 = C_0(e^X -1) +1\]
+The $\bigo (\epsilon)$ inner equation becomes
+\[Y_1'' - Y_1' = -C_0 (e^X -1 )+1\]
+\[\implies Y_1 = C_1(e^X -1) C_0 X(e^X + 1)-X\]
+
+If we apply the BCs on the outer solution (little $x,y$) gives $A_0 = -4$ and $A_1 =0$. 
+\[y_{out(2)}(x) = -4e^x + 2x + 2 - \epsilon 4xe^x\]
+\[Y_{in(2)}(X) = C_0(e^X -1) + 1 + \epsilon(C_1(e^X -1) - C_0X(e^X + 1) - X)\]
+If we were only interested in leading order: use the normal limit 
+\[\lim_{x\to 1} y_0 = \lim_{X\to-\infty} Y_0 \implies -4e +X = -C_0 +1 \implies C_0 = 4e-3\]
+This is Van Dyke matching with $m=n=1$.
+
+If we want to do it with $m=n=2$ The outer solution needs to be rewritten in terms of the inner variable
+\begin{align*}
+    y_{out}(x) =-4e^xx + 2x + 2 -\epsilon 4xe^x \\
+    y_{out}(1+\epsilon X) = -4e^{1+\epsilon X} +2 (1+\epsilon X)+2 -\epsilon 4(1+\epsilon X) e^{1+\epsilon X}\\
+    y_{out(2,2)}(X) = -4e + 4 + \epsilon(-4eX + 2X - 4e)
+\end{align*}
+We expanded $e^{\epsilon X}$ using power series, and then simplified, and we have concatenated to order $\bigo(\epsilon)$.
+
+
+Now do the inner expansion in terms of the outer variable i.e. writing $X = \frac{x-1}{\epsilon}$
+\begin{align*}
+    Y_{in}(X) = C_0(e^X - 1) + 1 + \epsilon \left(C_1(e^X - 1) - C_0 X(e^X +1) -X\right)\\
+    Y_{in}(x) = C_0(e^{(x-1)/\epsilon} -1 )+1 + \epsilon\left(C_1 (e^{(x-1)/\epsilon} -1) - C_0\frac{x-1}{\epsilon}(e^{(x-1)/\epsilon}+1 ) - \frac{x-1}{\epsilon}\right)\\
+    = -C_0 + 1 + \epsilon\left(-C_1 - (C_0 +1) \frac{x-1}{\epsilon}\right)\\
+    Y_{in(2,2)}(x) = -C_0 + 1 - (C_0 + 1) (x-1) + \epsilon(-C_1)
+\end{align*}
+
+We dropped all the exponential terms since $x\to 0$ and $\epsilon\to 0$ so they will all be negligible.
+
+To make them match, they have to be equal at each order
+\begin{align*}
+    y_{out(2,2)}(X) &= Y_{in(2,2)}(x)\\
+    -4e + 4 + \epsilon(-4eX + 2X - 4e) &= -C_0 + 1 - (C_0 + 1) (x-1) + \epsilon(-C_1)\\
+    -4e + 4 + \epsilon(-(4e- 2)X - 4e) &= -C_0 + 1 - \epsilon(-(C_0 + 1)X - C_1)\\
+\end{align*}
+Equating orders gives $C_0 = 4e-3$ as before. At $\bigo(\epsilon)$ we get
+\begin{align*}
+    -(4e - 2)X - 4e = -(4e - 2)X - C_1\\
+    \implies C_1 = 4e
+\end{align*}
+The fact that the $X$ dependence disappears means that we've done it right.
+
+Now calculate the composite solution as we usually would. Where $y_{overlap} = y_{out(2,2)}(X)$
+If you've done things right, the overlap behaviour should cancel out entirely.
+\begin{align*}
+    y_{comp(2,2)} &= y_{out(2)}(x) + Y_{in(2)}(X) - y_{overlap}\\
+    \vdots&\\
+    &= -4e^x + 2x + 2 + (4e-3)e^X + \epsilon\left(4xe^x - 4e^{X+1} - (4e-3) Xe^X\right)
+\end{align*}
+And we can rewrite this in terms of $x$ i.e. $X = \frac{x-1}{\epsilon}$ for a proper solution
+
+
+\textbf{WKBJ approximation}
+An alternative way is to apply ansatz of the form
+\[y(x) \sim \sum_{n=0}^\infty u_n(x) \epsilon^n + e^{-F(x)/\epsilon} \sum_{n=0}^\infty v_n(x) \epsilon^n\]
+Which is known as WKB ansatz or Wentzel, Kramers and Brillouin Jeffreys. 
+
+
+
+
+Lets do a previous example up to $\epsilon^2$
+\[\epsilon \frac{d^2y}{dx^2} + \frac{dy}{dx} = \cos x,\quad \epsilon\to 0\]
+Subject to $y(0) = 2$ and $y(\pi) = -1$, over $0\leq x \leq \pi$. Recall there was a boundary layer at $x=0$ and we rescaled with $x=\epsilon X$, $y=Y$.
+Outer problem
+\begin{align*}
+    y'_0 &= \cos x,\quad  y_0(\pi) = -1\\
+    y_0'' + y_1' &= 0 ,\qquad  y_1(\pi) = 0\\
+    y_1'' + y_2' &= 0,\qquad y_2(\pi) =0
+\end{align*}
+Gives
+\[y_{outer} = \sin x -1 + \epsilon(-\cos x - 1) - \epsilon^2 \sin x + \bigo(\epsilon^2)\]
+
+
+
+Inner solution  
+\[\frac{d^2Y}{dX^2} + \frac{dY}{dX} = \epsilon \cos(\epsilon x) = \epsilon\left(1 - \epsilon^2 \frac12 X^2 + \hdots\right)\]
+Gives
+\begin{align*}
+    Y_0'' + Y_0' = 0,\quad Y_0(0)=2\\
+    Y_1'' + Y_1' =1,\quad Y_1(0)=0\\
+    Y_2'' + Y_2' = 0,\quad Y_2(0)=0
+\end{align*}
+Gives
+\[Y_{in}(X) = 2 + C_0 (e^{-X} - 1) + \epsilon (C_1 (e^{-X} -1) + X) + \epsilon^2 C_2(e^{-X} -1) + \bigo(\epsilon^3)\]
+
+Matching to determine $C_0$, $C_1$, and $C_2$. Look at 
+\begin{align*}
+    y_{out(3)} &= \sin(\epsilon X) - 1 +\epsilon(-\cos \epsilon X - 1) - \epsilon^2 \sin(\epsilon X)\\
+    &=\left(\epsilon X - \frac16 \epsilon^3 X^3 + \hdots\right) - 1 +\epsilon\left(-\left(1 - \frac12 \epsilon^2 X^2 + \hdots\right) -1 \right) + \epsilon^2(\epsilon X +\hdots) \\
+    y_{out(3,3)}(X) &= -1 + \epsilon (X-2)\\
+    y_{out(3,3)}(x) &= -1 + x - 2\epsilon
+\end{align*}
+Which is also the overlap behaviour for the composite.
+Now the inner in terms of the outer (using $X = \frac{x}{\epsilon}$)
+\begin{align*}
+    Y_{in(3)}(x) &= 2 + C_0(e^{-x/\epsilon} -1) + \epsilon (C_1 (e^{-x/\epsilon} -1) +\frac{x}{\epsilon}) + \epsilon^2 C_2 (e^{-x/\epsilon} -1)\\
+    &= 2 + C_0( -1) + \epsilon (C_1 (-1) +\frac{x}{\epsilon}) + \epsilon^2 C_2 (-1) + e.s.t\\
+    Y_{in(3,3)}(x) = 2 - C_0 + x - \epsilon C_1 - \epsilon^2 C_2
+\end{align*}
+Where e.s.t is exponentially small terms
+Matching gives:
+\begin{align*}
+    y_{out(3,3)}(x) = Y_{in(3,3)}(x)\\
+    -1 + x - 2\epsilon = 2 - C_0 + x - \epsilon C_1 - \epsilon^2 C_2
+\end{align*}
+The fact that there is an $x$ on both sides is a good sign.
+Hence
+\[C_0 = 3, \quad C_1 = 2, \quad C_2 = 0\]
+
+Hence the composite solution:
+\begin{align*}
+    y_{comp(3,3)} &= y_{out(3)} + Y_{in(3)} - y_{overlap}\\
+    &= \sin x -1 + \epsilon(-\cos x - 1) - \epsilon^2 \sin x + 2 + 3(e^{-X} -1) + \epsilon(2(e^{-X} -1) + X) - (-1+x - 2\epsilon)\\
+    &= \sin x -1 + 3e^{-x/\epsilon} + \epsilon(-1 - \cos x + 2e^{-x/\epsilon}) - \epsilon^2 \sin x
+\end{align*}
+
+Now we're finally going to do WKBJ approximation for boundary layers
+\[y(x) \sim \sum_{n=0}^\infty u_n (x) \epsilon^n + e^{-F(x)/\epsilon}\sum_{n=0}^\infty v_n(x)\epsilon^n\]
+We can apply this for pretty much any perturbation/bl problem, especially if there are multiple scales.
+
+Apply it to the example
+\[\epsilon \frac{d^2y}{dx^2} + (2x+1) \frac{dy}{dx} + 2y = 0\]
+With $\epsilon\to 0$ and $0\leq x \leq 1$ and bcs $y(0)=2$ and $y(1)=1$
+
+Leading order solution by matched asymptotics is 
+\[y_{comp}(x) = \frac{3}{1+2} - e^{-x/\epsilon}\]
+
+Lets see if we can get a `better' one using WKB.
+
+reduce the WKB ansatz to leading order
+\begin{align*}
+    y \sim u_0 + e^{-F/\epsilon} v_0\\
+    y' \sim u_0' + e^{-F/\epsilon} v_0' -\frac{F'}{\epsilon} e^{-F/\epsilon} (v_0 + \epsilon v_1 +\hdots)\\
+    y'' \sim u_0'' + e^{-F/\epsilon} v_0'' - 2\frac{F'}{\epsilon} v_0'+ \left(\frac{F'}{\epsilon}\right)^2 e^{-F/\epsilon}(v_0 + \epsilon v_1 + \hdots) - \frac{F''}{\epsilon} e^{-F/\epsilon} v_0
+\end{align*}
+Using the WKB ansatz and equating to various orders:
+\begin{align*}
+    \bigo(1): \ 0&= (2x +1) u_0' + 2u_0\\
+    \bigo(e^{-F(x)/\epsilon}\epsilon^{-1}): \ 0 &= [F' - (2x+1)]F'v_0\\
+    \bigo(e^{-F(x)/\epsilon}): \ 0 &= [-2F' +2 x +1)]v_0' + (-F'' + 2)v_0 +[F' - (2x+ 1)] F'v_1\\
+\end{align*}
+
+We know the boundary layer is at $x=0$, so we'd like $u_0$ and $v_0$ to balance as per the composite solution. I.e. we would want $e^{-F/\epsilon} = \bigo(1)$, so $F(0) = 0$. For $F$ to be non-trivial, the second equation gives:
+\[F' = 2x+1\]
+Which gives
+\[F(x) = x^2 +x\]
+Solving the $\bigo(1)$ equation and applying $u_0(1) = 1$ gives
+\[u_0(x) = \frac{3}{2x+1}\]
+Hence the third equation becomes 
+\[-(2x +1)v_0' = 0\]
+and applying $u_0(0) + v_0 = 2$ to get $v_0 = -1$
+Hence the final solution is
+\[y_{WKB}(x) = \left(\frac{3}{2x+1} - e^{-(x^2+x)/\epsilon}\right) (1+\bigo(\epsilon))\]
+This has slightly more detail than the composite solution due to the $x^2$ in the exponential term.
+
+
+
+
+What if we considered the problem with the perturbed cylinder in a flow moving left to right.
+Now if instead of perturbing the cylinder, we heated the cylinder, and we want to model the temperature of the water flowing past the cylinder. 
+
+We expect the water close to the cylinder to be warm, and for that heat to carry down with the flow.
+
+To model this, assume the diffusion of temperature is small compared to advection (i.e. a high Peclet number). giving
+\[\mathbf{u}\cdot \nabla T = \epsilon \nabla^2 T, \quad r \geq 1\]
+We're only solving for $T$ since we already know
+\[\mathbf{u} = \nabla\phi,\quad \phi = \left(r + \frac1r\right)\cos\theta\]
+
+The boundary conditions are 
+\[T=1,\quad r=1, \qquad and \qquad T\to 0,\quad as \ r\to \infty\]
+
+I.e. the temperature is fixed at 1 on the surface of the cylinder, and far away from the cylinder the temperature is $0$.
+
+Note in real life we might expect the heat to change the flow in some way.
+
+
+As usual calculate the outer solution first.
+Lets try a perturbation series of form:
+\[T(r,\theta) = T_0 + \epsilon T_1 + \bigo(\epsilon^2)\]
+With $\epsilon\to 0$. This gives
+\[\mathbf{u} \cdot \nabla T_0 = 0 ,\quad T_0(1,\theta) = 1, T_0(\infty,\theta) \to 0\]
+
+The only acceptable solution is $T_0(r,\theta) =0$ (since it must be constant on streamlines). And similarly for all $T_n$. But this doesn't satisfy $T_0(1,\theta)=1$. Hence there is a boundary layer on $r=1$.
+
+The inner solution's equation is:
+\[\left(1-\frac1{r^2}\right)\cos\theta \dd{T}r - \left(1 + \frac1{r^2}\right)\frac{\sin \theta}r \dd T\theta  = \epsilon\left(\ddn Tr2 + \frac1r \dd Tr + \frac1{r^2} \ddn T\theta 2\right)\]
+Lets take a change of variables $r = 1 + \delta \rho$. We need to find out what the scaling on $\delta$ is.
+The equation becomes
+\begin{align*}
+    \left(1-\frac1{(1 + \delta \rho)^2}\right)\frac{\cos\theta}\delta  \dd{T}\rho - \left(1 + \frac1{(1 + \delta \rho)^2}\right)\frac{\sin \theta}{1+\delta \rho} \dd T\theta  = \epsilon\left(\frac{1}{\delta^2}\ddn T\rho2 + \frac1{\delta(1+\delta \rho)} \dd T\rho + \frac1{(1+\delta \rho^2} \ddn T\theta 2\right)
+\end{align*}
+
+Expanding denominators with binomial expansions will give:
+\[(2 \delta \rho + \hdots) \frac{\cos\theta}{\delta} \dd Tr2 - (2 +\hdots) \sin \theta \dd T \theta = \epsilon\left(\frac{1}{\delta^2}\ddn T\rho2 + \frac1{\delta}(1+\hdots) \dd T\rho + (1+\hdots) \ddn T\theta 2\right)\]
+
+Rewrite so all the $\epsilon$ and $\delta$ is on the RHS
+\[(2 \rho + \hdots) \cos\theta \dd Tr2 - (2 +\hdots) \sin \theta \dd T \theta = \frac{\epsilon}{\delta^2}\ddn T\rho2 + \frac\epsilon{\delta}(1+\hdots) \dd T\rho + \epsilon(1+\hdots) \ddn T\theta 2\]
+(may be a typo)
+
+Look at possible balances:
+\begin{itemize}
+    \item $\delta =1$ just gives the outer solution
+    \item $\delta= \epsilon^{1/2}$ brings in the first RHS term only without causing a contradiction (so we use this)
+\end{itemize}
+
+
+Setting $\delta=\epsilon^{1/2}$ and introducing the inner perturbation series:
+\[T = T_0 + \epsilon^{1/2} T_1 + \bigo(\epsilon)\]
+
+To leading order:
+\[2\rho \cos\theta \dd{T_0}\rho - 2\sin\theta \dd{T_0}\theta = \ddn{T_0}\rho 2\]
+Subject to $T_0 = 1$ on $\rho=0$ and $T_0=0$ on $\rho\to \infty$ (matching condition)
+
+There is a similarity solution of the form: (we don't need to know where this comes from)
+\[T = f(\eta) , \quad \eta = \frac{\rho\sin \theta}{(1+\cos\theta)^{1/2}}\]
+
+The leading order equation becomes
+\[\frac{2\rho\cos\theta\sin\theta}{(1+\cos\theta)^{1/2}} f' - \frac{2\sin\theta}{(1+\cos\theta)^{1/2}} \left(\rho \cos\theta + \frac{\rho\sin^2\theta}{2(1+\cos\theta)}\right) f' = \frac{\sin^2\theta}{1+\cos\theta} f''\]
+Rearranging and simplifying:
+\[- \frac{2\sin\theta}{(1+\cos\theta)^{1/2}} \left(\frac{\rho\sin^2\theta}{2(1+\cos\theta)}\right) f' = \frac{\sin^2\theta}{1+\cos\theta} f''\]
+\[-\frac{\rho \sin\theta}{(1+\cos\theta)^{1/2}} f' = f''\]
+\[-\eta f' = f''\]
+Simple separable first order ODE!
+
+Hence
+\[f(\eta) = A\int_0^\infty e^{-u^2/2} du + B\]
+Applying the matching condition $f\to 0$ as $\eta \to \infty$ gives $B=0$. The other condition $f=1$ on $\eta =0$ ($r=1$) gives $A = \sqrt{2/\pi}$
+
+\[T_0 = \sqrt{\frac2\pi} \int_\eta^{\infty} e^{-u^2/2} du, \quad \eta = \epsilon^{1/2} \frac{(r-1)\sin\theta}{(1+\cos\theta)^{1/2}}\]
+
+% Boundary layers for coffee brewing:
+% This is a `double porosity' model. I.e. in two different scales it is porous: the whole of the coffee is considered porous, and each individual coffee grain is considered porous too.
+
+% We will do this with respect to time.
+% Its essentially a time-dependent model in one spatial dimension ($z$, pointnig down into the cup). The dependent variables are
+% \begin{itemize}
+%     \item $c_h$, coffee concentration in the space between coffee grains
+%     \item $c_v$, coffee concentration in the pores within the grains
+%     \item $\psi_s$, fraction of coffee left on grain surfaces ($0$ if everything has been extracted).
+% \end{itemize}
+
+% With some scaling etc. we get
+% \begin{itemize}
+%     \item $t_d$, bulk diffusion from kernels to the pores between the grains
+%     \item $t_s$, coffee dissolving from grain surface to pores between the grains
+%     \item $t_a$, advection of coffee through the bed. 
+% \end{itemize}
+% Where they are given by very grotty expressions, but come down to roughly 
+% \[t_s = 1.042s, \quad t_a = 5.356, \quad t_d = 42.231\]
+% A small parameter $\epsilon$ can be introduced as $\epsilon = t_a/t_d$.
+
+% Governing equations and BCs/ICs are:
+% \begin{align*}
+%     \epsilon \dd{C_h}\tau = \dd\\
+%     \\
+%     \epsilon \dd{\Psi_s}\tau = -a_2a_3(1-)
+% \end{align*}
+
+
+
+
+\section{Multi-Scale Problems}
+
+Boundary Layer problems typically feature multiple scales acting in different regions of a solution domain (inner \& outer regions). Many problems of interest feature two different scales occurring simulaneously. 
+
+Some example phenomena:
+\begin{itemize}
+     \item Mechanical properties - plywood, sponges, fibreglass, whose overall behaviour depends on the small scale structure.
+     \item Biological tissues compromised of cells
+     \item Propagation of waves through a region which contains small obstacles
+\end{itemize} 
+
+
+The methods used for these are \textbf{multiscale methods} or equivalently \textbf{the method of multiple scales}.
+
+Say we have a solution $y(t)$ of the form $y(\tau,T)$, where $\tau =t$ and $T = \epsilon t$ to represent the fast and slow scales. Under this change of variables we get
+\[\frac{d}{dt} = \frac{d\tau}{dt} \dd{}\tau + \frac{dT}{dt} \dd{}T = \dd{}\tau + \epsilon \dd{}T\]
+And then if we want the second derivative we get
+\[\frac{d^2}{dt^2} = \ldots = \ddn{}\tau2 + 2\epsilon \dd{^2}{\tau\partial T} + \epsilon^2 \ddn{}T2\]
+
+This then permits analysis of problems which are not otherwise amenable to the techniques of the perturbation problems already considered. Lets look at the Van der Pol oscillator.
+
+
+The Van der Pol equation is:
+\[\frac{d^2y}{dt^2} + \epsilon(y^2-1) \frac{dt}{dt} + y = 0\]
+With $\epsilon \ll1$, $y(0)=0$ and $y'(0)=0$. We will see that for smamll $\epsilon$ the solution displays behaviour on two time scales simultaneously: rapid oscillations (fast scale) combined with a gradual change in amplitude (slow scale).
+
+If we tried a regular perturbation solution:
+$y=y_0 + \epsilon y_1 + \bigo(\epsilon^2)$
+\begin{align*}
+    y_0'' + y_0 = 0\\
+\end{align*}
+$y_0(0)=1$ and $y_0'(0)=0$
+Hence
+\[y_0(t) = \cos t\]
+
+At $\bigo(\epsilon)$
+\begin{align*}
+    y_1'' + y_1 = -(y_0^2 - 1) y_0'\\
+    y_1'' + y_1 = -\sin^3 t
+\end{align*}
+$y_1(0)=0, y_1'(0)=0$.
+
+We would use variation of parameters here (using the wronskian)
+\begin{align*}
+    y_1 = A(t)\cos t + B(t)\sin t
+\end{align*}
+Where
+\[A(t) = -\int \frac1W \sin t(-\sin^3 t) dt \ and \ B(t) = \int \frac1W \cos t(-\sin^3 t) dt \]
+And 
+\[W = \det\begin{pmatrix}
+    \cos t & \sin t\\-\sin t&\cos t
+\end{pmatrix} = \cos^2 t + \sin^2 t = 1 \]
+
+Which finally gives
+\[y_1 = \frac{3t\cos t}{8} - \frac{9\sin t}{32} - \frac{\sin 3t}{32}\]
+This doesn't match the true solution since it levels out with time, whereas this solution expands in time (forever). There is `resonance' in the equation. We have \textbf{secular or resonant} terms in the equations. Namely terms that on integration give erroneous growth. Multiple scale analysis prevents this issue.
+
+ \[\frac{d^2y}{dt^2} + \epsilon(y^2-1) \frac{dt}{dt} + y = 0\]
+Now a perturbation series for the two variables
+\[y(t) \equiv y(\tau,T) = y_0(\tau,T) + \epsilon y_1(\tau,T) + \ldots\]
+
+\[\frac{d}{dt} = \dd{}\tau + \epsilon \dd{}T\]
+\[\frac{d^2}{dt^2} = \ddn{}\tau2 + 2\epsilon \dd{^2}{\tau\partial T} + \epsilon^2 \ddn{}T2\]
+Giving the equation:
+\[\ddn y\tau 2 + 2\epsilon \frac{\partial^2y}{\partial \tau \partial T} + \epsilon^2 \ddn yT2 + \epsilon(y^2 -1)(\dd y \tau + \epsilon \dd y T) + y = 0\]
+
+At leading order:
+\[\ddn{y_0}\tau2 + y_0 = 0\]
+This is the same as before EXCEPT this is a PDE for $y$.
+With $y_0(t=0) = 1$ and $y_0'(t=0)=0$
+The initial conditions become
+\begin{align*}
+    y_0 &=1\\
+    \dd{y_0}{\tau} + \epsilon \dd{y_0}T = 0\implies \dd{y_0}{\tau} &= 0 \ at \ \bigo(\epsilon)
+\end{align*}
+
+
+Solving the PDE for $y_0$:
+\begin{align*}
+    y_0(\tau,T) = R(T)\cos(\tau +\theta(T))\\
+\end{align*}
+And the boundary conditions give:
+\begin{align*}
+    y_0(0,0) = 1 \implies R(0) = 1\\
+    \dd{y_0(0,0)}{\tau} = 0 \implies R(T)(-\sin(\theta(T)))\implies \theta(0) = 0
+\end{align*}
+
+Now at order $\bigo(\epsilon)$:
+\[
+    \ddn{y_1}\tau2 + y_1 = - 2\frac{\partial y_0}{\partial \tau \partial T} - (y^2-1)\dd{y_0}\tau
+\]
+
+\begin{align*}
+    \dd{y_0}\tau &= -R(t) \sin(\tau + \theta(T))\\
+    \frac{\partial y_0}{\partial \tau \partial T} &= -R'(T)\sin(\tau+\theta(T)) -R(T)\cos(\tau+\theta(T))\theta'(T) 
+\end{align*}
+
+
+\begin{align*}
+        \ddn{y_1}\tau2 + y_1 &= - 2\frac{\partial y_0}{\partial \tau \partial T} - (y^2-1)\dd{y_0}\tau\\
+        \ddn{y_1}\tau2 + y_1 &=  2R'\sin(\tau+\theta) + 2R\theta'\cos(\tau+\theta) +(R^2\cos^2(\tau+\theta)-1)(-R\sin(\tau+\theta))\\
+        &\vdots\\
+        \ddn{y_1}\tau2 + y_1 &=  2R\theta'\cos(\tau+\theta) + (2R' + \frac{R^3}{4} - R) \sin(\tau +\theta) + \frac{R^3}{4} \sin(3(\tau+\theta))
+\end{align*}
+We won't solve this! Only use it to obtain information about $R$ and $\theta$.
+Since we don't want unbounded growth we require these forcing terms to be $0$. I.e. solve
+\begin{align*}
+    2R\theta' =0\\
+    2R' + \frac{R^3}{4} - R = 0\\
+\end{align*}
+For nontrivial solutions we have $\theta' =0$, and hence $\theta = c$. And 
+\begin{align*}
+    2R' + \frac{R^3}{4} - R = 0\\
+    R' = \frac{R(4-R^2)}{8}\\ 
+    R = \frac{2}{(1+3e^{-T})^{1/2}}
+\end{align*}
+Using the initial condition $R(0)=1$.
+To satisfy the other boundary condition, $\theta(T) = k\pi$ and for simplicity we set $\theta =0 $
+Hence
+\begin{align*}
+    y_0(\tau,T) &= R(T) \cos(\tau + \theta(T))\\
+    &= \frac{2\cos(\tau)}{(1+3e^{-T})^{1/2}}\\
+    y_0(t)&= \frac{2\cos t}{(1+3e^{-\epsilon t})^{1/2}}
+\end{align*}
+
+The key steps in the solution were:
+\begin{enumerate}
+    \item Made a change of variables to account for fast/slow scales
+    \item Apply to the governing equation
+    \item Removal of resonant terms from the next-to leading order governing equation
+\end{enumerate}
+That process featured some slightly messy algebra. There is a method which is a little more straight forward (for the same problem:
+
+
+At $\bigo(1)$ we had
+\[\ddn{y_0}\tau 2 + y_0 = 0\]
+An alternative solution to this PDE is
+\[y_0 = A(T) e^{i\tau} + \bar{A}(T)e^{-i\tau}\]
+Where $\bar{A}$ is the complex conjugate to $A$.
+
+\begin{align*}
+  \ddn{y_1}\tau 2 + y_1 &= -(y_0^2 - 1)\dd{y_0}\tau - \frac{\partial y_{0}}{\partial \tau \partial T}\\
+  &=-\left(A^2 e^{i2 \tau} +2A\bar{A} +\bar{A}^2e^{-i2\tau} -1\right) \left(iA(t)e^{i \tau} - i\bar{A}e^{-i\tau}\right) - i\left(A' e^{i\tau} - \bar{A}' e^{-i\tau}\right)\\
+  &=\left(-iA'-i2A^2\bar{A} + iA + iA^2 \bar{A}\right) e^{i\tau}\\
+  &+ \left(stuff2\right) e^{-i\tau} + \left(stuff3\right)\\
+\end{align*}
+We need to set these coefficient functions for $e^{i\tau}$ to zero.
+\[-i\left(A' + A^2\bar{A} + A \right) =0 \]
+Which should give
+\begin{align*}
+    A' = \frac{A(4-|A|^2)}{8}\\
+\end{align*}
+Let $A = R(T)e^{-\theta(T)}$, and should give us the same solution as before.
+
+
+\subsection{Asymptotic Homogenisation}
+Another method for multiple scales is when we only really care about the large scale behaviour - to derive `effective' governing equations for the behaviour of systems which have complicated small-scale behaviour.
+
+Example derivation of an effective governing equation for a 1D composite material:
+
+\[E \frac{du}{dx} = 1\]
+But if 
+\[E\equiv E(x,\frac{x}{\epsilon})\]
+Then we have a large scale and a small scale to work with.
+Let $\xi = x/\epsilon$
+\begin{align*}
+    \frac{d}{dx} = \dd{}x + \frac{1}{\epsilon} \dd{}\xi\\
+    E(x,\xi) \left(\dd ux + \frac1{\epsilon} \dd u\xi\right) = 1
+\end{align*}
+Now we will homogenise the equation to get an effective equation:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}

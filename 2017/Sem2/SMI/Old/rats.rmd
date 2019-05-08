@@ -1,0 +1,120 @@
+---
+title: "Rats or Cats which sleeps longer?"
+author: "Andrew Martin"
+date: "21/08/2017"
+output:
+  pdf_document: default
+  html_document: default
+  word_document:
+    fig_caption: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction 
+
+In this analysis, we will address the question of which has the longer average sleeping patterns: rats (Rodentia) or cats (Carnivora). 
+
+# Data
+
+The line has *bold* words and also **italic** words.  
+
+# R commands
+
+bleh  
+
+## mean
+
+bleh
+
+## stdev
+
+bleh
+
+## summary
+
+bleh
+
+The data is contained in the `msleep` dataset in the `tidyverse` package. This is loaded:
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+data("msleep")
+```
+
+The data consists of `r nrow(msleep)` Species with `r ncol(msleep)` variables measured on it. 
+
+# Cleaning of data
+
+We are only interested in the variables:
+
+- **order:** which is a categorical nominal variable and gives the Order of the Species. 
+- **sleep_total:** which is a quantitative continuous variable and gives the total amount of sleep in hours. 
+
+As well, we are only interested in Species that are in the order Carnivora or Rodentia. The following code cleans the dataset:
+
+```{r}
+rats_cats  <- msleep %>% 
+  filter(order %in% c("Carnivora", "Rodentia")) %>% 
+  select(order, sleep_total)
+```
+
+```{r,echo = FALSE}
+rats_cats%>%
+  group_by(order) %>% 
+  summarise(sd=sd(sleep_total))%>%
+  knitr::kable(digits = 2)
+```
+
+# Basic summary statistics
+
+Table \ref{tab:ss} gives the summary statistics for each group. 
+
+```{r, echo = FALSE}
+rats_cats %>% 
+  group_by(order) %>% 
+  summarise(n = n(), mean = mean(sleep_total)) %>% 
+  knitr::kable(caption = "Summary statistics for each Order\\label{tab:ss}")
+```
+
+# Figuretoldtomake
+$$
+T = \frac{\bar{X_1} - \bar{X_2}}{\sqrt[]{\frac{S_1^2}{n_1}+\frac{S_2^2}{n_2}}}\\
+cov\left(\sum_{i=1}^n a_iY_i , \sum_{j=1}^n b_j Y_j\right) = \sum_{i=1}^n\sum_{j=1}^n
+$$
+# Side-by-side boxplots
+
+Figure \ref{fig:boxplot} gives the side-by-side boxplots of sleep total for each order. 
+
+```{r, fig.cap="Side-by-side boxplots of total sleep for each order.\\label{fig:boxplot}", echo = FALSE}
+ggplot(rats_cats, aes(x = order, y = sleep_total, fill = order)) + 
+  geom_boxplot(show.legend = FALSE)
+```
+
+# Two-sample t-test
+
+The sample mean for each group was used. To recap the sample mean for each group is 
+
+$$
+\bar{Y}_i = \sum^{n_i}_{i = 1}Y_{ij}, 
+$$
+where $n_i$ is the number in the $i$th group, and $Y_{ij}$ is the $j$th observation in the $i$th group. 
+
+The appropriate null and alternative hypotheses are
+
+$$
+\begin{aligned}
+H_0 &: \mu_1 - \mu_2 = 0,\\
+H_a &: ?? \ne ??,
+\end{aligned}
+$$
+where ??.
+
+We perform a two-sample t-test with 
+
+```{r}
+## Insert correct code here for t.test
+```
+

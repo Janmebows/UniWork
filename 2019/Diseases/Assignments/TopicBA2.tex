@@ -1,0 +1,271 @@
+\documentclass{/home/janmebows/Documents/LatexTemplates/myassignment}
+\title{Topic B Assignment 2}
+\newcommand{\odd}[2]{\frac{d#1}{d#2}}
+
+\begin{document}
+\maketitle
+
+
+\begin{enumerate}
+	\item 
+	\begin{enumerate}[label=(\roman*)]
+		\item Let $S(t)$, $I(t)$ and $R(t)$ be the number of susceptible, infected and recovered people respectively at time $t$. We are modelling the SIR model where recovered individuals will die with rate $\mu$, and are reborn as susceptibles. This is simply a transition from $R\to S$ with rate $\mu$. This is effectively an SIRS model. Writing out the transition table:
+		\begin{table}[tb]
+		\centering
+		\label{tab::sirsnaive}
+		 	\begin{tabular}{c|c|c}
+		 		Event&Transition&Rate\\
+		 		\hline 
+		 		Infection & $(S,I,R)\to (S-1,I+1,R)$ & $\frac{\beta IS}{S+I+R-1}$\\
+		 		Recovery & $(S,I,R) \to (S,I-1,R+1)$ & $\gamma I$\\ 
+		 		Rebirth & $(S,I,R)\to (S+1,I,R-1)$& $\mu R$
+		 	\end{tabular}
+		\label{tab::sirs}
+		 	\begin{tabular}{c|c|c}
+		 		Event&Transition&Rate\\
+		 		\hline 
+		 		Infection & $(S,I)\to (S-1,I+1)$ & $\frac{\beta IS}{N-1}$\\
+		 		Recovery & $I \to I-1$ & $\gamma I$\\ 
+		 		Rebirth & $S\to S+1$& $\mu (N-I-S)$
+		 	\end{tabular}
+		 	\caption{Top: full SIRS model description. Bottom: a simplified description to the model}
+		 \end{table} 
+		 Table~\ref{tab::sirsnaive} shows a na\"ive approach to the problem. Since rebirth occurs instantly after a recovered individual dies, $N$ remains fixed. 
+		\begin{table}[tb]
+		\centering
+		 \end{table} 
+		\item %Deterministic approximation to the dynamics
+		Without randomness, this is the system (using proportions)
+		\begin{align*}
+			\frac{di}{dt} &= \beta is - \gamma i\\
+			\frac{ds}{dt} &= -\beta is + \mu(1-i-s)
+		\end{align*}
+		Where $I = Ni$ and $S = Ns$.
+		\item %Long term behaviour of the deterministic approximation
+			Consider the equilibria for the model. I will consider the population proportions ()$i,s$) rather than numbers ($I,S$).
+			First get the $i$ nullclines:
+			\begin{align*}
+				\odd it = 0=\beta is -\gamma i\\
+				\implies i=0 \ or \ \beta s - \gamma =0\\
+				s = \frac{\gamma}{\beta}
+			\end{align*}
+			And the $s$ nullclines:
+			\begin{align*}
+				\odd st = 0 &= -\beta is+ \mu(1-i-s)\\
+				-\beta is - \mu S &= -\mu(1-i)\\
+				s(\beta i + \mu) &= \mu(1-i)\\
+				s &= \frac{\mu(1-i)}{\beta i + \mu}
+			\end{align*}
+			So fixed points are: the trivial case: $i=0, s=1$, and the more interesting one:
+			\begin{align*}
+				s = \frac{\gamma}{\beta}, \quad \odd it &= -\beta i\frac{\gamma}{\beta} + \mu(1-i-\frac{\gamma}{\beta})\\
+				0 &=-\gamma i + \mu  - \mu i - \mu\frac{\gamma}{\beta}\\
+				\gamma i + \mu i &= \mu(1 - \frac{\gamma}{\beta})\\
+				i &= \frac{\mu\left(1 - \frac{\gamma}{\beta}\right)}{\gamma + \mu}
+			\end{align*}
+			
+			The fixed point for $I$ exists in the relevant region only if
+			\begin{align*}
+				1 - \frac{\gamma}{\beta} \geq0\\
+				\gamma \leq \beta
+			\end{align*}
+			So this fixed point exists only if $\gamma \leq \beta$
+
+			The stability of these steady states, using the Jacobian:
+			\[J(i,s) = \begin{pmatrix}
+				\beta s - \gamma & \beta i\\
+				-\beta s - \mu &-\beta i - \mu
+			\end{pmatrix}\]
+			And hence for the steady states
+			\[J(0,1) = \begin{pmatrix}
+				\beta - \gamma & 0\\
+				-\beta - \mu & -\mu
+			\end{pmatrix}\]
+			With eigenvalues $\beta- \gamma$ and $-\mu$. This is stable if $\gamma > \beta$ and $\mu > 0$.
+			For the other steady state:
+
+			\begin{align*}
+				J\left(\frac{\mu\left(1 - \frac{\gamma}{\beta}\right)}{\gamma + \mu},\frac\gamma\beta \right) &= \begin{pmatrix}
+				\beta \frac\gamma\beta - \gamma & \beta \frac{\mu\left(1 - \frac{\gamma}{\beta}\right)}{\gamma + \mu}\\
+				-\beta \frac\gamma\beta - \mu &-\beta \frac{\mu\left(1 - \frac{\gamma}{\beta}\right)}{\gamma + \mu} - \mu
+			\end{pmatrix} \\
+			&= \begin{pmatrix}
+				0 & \frac{\mu(\beta - \gamma)}{\gamma + \mu}\\
+				-\gamma - \mu & -\left(\frac{\mu(\beta - \gamma)}{\gamma + \mu} +\mu\right)
+			\end{pmatrix}\\
+			&= \begin{pmatrix}
+					0 & \frac{\mu(\beta - \gamma)}{(\gamma + \mu)}\\
+				-(\gamma + \mu) & -\frac{\mu(\beta - \mu)}{(\gamma + \mu)}
+			\end{pmatrix}\\
+			\end{align*}
+			This will be stable if $\det J > 0 $ and $tr J <0$
+			\begin{align*}
+				\det J = \mu(\beta - \gamma) > 0\\
+					\beta - \gamma > 0\\
+					\beta > \gamma
+			\end{align*}
+			And the trace has to be negative:
+			\begin{align*}
+				-\mu(\beta - \mu) < 0\\
+				\beta - \mu > 0\\
+				\beta > \mu
+			\end{align*}
+			Hence this is a stable point so long as $\beta > \max\{\gamma,\mu\} $ 
+
+
+			If we have $\mu >\beta > \gamma > 0$ then there are no stable fixed points.
+
+		\item %Simulate the stochastic model and compare long term dynamics to the deterministic
+				%Consider R_0 = 15, 1/\gamma = 13 days, 1/\mu = 60 years 
+				%and frequency dependent mixing
+			The code to simulate the model is shown in Code~\ref{code:main}. Figure~\ref{fig:sirsim} plots 10 simulations of the model. Clearly for this parameter set, the number of infected goes to $0$. What is not shown in the plot is that as time goes to infinity $S\to N$.
+		
+			\begin{figure}[tb]
+				\centering
+				\includegraphics[]{TopicBA2Q14}
+				\caption{10 Simulations of the model for $R_0 =15$, $1/\gamma = 13$ and $1/\mu = \frac{60}{365}$. Blue: susceptible, red: infected}
+				\label{fig:sirsim}
+			\end{figure}
+
+		\item %Calculate E(I(t)) conditioned on the disease not going extinct and compare with the deterministic model
+		%\[\mathbb{E}\left(I(t) | I(t) > 0\right)\]
+		By simulating repeatedly, and rejecting points where $I(t)=0$ for any $t$, we can estimate this $\mathbb{E}(I(t)|I(t) > 0)$ 
+
+		Figure~\ref{fig:detandstoc} plots a comparison of the two models. Only $I(t)$ has been plotted for the deterministic and stochastic models, as this is the more interesting quantity. As shown in the figure, the two plots are very similar, overlapping for most of the region, but begin to separate slightly around $t=60$ and above.
+
+		\begin{figure}[tb]
+			\centering
+			\includegraphics[]{TopicBA2Q15}
+			\caption{Comparison of the deterministic and stochastic models, where the stochastic solution is the average of 50 simulations.}
+			\label{fig:detandstoc}
+		\end{figure}
+
+
+		\item %How would the model change if all individuals can die at a rate $\mu$ and 
+				%susceptibles are born independently at rate $\mu$ proportional to the total population?
+				If \textbf{all} individuals die at a rate $\mu$, and susceptibles are independently born at rate $\mu$ proportional to the total population, the model itself changes significantly. The total populaiton size $N$ is no longer constant. The deterministic system of ODEs to model this is:
+
+		\begin{align*}
+			\frac{dI}{dt} &= \frac{\beta IS}{S+I+R} - \gamma I - \mu I\\
+			\frac{dS}{dt} &= -\frac{\beta IS}{S+I+R} + \mu(I+R)\\
+			\frac{dR}{dt} &= \gamma I -\mu R
+		\end{align*}
+
+
+	\end{enumerate}
+	\item 
+	\begin{enumerate}[label=(\roman*)]
+		\item %Write code to generate the complete Q matrix for an SIR model (pop size N) using 
+				%degree of advancement representation
+				The code for this is shown in ~\ref{code:Qmat}. It calls code~\ref{code:DAmap} to obtain the DA representation and then generates a $Q_1$ and $Q_2$ matrix for infection and recovery rates, respectively.
+
+		\item %For N=15, beta = 1.6, gamma =1 with IC (S(0),I(0)) = (N-1,1), produce
+				%figures which show the PMF of I(t) at times 0,1,5,50. 
+				%Use an implicit Euler method to numerically solve the forward equation
+				Part 2 of code~\ref{code:main} utilises the SIRQ function and the code~\ref{code:IEMethodReturnAll}. 
+
+				\begin{figure}[tb]
+					\centering
+					\includegraphics[]{TopicBA2Q22.eps}
+					\caption{Probability mass function of $I(t)$ calculated using the implicit Euler method for various times}
+					\label{fig:detvsstoc}
+				\end{figure}
+		\item %probability that exactly 12 people are infected over the course of the epidemic
+				%same params as (ii)
+				The code~\ref{code:main} outputs the value, and it gives $0.0501$ for the probability that a total of $12$ people are infected over the epidemic. 
+
+		\item %N=100,beta =1.6, gamma =1, plot the expected value of I(t) 
+				%as a function of time by solving the forward equation numerically
+				%and compare to the deterministic approximation from lectures
+				The part labelled Question 4 Part 4 of code~\ref{code:main} solves this. 
+
+		\begin{figure}[tb]
+			\centering
+			\includegraphics[width=\linewidth]{TopicBA2Q24}
+			\caption{Comparison of the deterministic value and Implicit Euler approximation of $E[I(t)]$ .}
+			\label{fig:detandstoc}
+		\end{figure}
+		\item %N=50,100,500 beta = 1.6 and gamma =1, calculate
+				%probability of a minor outbreak using same methods as 3
+				%How do these compare to the results derived using the branching process approx?
+				To calculate the probability of a minor outbreak, 
+	\end{enumerate}
+	\item 
+	\begin{enumerate}[label=(\roman*)]
+		\item %How do R0 and pmf of secondary infections change if we have 
+				%erlang 2 dist infectious period with same mean 1/gamma 
+				%instead of the normal exponential
+				So we now consider the SI(2)R model. Transitions are
+				\[S \stackrel{\frac{\beta IS}{N-1}}\to {I_1} \stackrel{\gamma}{\to} I_2 \stackrel{\gamma}{\to} R\]
+				Since we are only considering a single individual in the system, the states correspond to those above. $R$ is the absorbing state.
+
+				Since we consider an infinite population and we are only concerned with states that accumulate cost. So $Q_B$ will be the $Q$ matrix for $I_1,I_2$.
+				\[Q_B = \begin{pmatrix}
+					-2 \gamma& 2 \gamma\\
+					0 & -2 \gamma\\
+				\end{pmatrix}\]
+				With cost function (since you infect at rate $\beta$ in either state):
+				\[\vec f = \begin{bmatrix}
+					\beta\\ \beta
+				\end{bmatrix}\]
+				Hence
+				\begin{align*}
+					Q_B \vec d = -\vec f\\
+					\begin{pmatrix}
+					-2 \gamma& 2 \gamma\\
+					0 & -2 \gamma\\
+					\end{pmatrix} \begin{bmatrix}
+						d_1\\d_2
+					\end{bmatrix} = \begin{bmatrix}
+					-\beta\\ -\beta
+				\end{bmatrix}\\
+				\implies d_2 = \frac{\beta}{2\gamma}\\
+				-2 \gamma d_1 +\beta = -\beta\\
+				d_1 = \frac{\beta}{\gamma}
+				\end{align*}
+				Since $d_i$ are the expected cost for state $i$. So the expected total cost for one individual will be
+				\[d_1 + d_2 = \frac{3 \beta}{2 \gamma} = R_0\]
+		\item %SIR CTMC N=20 where people need care to recover
+				%4 people
+				SIR model. We want to calculate 
+				\[D = \mathbb{E}\left(\int_0^\infty f(X(t)) dt\right)\]
+			 							
+			With $N=20, \beta = 0.6$ and $1/\gamma = 3$, and the cost per day to take care of $i$ infected individuals will be:
+			\[f(i) = ai + b\lceil\frac{i}{4}\rceil = 2i + 5\lceil\frac{i}{4}\rceil,\quad f(0) =0  \]
+			Where $i=0$ is an absorbing state
+			Have to solve the system 
+			\[\vec d = -\vec f \backslash Q_b\]
+			Where $d_i$ is the expected cost for caring for individuals given the process starts in state $i$.
+			Since this is the SIR model, we will use the DA state space. To extract the number of infected from this, $I = Z_2 - Z_1$
+
+	\end{enumerate}
+\end{enumerate}
+
+\clearpage
+\appendix
+\section{Code}
+\label{code:main}
+\subsection{Main Script}
+\lstinputlisting{DiseasesA2.m}
+\label{code:SIRSsim}
+\subsection{SIRS\_Sim.m}
+\lstinputlisting{../SIRS_Sim.m}
+\label{code:DAmap}
+\subsection{SIR\_DA\_mapping.m}
+\lstinputlisting{../SIR_DA_mapping.m}
+\label{code:Qmat}
+\subsection{SIRQ.m}
+\lstinputlisting{../SIRQ.m}
+\label{code:IEMethodReturnAll}
+\subsection{IEMethodReturnAll.m}
+\lstinputlisting{../IEMethodReturnAll.m}
+\label{code:deterministic}
+\subsection{SIRS\_DE\_deterministic.m}
+\lstinputlisting{../SIRS_DE_deterministic.m}
+	
+
+
+
+\clearpage
+\includepdf[pages=1-]{TopicBA2Questions}
+\end{document}
