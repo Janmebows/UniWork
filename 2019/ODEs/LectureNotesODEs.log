@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.4.3)  9 MAY 2019 09:19
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.4.3)  9 MAY 2019 09:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1239,15 +1239,15 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [30]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1617.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1617.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1631.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1631.
  (./LectureNotesODEs.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1617.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1617.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1631.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1631.
 
 Package rerunfilecheck Info: File `LectureNotesODEs.out' has not changed.
 (rerunfilecheck)             Checksum: F3764CE65905631AAD56AF213E1AD7A6;3776.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1617.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1631.
  ) 
 Here is how much of TeX's memory you used:
  30122 strings out of 492982
@@ -1278,7 +1278,7 @@ blic/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
 msfonts/symbols/msam10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
 sfonts/symbols/msbm10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm109
 5.pfb>
-Output written on LectureNotesODEs.pdf (30 pages, 321955 bytes).
+Output written on LectureNotesODEs.pdf (30 pages, 322311 bytes).
 PDF statistics:
  502 PDF objects out of 1000 (max. 8388607)
  444 compressed objects within 5 object streams

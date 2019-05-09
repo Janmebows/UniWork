@@ -1548,7 +1548,21 @@ We could use the MVP as above, but theres a simpler approach:
 Using the fact that $|x+y| \leq |x|+|y|$ by the triangle inequality, consider $g$ on a bounded interval, say $J = [-1,1]$.
 
 
+$g(x) = x^2$
+Say we consider an odd interval $J$, e.g. $J=[-1,1]$, then $|x| + |y| \leq 2$
+So that
+\[|g(x)-g(y)| \leq 2 |x-y|\]
+So $g$ is Lipschitz continous with best const $L=2$ on $J=[-1,1]$
+However if $J$ is unbounded, e.g. $J =\mathbb{R}$. Then there doesn't exist an $L$.
+But for any finite interval, then we have Lipschitz continuity.
+
+
+
+
 If we have the ODE $\dot u = f(t,u)$ where $t \in I$ and $u \in J$, so we get $f:I\times J \to \mathbb{R}$. So we can plot this system in 3D as a surface plot. I.e. plotting $u,t,f$ (literally half of what im doing in my thesis...)
+
+
+
 
 
 
