@@ -24,8 +24,8 @@
 \BOOKMARK [3][-]{subsubsection.3.2.2}{Complex Eigenvalues}{subsection.3.2}% 24
 \BOOKMARK [3][-]{subsubsection.3.2.3}{General Linear system}{subsection.3.2}% 25
 \BOOKMARK [3][-]{subsubsection.3.2.4}{Asymptotic Stability}{subsection.3.2}% 26
-\BOOKMARK [2][-]{subsection.3.3}{Nonlinear Systems and Linearisation}{section.3}% 27
-\BOOKMARK [3][-]{subsubsection.3.3.1}{General nonlinear system}{subsection.3.3}% 28
+\BOOKMARK [2][-]{subsection.3.3}{Non-linear Systems and Linearisation}{section.3}% 27
+\BOOKMARK [3][-]{subsubsection.3.3.1}{General non-linear system}{subsection.3.3}% 28
 \BOOKMARK [3][-]{subsubsection.3.3.2}{Linearisation}{subsection.3.3}% 29
 \BOOKMARK [2][-]{subsection.3.4}{Application to models}{section.3}% 30
 \BOOKMARK [3][-]{subsubsection.3.4.1}{Interaction model for 2 populations}{subsection.3.4}% 31
@@ -43,8 +43,3 @@
 \BOOKMARK [3][-]{subsubsection.4.1.1}{Well and Ill posed Problems}{subsection.4.1}% 43
 \BOOKMARK [2][-]{subsection.4.2}{Existence and Uniqueness Theorem}{section.4}% 44
 \BOOKMARK [2][-]{subsection.4.3}{Picard Iteration}{section.4}% 45
-\BOOKMARK [2][-]{subsection.4.4}{Error, Conditioning and Stability}{section.4}% 46
-\BOOKMARK [3][-]{subsubsection.4.4.1}{Error}{subsection.4.4}% 47
-\BOOKMARK [3][-]{subsubsection.4.4.2}{Conditioning}{subsection.4.4}% 48
-\BOOKMARK [3][-]{subsubsection.4.4.3}{Stability of algorithms}{subsection.4.4}% 49
-\BOOKMARK [2][-]{subsection.4.5}{Finite Differences}{section.4}% 50

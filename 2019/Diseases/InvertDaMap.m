@@ -1,7 +1,10 @@
 function values = InvertDaMap(vec,N,includeZeroes)
-%vec is a 1,N or N,1 vector with the DA mapping
 %InvertDaMap extracts a vector corresponding to I for this mapping
+%InvertDaMap(vec,N,includeZeroes)
+%vec is the vector in DA mapping
+%N is the number of people
 %If includeZeroes == TRUE then the cases where Z1 - Z2 == 0 are in vec
+%vec is a 1,N or N,1 vector with the DA mapping
 if nargin==2
     includeZeroes=true;
 end

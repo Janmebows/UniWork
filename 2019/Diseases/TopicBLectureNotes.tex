@@ -1464,6 +1464,8 @@ We may be able to specify the model for the dynamics of a system, but to provide
 
 We may have some observations/data from the system which we wish to use to infer the parameters (or alternatively their distribution). In deterministics we may refer to this as an `inverse problem'.
 
+\subsection{Frequentist}
+
 We will focus specifically on Bayesian inference (which Josh believes is the best kind), but today we will start with Frequentist (classical) inference. 
 
 From a text:
@@ -1521,29 +1523,93 @@ SIR outbreak. Estimate (using MLE) of $R_0$ given the following final size and p
 What is the likelihood function of a CTMC, where we observe the state of the system of the process at a sequence of times, $t_1,\ldots,t_n$
 
 
+\subsection{Bayesian}
+\begin{verse}
+\noindent
+{\centering
+In Bayesian inference, the model parameters are regarded as random variables and the main object of interest is the posterior distribution, i.e. the distribution of the parameters given the data. Specifically, the posterior density is defined via Bayes' theorem as the normalised product of the prior density, and the likelihood.
+-O'Neill (2002)
+}
+\end{verse}
+
+\subsubsection{Bayes' Theorem}
+Bayes' theorem relates the conditional probability of an event $A$ given an event $B$.
+\[P(A|B) = \frac{P(B|A)P(A)}{P(B)}\]
+
+Let $A$ be the event of having a particular rare disease; and $B$ be the event that you test positive for having the disease.
+
+
+We might know that $P(B|A) = 0.99$ (sensitivity [true positive]) and $P(A) = 0.0001$ 
+We know $P(B^c | A^c) = 0.98$ (specificity [true negative]).
+Hence
+\[P(B) = P(B|A) P(A) + (1-P(B^c|A^c))P(A^c) = 0.99 \times 0.0001 + 0.02 \times 0.9999 = 0.0201\]
+Say I tested positive, whats the probability I have the disease?
+\[P(A|B) = \frac{P(B|A)P(A)}{P(B)} = \frac{0.99\times 0.0001}{0.0201} = 0.0049\]
+So its still unlikely we have the rare disease.
 
 
 
 
+\subsubsection{Bayesian Inference}
+In the context of inference, we are interested in the posterior density of the parameter $\theta$, given some data $D$
+\[P(\theta| D) = \frac{P(D|\theta)P(\theta)}{P(D)}\]
+Noting that
+\begin{itemize}
+    \item $P(\theta)$ is the prior density
+    \item $P(D|\theta)$ is the likelihood, $L(\theta)$
+    \item $P(D)$ is a normalising constant:
+    \[P(D) =\int_{-\infty}^\infty P(D | \theta) P(\theta) d\theta\]
+\end{itemize}
+
+Hence we have
+\[P(\theta | D) = \frac{L(\theta) P(\theta)}{\int_{-\infty}^\infty L(\theta) P(\theta) d\theta}\]
+
+For the `coin toss' example. We can take the prior 
+\[P(p) = Beta(a,b) = f(p)\]
+Which is the uniform($1,1$) distribution if $a=b=1$, so we will use this.
+\[L(p) = \ncr Ns p^s(1-p)^{N-s}\]
+We were using data set $N=30,s=7$:
+
+Since it is continuous we will use $f$
+
+\begin{align*}
+    f(p|D) &= \frac{f(p)L(p)}{\int_0^1 f(z)L(z)dz}\\
+    &=\frac{\frac{p^{(a-1)} (1-p)^{b-1}}{\beta(a,b)} \times \ncr Ns p^s (1-p)^{N-S}}{\int_0^1 \frac{z^{(a-1} (1-z)^{b-1}}{\beta(a,b)} \times \ncr Ns z^s (1-z)^{N-s} dz}\\
+    &= \frac{p^{(a-1)} (1-p)^{b-1}p^s (1-p)^{N-S}}{\int_0^1 z^{(a-1} (1-z)^{b-1} z^s (1-z)^{N-s} dz}\\
+    &= \frac{p^{(a+s-1)} (1-p)^{b+N-s-1}}{\int_0^1 z^{(a+s-1} (1-z)^{b+n-s-1}dz}\\
+    &= \frac{p^{(a+s-1)} (1-p)^{b+N-s-1}}{\beta(a+b,b+N-s)}\\
+    &= Beta(a+s,b+N-s)
+\end{align*}
+
+The posterior density is of the same type as the prior, and hence the Beta is said to be a conjugate prior for the binomial distribution.
+
+For our particular realisation ($D$)
+\[f(p|D) = Beta(8,24)\]
+\[\mathbb{E}(p|D) = \frac{a}{a+b} =\frac{8}{32}\]
+Which is different to the MLE
+\[Mode = MAP \ estimate  = \frac{7}{30}\]
+Where MAP stands for Maximum a posteriori.
+
+And we can calculate probabilities too which is nice.
 
 
+The main motivation for the use of Bayesian inference over frequentist inference is the presence of prior information about the parameters of interest. We wish to use this information to update our knowledge of the parameters.
 
+I.e. if we took more data for the coin, we could now use $f(p)= Beta(8,24)$ as the prior.
 
+However the absence of (informative) prior information does not preclude use of a Bayesian framework - we may use an `uninformative' prior (i.e. a prior that gives us no real information about the parameter). Sometimes this is done as a baseline comparison, to see how much the prior is affecting the results. In any case, we get the (joint) distribution of the parameter(s).
 
+Consider evaluating the normalising constant as
+\begin{itemize}
+    \item the dimensionality of the parameter space increases (i.e. as the number of parameters increases).
+\[P(D) = \int_{-\infty}^{\infty} f(\Theta) L(\Theta) d\Theta\]
+    \item Or if you could only evaluate $L(\Theta)$ numerically
+\end{itemize}
+This would get really messy really quickly.
 
+Can we perform Bayesian inference without needing to calculate the normalising constant? Yes (would we have asked the question if the answer wasn't yes?)
 
-
-
-
-
-
-
-
-
-
-
-
-
+We will focus on the Metropolis Hastings algorithm.
 
 
 

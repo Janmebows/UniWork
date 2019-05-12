@@ -18,6 +18,7 @@ for i=1:10
 plot(t,IS(:,1),'-r')
 plot(t,IS(:,2),'-b')
 end
+hold off
 axis([0,100,0,100])
 xlabel("t")
 ylabel("Infected, Susceptible")
@@ -33,6 +34,8 @@ end
 %%
 %%Question 1
 %part 5
+%calculate E(I(t) |I(t) >0)
+%and the deterministic version
 close all
 clear all
 tbounds = [0,100];
@@ -44,7 +47,7 @@ i0 = 10;
 
 total = 0;
 %number of cases we want without rejection
-numberWanted = 50;
+numberWanted = 200;
 maxFailCount = 10000;
 failcount = 0;
 AverageIS = zeros(tbounds(2),2);
@@ -92,6 +95,8 @@ end
 %%
 %%Question 2
 %part 2
+%show the pmf at times 0,1,5,50
+%by solving the forward equation
 close all
 N = 15;
 beta = 1.6;
@@ -103,10 +108,7 @@ Q=beta*Q1+gamma*Q2;
 %only has one element
 initState = sparse(1,2,1,1,length(Q),1);
 probt = IEMethodReturnAll(Q,initState,[0,1,5,50]);
-%probt0 = IEMethodReturnAll(Q,initState, 0);
-%probt1 = IEMethodReturnAll(Q,initState, 1);
-%probt5 = IEMethodReturnAll(Q,initState, 5);
-%probt50 = IEMethodReturnAll(Q,initState, 50);
+
 
 probt0NumInfected = InvertDaMap(probt(1,:),N);
 probt1NumInfected = InvertDaMap(probt(2,:),N);
@@ -116,15 +118,23 @@ figure
 title("Probability distributions of number infected at various times")
 subplot(2,2,1)
 bar(probt0NumInfected)
+xlabel("Number infected")
+ylabel("Probability")
 title("t = 0")
 subplot(2,2,2)
 bar(probt1NumInfected)
+xlabel("Number infected")
+ylabel("Probability")
 title("t = 1")
 subplot(2,2,3)
 bar(probt5NumInfected)
+xlabel("Number infected")
+ylabel("Probability")
 title("t = 5")
 subplot(2,2,4)
 bar(probt50NumInfected)
+xlabel("Number infected")
+ylabel("Probability")
 title("t = 50")
 hold off
 %my file hierarchy is dodgy
@@ -137,7 +147,9 @@ end
 
 %%Question 2
 %Part 3
+%probability exactly 12 people are infected
 Z = SIR_DA_mapping(N);
+probt50 = probt(4,:);
 probt50TotalInfected = zeros(size(probt50));
 for i=1:N
     %i infection events is Z(:,1)==i
@@ -148,6 +160,7 @@ probt50TotalInfected(12)
 %%
 %%Question 2
 %Part 4
+%E(I(t)) using implicit euler
 N=100;
 beta = 1.6;
 gamma = 1;
@@ -183,6 +196,41 @@ try
 catch
     saveas(gcf,"TopicBA2Q24.eps",'epsc')
 end
+
+%%
+%%Question 2 
+%part 5
+%probability of a minor outbreak
+t = 100;
+N = [50,100,500];
+beta = 1.6;
+gamma =1 ;
+for i=1:3
+    n = N(i);
+    [Q1,Q2] = SIRQ(n);
+    Q = beta*Q1 + gamma*Q2;
+    initState = sparse(1,2,1,1,length(Q),1);
+    probN = IEMethodReturnAll(Q,initState,50);
+    Z = SIR_DA_mapping(n);
+    %we want the total infection events
+    %so we want to group probN by Z(:,1)
+    for j=1:n
+    probNumInfections(j) = sum(probN(Z(:,1)==j));
+    end
+    subplot(3,1,i)
+    bar(probNumInfections,1)
+    sol(i) = sum(probNumInfections(1:n/2));
+    xlabel('Number of Infection events')
+    ylabel('Probability')
+end
+sol
+
+%my file hierarchy is dodgy
+try
+    saveas(gcf,"Assignments/TopicBA2Q25.eps",'epsc')
+catch
+    saveas(gcf,"TopicBA2Q25.eps",'epsc')
+end
 %%
 %%Question 3
 %Part 2
@@ -200,15 +248,24 @@ Z = SIR_DA_mapping(N);
 Q = beta*Q1 + gamma*Q2; 
 %get the number of infected
 indexer = Z(:,1) - Z(:,2);
-%non-absorbing states are those for Z1 - Z2 ~= 0
-%nonZeroI = indexer(indexer~=0);
-f = a*indexer + b*ceil(indexer/5);
+f = a*indexer + b*ceil(indexer/4);
 %all states where 0 infected accumulate 0 cost
-f(indexer==0) = 0;
-%f = f(nonZeroI)
-%f = a*nonZeroI + b*ceil(nonZeroI/5);
-%Qb = Q(nonZeroI,nonZeroI);
-Q(indexer==0,indexer==0)=0;
-q = -f\Qb;
-q = InvertDaMap(q,N,false);
-plot(q)
+f(indexer==0) = [];
+Q(indexer==0,:)=[];
+Q(:,indexer==0)=[];
+q = Q\-f;
+%There is dependence on the number of recovered
+%so inverting it is wrong.
+%q = InvertDaMap(q,N,false);
+
+
+plot(1:20,q(1:20))
+xlabel('Initial Number infected')
+ylabel('Expected Cost')
+title("Expected Cost")
+%my file hierarchy is dodgy
+try
+    saveas(gcf,"Assignments/TopicBA2Q32.eps",'epsc')
+catch
+    saveas(gcf,"TopicBA2Q32.eps",'epsc')
+end
