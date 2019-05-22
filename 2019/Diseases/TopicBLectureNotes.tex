@@ -1,4 +1,4 @@
-\documentclass{/home/janmebows/Documents/LatexTemplates/myassignment}
+\documentclass{X:/Documents/Coding/Latex/myassignment}
 
 
 %%Document info
@@ -1376,7 +1376,7 @@ Going to use $L_i^{(n)} : = \frac{d^n L_i}{dl^n}$ as shorthand
 \[f(i) L_i^{(1)} + \sum_{j\in T} q_{ij} L_j^{(1)} - f(i) L_i\]
 
 Differentiating again gives
-\[f(9i) L_i^{(2)} + l f(i) L_i^{(2)} = \sum_{j\in T} q_{ij} L_j^{(2)} - f(i)L_i^{(1)}\]
+\[f(i) L_i^{(2)} + l f(i) L_i^{(2)} = \sum_{j\in T} q_{ij} L_j^{(2)} - f(i)L_i^{(1)}\]
 \[\implies lf(i) L_i^{(2)} = \sum_{j\in T} q_{ij} L_j^{(2)} - 2f(i) L_i^{(1)}\]
 And in general
 \[l f(i) L_i^{(m)} = \sum_{j\in T} q_{ij} L_j^{(m)} - m f(i) L_i^{(m-1)}, \quad i \in T, m \geq 1\]
@@ -1612,15 +1612,240 @@ Can we perform Bayesian inference without needing to calculate the normalising c
 We will focus on the Metropolis Hastings algorithm.
 
 
+\section{Markov Chain Monte Carlo (MCMC)}
+MCMC methods:
+\begin{itemize}
+    \item Generate a Markov chain whose stationary distribution is a `target' distribution (i.e. the target is the posterior);
+    \item Use the chain to produce samples from the target distribution
+    \item Use the samples to produce (Monte Carlo) estimates
+\end{itemize}
+
+The Metropolis-Hastings algorithm is an MCMC algorithm which allows this without having to calculate the normalising constant.
+
+Assume we know the target density up to normalisation, $p(x)$.
+Note that
+\[f(\theta|D) \propto L(\theta) f(\theta)\]
+So we can say
+\[p(x) = f(x) L(x)\]
+
+The MH algorithm:
+\begin{enumerate}
+    \item Set $i=0$ and initialise $x,x_0$.
+    \item For $i=0,\ldots N$ (where $N$ is the number of iterations for the chain)
+    \begin{enumerate}
+        \item Sample (propose) a candidate state
+        \[x' \sim r(x'|x_i)\]
+        Where $r$ is the ``proposal density''
+        \item Accept the candidate state, $x'$ with probability 
+        \[\alpha(x_i,x') = \frac{p(x') r(x_i|x')}{p(x_i)r(x'|x_i)}\]
+        \item Set $x_{i+1} = x'$, or if we rejected, set $x_{i+1} = x_i$
+    \end{enumerate}
+\end{enumerate}
+
+This is a Discrete time Markov chain since we only depend on the current state and we repeat in discrete steps. 
+Though this has a typically continuous state space.
+
+
+We have to choose $N$, $x_0$ and $r$ (the `proposal density'). We usually sample $x_0$ from the prior density $f(x)$.
+
+
+Provided the proposal density is chosen such that it is possible to get from any state in the state space to any other state in the state space through a series of proposals, the choice does not matter in terms of the stationary distribution being the target distribution.
+
+
+The state space for the problem is the parameter space, i.e. it is the support of the prior density.
+
+However the choice of proposal density does alter the `mixing' of the chain, i.e. how quickly it converges to stationarity and how well it samples from the stationary/target/posterior density.
+
+If we applied this to the coin toss example:
+Assume a beta prior with $a=b=1$ (uniform).
+\[f(p) = Beta(1,1)\]
+Likelihood which is binomial
+\[L(p) = \ncr Ns p^s (1-p)^{N-s}\]
+$N = 30, s =7$.
+
+Choose  $p_0 \sim f(p)$
+Choose numsims $N=100$ (we would increase this much more).
+
+Proposal density choose:
+\[r(\cdot,\cdot) \sim N(p_i,0.1)\]
+You could actually choose $Beta(1,1)$ or a similar one that includes $p_i$ and it would work but there would be a lot of rejection.
+
+Note that $N(p_i,0.1)$ can go outside the acceptable range of $p$. So what we do is set
+\[L(p) = 0 \begin{cases}
+    \text{ if } p<0\\
+    \text{ if } p>1\\    
+\end{cases}\]
+Using the normal is good since it is a symmetric proposal density, meaning that 
+\[\alpha(x_i,x') = \frac{p(x') r(x_i|x')}{p(x_i) r(x'|x_i)} = \frac{p(x')}{p(x_i)}\]
+
+In this case $f(p) =1 \forall p$ since $Beta(1,1) = Uniform(0,1)$.
+And so
+\[p(x) = f(x)L(x) = L(x)\]
+
+
+The ESS (effective sample size) is an estimate of the `estimation power' of an equivalent independent sample. Provided your chain has mixed adequately (`randomness without stickiness'), an estimate is
+\[ESS = \frac{n}{1 + 2\sum_{k=1}^\infty \rho(k)}\]
+Where $n$ is the number of points and $\rho(k)$ is the autocorrelation with lag $k$.
+
+In practice we truncate the sum to $\kappa$ so that $|\rho(k)| < tol$ for all $k > \kappa$.
+
+The estimation error is \[error \propto \frac{1}{\sqrt{ESS}}\]
+Rather than 
+\[error \propto \frac{1}{\sqrt{N}}\]
+For an independent sample.
 
 
 
 
 
+In the MH algorithm, the step 2a we sample from a candidate state
+\[x' \sim r(x'|x_i)\]
+If we propose all RVs at once, this is batch updating/proposal.
+Alternatively you can go through sequentially. 
+
+
+Show that the stationary distribution of the MC is actually $p(x)$ as we want. I.e. that the MH algorithm gives an MC with stationary distribution equivocal to the target density $p(\theta)$ (up to normalisation).
+
+Since the parameters we are typically interested in estimating are continuous, we need to generalise our theory for discrete-state MC, to continuous-state MCs.
+
+In place of the one-step transition probability matrix, $P(i,j)$, which satisfies
+\[\sum_{j\in S} P(i,j) = 1\]
+We now have 
+A transition probability \textbf{kernel}, $P(x,y)$, which satisfies
+\[\int_S P(x,y) dy = 1 \ \forall x \in S\]
+
+We also have the continuous Chapman-Kolmogorov equation;
+\[\pi_n(y) = \int_S \pi_{n-1} (x) P(x,y) dx\]
+Where $\pi_n(y)$ is the density at $y$ at iteration $n$.
+The stationary distribution of this continuous state MC satisfies
+\[\pi^*(y) = \int_S \pi^*(x) P(x,y) dx\]
+If the detailed-balance equations hold for all $j,k \in S$, i.e. 
+\[\pi^*_j(P(j,k)) = \pi_k^*(P(k,j))\]
+Then $\pi^*$ is a stationary distribution.
+
+Here we have (similarly), that if 
+\[\pi^*(x) P(x,y) = \pi^*(y) P(y,x), \quad \forall x,y \in S\]
+Then $\pi^*$ is a stationary distribution.
+This is what we will use to show that the MH algorithm works, i.e. it is sufficient to show that the kernel used in the MH algorithm satisfies the detailed-balance equations, with
+\[\pi^*(x) = p(x)\]
+
+
+So, we sample from $R(y|x)$ and then accept the sample with probability 
+\[\alpha(x,y) = \min \left\{\frac{p(y)R(x|y)}{p(x)R(y|x)},1\right\}\]
+So the MH-kernel is
+\[P(x,y) = R(y|x) \alpha(x,y)\]
+
+Hence we want to show that (using our terms in the detailed balance equation)
+\[p(x)R(y|x)\alpha(x,y) = p(y) R(x|y)\alpha(y,x)\]
+Three cases:
+\begin{enumerate}
+    \item $p(y)R(x|y) = p(x)R(y|x)$
+    Then 
+    \[\alpha(x,y) = \alpha(y,x) =1\]
+    Hence
+    \[p(x)P(x,y) = p(y)P(y,x)\]
+    So we're done.
+    \item $p(y)R(x|y) < p(x)R(y|x)$
+    So 
+    \[\alpha(x,y) = \frac{p(y)R(x|y)}{p(x)R(y|x)} <1\]
+    And
+    \[\alpha(y,x) = 1\]
+    Substitute in
+    \begin{align*}
+        p(x)R(y|x)\alpha(x,y) &= p(y) R(x|y)\alpha(y,x)\\
+        p(x)R(y|x)\frac{p(y)R(x|y)}{p(x)R(y|x)} &= p(y) R(x|y)\\
+        p(y)R(x|y) &= p(y)R(x|y)
+    \end{align*}
+    And so that works!
+    \item $p(y)R(x|y) > p(x)R(y|x)$
+    This is essentially the reverse of the last one and we get
+    \[p(x)R(y|x) = p(x)R(y|x)\]
+\end{enumerate}
+And so the MH algorithm works. 
+
+
+
+Consider the SIS model for $S = \{0,\hdots,N\}$
+\[\{I_t,t=1,\hdots,20\}\]
+If $\beta,\gamma$ are dependent, what is the likelihood? I.e. what is
+\[L(\{\beta,\gamma\} | \{I_t\}) ?\]
+However since it is a markov chain, it is conditionally independent, so
+\begin{align*}
+    L(\{\beta,\gamma\} | \{I_t\}) &= \prod_{t=1}^{20} P(I(t+1) = I_{t+1} | I(t) = I(t))\\
+    &=\prod_{t=1}^{20} \left[e^{Q}\right]_{I_t,I_{t+1}}
+\end{align*}
+So all we need is to choose a prior for $\beta$ and another for $\gamma$.
+
+{\Huge End of examinable content}
+
+Exam:
+\begin{itemize}
+    \item 8 questions
+    \item 92 marks
+    \item 3 hour exam
+\end{itemize}
+Questions
+\begin{enumerate}
+    \item 10 true false questions with brief justification (20 marks)
+    \item ODE - SIR model (5 marks)
+    \item Characteristics of different model types (reasoning) (6 marks)
+    \item Specifying a CTMC (interpreting from words) \& simulation (14 marks)
+    \item CTMC model \& deterministic approximation (11 marks)
+    \item Branching processes (14 marks)
+    \item Path integrals (12 marks)
+    \item Bayesian inference (10 marks)
+\end{enumerate}
 
 
 
 
+\section{Bonus lecture content:}
+\subsection{Bayesian Inference}
+\begin{itemize}
+    \item Estimate Likelihood
+    \begin{itemize}
+        \item Doob algorithm - look at the proportion that match real data. The issue is that sometimes the variance can become very large and things can `break down'
+        \item Various ways to improve on the efficiency (and accuracy) of this approach
+        \begin{itemize}
+            \item Importance Sampling
+        \end{itemize}
+        \item ABC  (approximate Bayesian computation). Basic (exact) implementation:
+        \begin{enumerate}
+            \item Sample a candidate parameter
+            \[\theta \sim f(\theta)\]
+            \item Simulate data, $x$, from the model w parameter $\theta$
+            \item If $X=D$ (i.e. you match real and simulated data) then accept $\theta$ as a sample from $f(\theta | D)$
+        \end{enumerate}
+        Approximate implementation:
+        \begin{enumerate}
+            \item Sample a candidate parameter
+            \[\theta \sim f(\theta)\]
+            \item Simulate data, $X$, from the model w parameter $\theta$
+            \item if $S(X) = S(D)$ we accept $\theta$ as a sample from $f(\theta|D) $
+            \begin{itemize}
+                \item To further approximate we can use
+                \[\Delta(S(X),S(D)) < \epsilon\]
+            \end{itemize}
+            \item If $S$ is a sufficient statistic then it is still exact, but we don't always know if it is a sufficient statistic.
+        \end{enumerate}
+
+        \item ABC-MCMC (MM)
+        \begin{enumerate}
+            \item Propose a candidate 
+            \[\theta' = R(\theta' | \theta)\]
+            \item Generate data $X$ with $\theta'$ 
+            \item If $X=D$ then go to step $4$, else stay at $\theta$ and go to step $1$.
+            \item Accept $\theta=\theta'$ with probability
+            \[\min\left\{1,\frac{f(\theta')R(\theta|\theta')}{f(\theta)R(\theta'|\theta)}\right\}\]
+        \end{enumerate}
+        You could approximate this in the same ways you can for ABC, so $S(X)=S(D)$ or 
+        \[\Delta(X,D)<\epsilon\]
+        or
+        \[\Delta(S(X),S(D))<\epsilon\]
+        \item ABC-SMC (sequential monte-carlo) - a type of importance sampling (he won't tell us the algorithm). This one is good since ABC-MCMC can get stuck in regions.
+        
+    \end{itemize}
+\end{itemize}
 
 
 

@@ -1,5 +1,4 @@
-\documentclass{/home/janmebows/Documents/LatexTemplates/myassignment}
-
+\documentclass{X:/Documents/Coding/Latex/myassignment}
 %%Document info
 \title{Practical Asymptotics (App Topic C)}
 \begin{document}
@@ -1478,7 +1477,7 @@ reduce the WKB ansatz to leading order
 \begin{align*}
     y \sim u_0 + e^{-F/\epsilon} v_0\\
     y' \sim u_0' + e^{-F/\epsilon} v_0' -\frac{F'}{\epsilon} e^{-F/\epsilon} (v_0 + \epsilon v_1 +\hdots)\\
-    y'' \sim u_0'' + e^{-F/\epsilon} v_0'' - 2\frac{F'}{\epsilon} v_0'+ \left(\frac{F'}{\epsilon}\right)^2 e^{-F/\epsilon}(v_0 + \epsilon v_1 + \hdots) - \frac{F''}{\epsilon} e^{-F/\epsilon} v_0
+    y'' \sim u_0'' + e^{-F/\epsilon} v_0'' - 2\frac{F'}{\epsilon}e^{-F/\epsilon} v_0'+ \left(\frac{F'}{\epsilon}\right)^2 e^{-F/\epsilon}(v_0 + \epsilon v_1 + \hdots) - \frac{F''}{\epsilon} e^{-F/\epsilon} v_0
 \end{align*}
 Using the WKB ansatz and equating to various orders:
 \begin{align*}
@@ -1770,34 +1769,607 @@ Example derivation of an effective governing equation for a 1D composite materia
 But if 
 \[E\equiv E(x,\frac{x}{\epsilon})\]
 Then we have a large scale and a small scale to work with.
+With $u(0) =0, u(1) = \alpha$,
+Where $u$ is the displacement of the solid from a reference point (in this case an undeformed state), $x$ is the Lagrangian co-ordinate along the beam, and $E$ is a Young's modulus. If $E$ is constant, the equation is simple to solve (linear elasticity). If $E$ is a function of position, and varies along multiple scales?
 Let $\xi = x/\epsilon$
 \begin{align*}
     \frac{d}{dx} = \dd{}x + \frac{1}{\epsilon} \dd{}\xi\\
     E(x,\xi) \left(\dd ux + \frac1{\epsilon} \dd u\xi\right) = 1
 \end{align*}
-Now we will homogenise the equation to get an effective equation:
+
+
+Let $u(x) \equiv u(x,\xi)$ and hence
+\[\odd ux = \dd ux + \frac1\epsilon \dd u\xi\]
+
+Governing equation becomes
+\begin{align*}
+    E(x,\xi) \left(\dd ux + \frac1\epsilon \dd u\xi \right) =1\\
+    \implies E(x,\xi) \left(\epsilon \dd ux + \dd u\xi \right) = \epsilon
+\end{align*}
+Letting $u(x,\xi) = u_0 + \epsilon u_1 + \hdots$ gives (to leading order)
+\[\dd{u_0}\xi = 0 \implies u_0(x,\xi) \equiv u_0(x)\]
+Leading order only varies on the macroscale! (this is a good thing!!)
+To order $\bigo(\epsilon)$
+\begin{align*}
+    E(x,\xi) \left(\dd{u_0}x + \dd{u_1}{\xi}\right) =1\\
+    \implies \odd{u_0} x  +\dd{u_1}\xi = \frac{1}{E(x,\xi)}
+\end{align*}
+Integrating over one microscale period gives (noting that $\xi$ goes from $0$ to $1$)
+\[\int_0^1 \odd{u_0}{x} d\xi + \int_0^1 \dd{u_1}{\xi} d\xi = \int_0^1 \frac1{E(x,\xi)} d\xi\]
+And since $u_0$ is only a function of $x$ we get
+\[\odd{u_0}x \int_0^1 d\xi + [u_1]_{\xi=0}^{\xi=1} = \int_0^1 \frac{1}{E(x,\xi)} d\xi\]
+We have assumed that $u$ is periodic in $\xi$  $u_1(x,0) = u_1(x,1)$ so
+\[\odd{u_0}{x} = \int_0^1 \frac{1}{E(x,\xi)} d\xi\]
+And rearranging gives:
+\[\frac{1}{\int_0^1 \frac{1}{E(x,\xi)} d\xi}\odd{u_0}{x} = 1\]
+
+Where 
+\[\frac{1}{\int_0^1 \frac{1}{E(x,\xi)} d\xi} =: E_{eff}(x)\]
+Is the \textbf{effective} modulus for the homogenised equation. Note that this is an ODE in the macroscale variable $x$, with all the microscale detail incorporated into the integral of $E_{eff}$ and noting that $E_{eff}$ is the \emph{harmonic mean} of $E(x,\xi)$. 
+Lets calculate $E_{eff}$ for
+\[E(x,\xi) = \begin{cases}
+    1, &0<\xi<1/2\\
+    0.1 + 0.5x^2,& 1/2<\xi<1    
+\end{cases}\]
+Integrating over the reciprocal:
+\begin{align*}
+    \int_0^1 \left[1/E(x,\xi)\right]d\xi &= \int_0^{1/2} d\xi + \int_{1/2}^1 \frac{1}{0.1+0.5x^2} d\xi\\
+    &= \frac12\left(1 + \frac{1}{0.1 + 0.5 x^2}\right) = \frac{1.1 + 0.5x^2}{2(0.1 + 0.5x^2)}
+\end{align*}
+Hence 
+\[E_{eff} = \frac{2(0.1 + 0.5x^2)}{1.1 + 0.5x^2} \]
+
+\subsection{Homogenisation in 2D, with periodic microstructure}
+Many practical applications for homogenisation involve periodic microstructure (small scale is periodic). We now can extend this to multiple spacial dimensions.
+
+Antiplane strain, $w(x,y)$. We have a 3D bar and deform is such that two components of displacement are zero, and the remaining component is $w$. 
+Strain is governed by
+\[\nabla \cdot (\mu\nabla w) =0 \]
+Here we have antiplane strain $w\equiv w(x,y)$ and the shear modulus $\mu \equiv (x,y)$. We consider the case of small scale periodic structure in $\mu$, corresponding to a composite material.
+
+
+We consider a composite material with two material scales. E.g. pencils glued together - the pencil lead, and the wood are the two materials.
+In this case $\mu$ is periodic in cross-section, and features small-scale variation. Practical example could be optical fibre cables (multi-core), steel reinforced concrete pillars, $\ldots$.
+Introduce $\mu \equiv \mu(x,y,\xi,\eta)$ where $(\xi,\eta) = (x,y)/\epsilon$. We assume periodicity in $\xi$ with period 1, and $\eta$ by period $b$, so
+\[\mu(x,y,\xi+1,\eta) = \mu(x,y,\xi,\eta), \quad \mu(x,y,\xi,\eta+b) =\mu(x,y,\xi,\eta)\]
+We're assuming there are only two values for $\mu$. One in the wood, and one in the lead.
+
+Derivation of the effective equation:
+
+Similarly let $w \equiv w(x,y,\xi,\eta)$ with same periodicity as $\mu$. Apply the chain rule to get
+\[\nabla \to \nabla_x + \frac1\epsilon \nabla_{\xi}\]
+Where
+\begin{align*}
+    \nabla_x &= \dd{}x\vec i + \dd{}y\vec j\\
+    \nabla_\xi &= \dd{}\xi \vec i + \dd{}\eta \vec j
+\end{align*}
+
+\begin{align*}
+    \nabla_\xi \cdot(\mu\nabla_\xi w) + \epsilon[(\nabla_\xi \cdot \mu(\nabla_x \vec w) + \nabla_x \cdot (\mu\nabla\xi w)] + \epsilon^2 \nabla_x (\mu(\nabla_x w)) = 0
+\end{align*}
+Lets consider one microscale cell (to ultimately average over it, like we did in 1D). Say our representative cell has domain
+\[0<\xi<1, \quad 0<\eta<b\]
+Periodicity of $w$ means that its $\xi$ and $\eta$ derivaties are also periodic. 
+\begin{align*}
+ w(x,y,1,\eta) = w(x,y,0,\eta), \quad w(x,y,\xi,b) = w(x,y,\xi,0) \\
+ \dd w\xi (x,y,1,\eta) = \dd w\xi(x,y,0,\eta), \quad  \dd w\eta (x,y,\xi,b) = \dd w\xi(x,y,\xi,0)  
+\end{align*}
+Seek solution of form:
+\[w \sim w_0 + \epsilon w_1 + \epsilon w_2\]
+Substituting this into the governing equation gives:
+\begin{align*}
+    \bigo(1) : 0&=\nabla_\xi \cdot (\mu \nabla \epsilon w_0)\\
+    \bigo(\epsilon) : 0&=\nabla_\xi \cdot (\mu \nabla \epsilon w_1) + \left[\nabla_\xi \cdot (\mu\nabla_x w_0) + \nabla_x \cdot(\mu\nabla_\xi w_0)\right]\\
+    \bigo(\epsilon^2) : 0&=\nabla_\xi \cdot (\mu \nabla \epsilon w_2) + \left[\nabla_\xi \cdot (\mu\nabla_x w_1) + \nabla_x \cdot(\mu\nabla_\xi w_1)\right] + \nabla_x\cdot(\mu(\nabla_x w_0))
+\end{align*}
+We won't solve $w_1$ or $w_2$, we just use the information from them.
+
+
+Leading order:
+\[0 = \nabla_\xi \cdot (\mu\nabla_\xi w_0)\]
+Subject to its boundary conditions. Easy to see that the conditions are satisfied when $w$ is independent to the microscale variables. I.e.
+\[w_0 \equiv w_0(x,y)\]
+Which is what we want in homogenisation. This is actually the unique solution (but we won't show it here).
+
+
+At $\bigo(\epsilon)$ - using the fact that $w_0 \equiv w_0(x,y)$ (hence dropping the micro terms)
+
+\[0 = \nabla_\xi \cdot (\mu \nabla_\xi w_1) + \nabla_\xi \cdot(\mu \nabla_x w_0)\]
+
+Expanding the $\nabla$'s and some rearrangement:
+\[\dd{}\xi \left(\mu \dd{w_1}{\xi}\right) + \dd{}\eta \left(\mu \dd{w_1}{\eta}\right) = -\dd\mu\xi \dd{w_0}x - \dd{\mu}{\eta} \dd{w_0}{y}\]
+
+Two things to note:
+
+\begin{enumerate}
+    \item The form of this derivative is a PDE (linear, elliptic) for $w_1$ 
+    \item Equation has periodic solution if RHS has zero mean, that is
+    \[\int_0^1 \int_0^b \left(\dd\mu\xi \dd{w_0}{x} + \dd{\mu}{\eta} \dd{w_0}{y}\right) d\xi d\eta = 0\]
+    We won't prove this last statement (but will assume it - would use divergence theorem apparently)
+\end{enumerate}
+
+Solution of $w_1$ has form
+\[w_1(x,y,\xi,\eta) = W^{(1)} (x,y,\xi,\eta) \dd{w_0}{x} + W^{(w)} (x,y,\xi,\eta) \dd{w_0}{y}\]
+Substituting this into the $\bigo(\epsilon)$ equation and equating coefficients of $\dd{w_0}{d}$ and $\dd{w_0}{y}$ to get
+\begin{align*}
+    \dd{}{\xi} \left(\mu \dd{W^{(1)}}{\xi}\right) + \dd{}\eta \left(\mu \dd{W^{(1)}}{\eta}\right) = -\dd{\mu}{\xi}\\
+    \dd{}{\xi} \left(\mu \dd{W^{(2)}}{\xi}\right) + \dd{}\eta \left(\mu \dd{W^{(2)}}{\eta}\right) = -\dd{\mu}{\eta}
+\end{align*}
+
+Now the PDE is 2 PDEs for the coefficient functions, with the corresponding periodic boundary conditions.
+
+This problem only depends on the microscale. Has unique periodic solutions and for a given $\mu(x,y,\xi,\eta)$ is can be solved numerically (if we wanted to).
+
+So  $\bigo(1)$ has given us a macro scale problem, while $\bigo(2)$ is a microscale problem.
+
+
+For $\bigo(\epsilon^2)$ We assume $w_2$ is periodic, and so the rhs (below) has to have zero mean. We won't solve it but use it.
+\begin{align*}
+    \nabla_\xi \cdot (\mu \nabla_\xi w_2) = -\nabla_\xi \cdot (\mu\nabla_x w_1) - \nabla_x \cdot(\mu \nabla_{\xi} w_1) - \nabla_x \cdot (\mu(\nabla_x w_0))
+\end{align*}
+
+Taking the integrals, we can see the first RHS term is identically zero. We require that the $\dd{}x$ and $\dd{}y$ terms be zero.
+
+\[0 = -\int_0^1 \int_0^b \left(\dd{}x \left(\mu \dd{w_1}{\xi} + \mu \dd{w_0}x\right) + \dd{}y\left(\mu \dd{w_1}{\eta} + \mu \dd{w_0}y\right)\right) d\xi d\eta \]
+Substituting the thing we had for $w_1$ (i.e. with the capital $W$'s)
+\begin{align*}
+    0 = -\int_0^1 \int_0^b \left(\dd{}x \left(\mu \left(\dd{W^{(1)}}{\xi} + 1\right) \dd{w_0}x + \mu \dd{W^{(2)}}y\right) + \dd{}y\left(\mu \dd{w_1}{\eta} + \mu \dd{w_0}y\right)\right) d\xi d\eta 
+\end{align*}
+
+
+A homogenised equation for $w_0(x,y)$ is
+\begin{align*}
+    \dd{}x \left(\bar{\mu}_{11} \dd{w_0}{x}\right) + \dd{}{x} \left(\mu_{12} \dd{w_0}{y}\right) +\\
+    \dd{}y \left(\bar{\mu}_{21} \dd{w_0}{x}\right) + \dd{}y \left(\bar{\mu}_{22} \dd{w_0}{y}\right) =0
+\end{align*}
+Where
+\begin{align*}
+    \bar{\mu}_{11} = \int_0^1\int_0^b \mu \left(\dd{W^{(1)}}{\xi} + 1\right) d\eta d\xi , \quad 
+    \bar{\mu}_{21} = \int_0^1\int_0^b \mu  \dd{W^{(1)}}{\eta} d\eta d\xi \\
+    \bar{\mu}_{22} = \int_0^1\int_0^b \mu \left(\dd{W^{(2)}}{\eta} + 1\right) d\eta d\xi , \quad 
+    \bar{\mu}_{12} = \int_0^1\int_0^b \mu  \dd{W^{(2)}}{\xi} d\eta d\xi \\
+\end{align*}
+
+
+To actually apply this procedure for a given $\mu$:
+\begin{itemize}
+    \item Solve the microscale problem to get the coefficient functions $W^{(1)}, W^{(2)}$
+    \item Use these functions to obtain the effective moduli $\bar{\mu}_{11},\bar{\mu}_{12},\bar{\mu}_{21},$ and $\bar{\mu}_{2}$
+    \item Solve the homogenised equation to obtain the effective macroscale behaviour
+\end{itemize}
+
+
+We would then continue this by picking a particular $\mu$.
+% \[\mu = \left(1+ \sin \pi x \sin \pi y\right)\left(1 + 0.1 \sin \pi \xi \sin \pi \eta\right)\]
+% Solving over a macroscale domain of $x \in \left[0,1\right]$ and the same for $y$.
+% Boundary conditions become
+% \begin{align*}
+%     w(0,y,\xi,\eta) = 0.1 \sin \pi y, \quad w(1,y,\xi\eta) = 0.2\sin\pi y\\
+%     w(x,0,\xi,\eta) = 0, \quad w(x,1,\xi\eta) = 0\\
+% \end{align*}
+
+
+Solving the $W$ equations for the microscale, we can make a change of variables
+
+\begin{align*}
+    \dd{}{\xi} \left(\mu \dd{W^{(1)}}{\xi}\right) + \dd{}\eta \left(\mu \dd{W^{(1)}}{\eta}\right) = -\dd{\mu}{\xi}\\
+    \dd{}{\xi} \left(\mu \dd{W^{(2)}}{\xi}\right) + \dd{}\eta \left(\mu \dd{W^{(2)}}{\eta}\right) = -\dd{\mu}{\eta}
+\end{align*}
+Say $W^{(1)} = \phi^{(1)} - \xi$
+
+\begin{align*}
+    \dd{}{\xi} \left(\mu \dd{W^{(1)}}{\xi}\right) + \dd{}\eta \left(\mu \dd{W^{(1)}}{\eta}\right) = -\dd{\mu}{\xi}\\
+    \dd{}{\xi} \left(\mu \dd{\phi^{(1)}}{\xi} - 1\right) + \dd{}\eta \left(\mu \dd{\phi^{(1)}}{\eta}\right) = -\dd{\mu}{\xi}\\
+    \dd{}{\xi} \left(\mu \dd{\phi^{(1)}}{\xi}\right) + \dd{}\eta \left(\mu \dd{\phi^{(1)}}{\eta}\right) = 0
+\end{align*}
+And you would do a similar thing for $W^{(2)}$.
+
+
+Some points:
+\begin{itemize}
+    \item Solving the microscale problem only needs to be done once per material so even though it can be computationally challenging it is worth doing!
+    \item Often there are micro-structural symmetries making life easier
+    \item Easy to extend it to three dimensional problems with a similar procedure.
+    \item A significant complication in doing this is for elasticity - it requires tensors (or going to rank 4)
+\end{itemize}
 
 
 
+\section{Integrals}
+Asymptotic evaluation of integrals!
+Particularly those of form
+\begin{align*}
+    I_1(x) &= \int_a^b f(t) e^{x\phi(t)} dt
+    I_2(x) &= \int_a^b f(t) e^{ix\psi(t)} dt
+    I_3(x) &= \int_C f(t) e^{x\phi(t)} dt
+\end{align*}
+Why do we care about these? They come up in 
+\begin{itemize}
+    \item Solving DEs with transforms
+    \item Approximating the PDF from the MGF in stats (we won't cover that)
+\end{itemize}
+
+We will focus on solving DEs of course.
+Consider the heat eqn
+\[\psi_t = \psi_{xx}, \quad -\infty < x < \infty, \quad t >0\]
+With BCs $\psi \to 0$ as $|x| \to \infty$ and initial data $\psi(x,0) = \psi_0(x)$. Fourier transform gives:
+\[\psi(x,t) = \frac1{2\pi} \int_{-\infty}^\infty b_0(k) e^{ikx - k^2 t} dk\]
+Where 
+\[b_0 = \int_{-\infty}^\infty e^{-ikx} \psi_0(x) dx\]
+This is great to have a closed form solution, but this isn't entirely useful here. For example how does this behave for large $t$? We can't simply interpret this from the integrals. So we will try asymptotics.
+
+First step: use integration by parts on `Laplace-type integrals' of form
+\[I(x) = \int_a^b f(t)e^{x\phi(t)} dt\]
+to determine the behaviour for $x\to\infty$
+
+Consider the example
+\begin{align*}
+    I(x) &= \int_0^\infty \frac{e^{-xt}}{(1+t^2)^2}d t\\
+    &=\left[\frac{e^{-xt}}{-x} \frac{1}{(1+t^2)^2}\right]_0^\infty - \int_0^\infty \frac{e^{-xt}}{-x} \frac{-4t}{(1+t^2)^3}dt\\
+    &= \frac1x + \bigo(1/x^3) 
+\end{align*}
+We can argue this last step by bringing out the $x$ term and considering that it will be largest for the $t=0$ point.
+Or we can write it as an asymptotic relation
+\[I(x) \sim \frac1x , \quad x\to\infty\]
+And you would find the order of the remainder term through some argument or directly evaluating the integral.
+
+
+Sometimes integration by parts doesn't work. It works if
+\begin{itemize}
+    \item Requires $\phi(t)$ is monotonic
+    \item There are no fractional powers
+\end{itemize}
+
+Sits easy to use, and we can approximate the error, but it doesn't always work.
+Consider
+\begin{align*}
+    I(x) &= \int_0^\infty e^{-xt^2}dt\\
+    &= \int_0^\infty \frac{-1}{2xt} \left(-2xt e^{-xt^2}\right)\\
+    &= \left[\frac{e^{-xt^2}}{-2xt}\right]_0^\infty - \int_0^\infty \frac{e^{-xt^2}}{2xt^2} dt
+\end{align*}
+
+But the first one fails for $t=0$.
+We know there is an exact solution
+\[\int_0^\infty e^{-xt^2} dt = \frac{\sqrt{\pi}}{2\sqrt{x}}\]
+Since there is a $\sqrt{x}$ term, it fails. 
+It will also fail the dominant bit of the integrand is in the interior (i.e. between 0 and $\infty$)
+
+One technique to evaluate these integrals more generally, is using Laplace's Method. It makes use of the fact that the most important contributions to the integral come from the regions where the integrand is largest. 
+
+Example:
+\[I(x) = \int_0^{10} \frac{e^{-xt}}{(1+t)} dt\]
+Consider the integrand. As we increase $x$ the integrand gets really sharp, so all of the area under the curve is around small $t$. So we can kinda say its asymptotic to it
+So lets split the range of integration
+\[ \int_0^\epsilon \frac{e^{-xt}}{(1+t)} dt +  \int_\epsilon^{10} \frac{e^{-xt}}{(1+t)} dt\]
+
+We assume here that $x^{-1} \ll \epsilon \ll 1$ (small but not too small). We will explain the choice later
+
+The second term is $\bigo(e^{-x\epsilon})$ and so is negligible compared to the first term as $x\to\infty$.
+
+\[I(x) \sim \int_0^\epsilon \frac{e^{-xt}}{(1+t)} dt, \quad x\to\infty\]
+
+We make the change of variables, letting $s =xt$
+\[I(x) \sim \int_0^{x\epsilon} \frac{e^-s}{1+s/x} \frac1x ds\]
+Taylor expand the fraction
+\[\frac{1}{1+s/x} = \sum_{n=0}^\infty \frac{(-s)^n}{x^n}\]
+\begin{align*}
+    I(x) &\sim \frac1x \int_0^{x\epsilon} e^{-s} \sum_{n=0}^\infty \frac{(-s)^n}{x^n} ds\\
+    &=\sum_{n=0}^\infty \frac1{x^{n+1}} \int_0^{x\epsilon} e^{-s}  (-s)^n ds\\
+\end{align*}
+Use
+\[\int_0^{x\epsilon} e^{-s}(-s)^n ds \gg \int_{x\epsilon}^\infty e^{-s}(-s)^n\]
+So we can add that back on 
+\begin{align*}
+    I(x) &\sim \sum_{n=0}^\infty \frac{1}{x^{n+1}} \left[\int_0^{x\epsilon} e^{-s}(-s)^n ds + \int_{x\epsilon}^\infty e^{-s}(-s)^n\right]\\
+    &\sim \sum_{n=0}^\infty \frac{1}{x^{n+1}} \int_0^\infty e^{-s} (-s)^n ds\\
+    &\sim \sum_{n=0}^\infty \frac{1}{x^{n+1}} (-1)^n  n!
+\end{align*}
+
+So the steps were shortly:
+\begin{enumerate}
+    \item Find the dominant contribution
+    \item Split the integral into dominant and small part
+    \item Drop the small part
+    \item Use a Taylor series
+    \item Unsplit (re-add) the small part
+    \item Tidy
+\end{enumerate}
+
+A really useful result in this is \textbf{Watson's Lemma}. We actually used this above.
+For integrals of the form
+\[I(x) = \int_0^b f(t) e^{-xt} dt\]
+Where $f(t)$ is continuous over $0\leq t \leq b$ and is represented by the asymptotic series
+\[f(t) \sim t^\alpha \sum_{n=0}^\infty a_n t^{\beta n}, \quad t\to 0^+\]
+With $\alpha > -1$ and $\beta > 0$ (for convergence at $t=0$). Additionally, if $b=\infty$  we require $f(t) \ll e^{ct}$ as $t\to\infty$ for positive constant $c$.
+If this holds then
+\[I(x) \sim \sum_{n=0}^\infty \frac{a_n\Gamma(\alpha + \beta n + 1)}{x^{\alpha + \beta n +1}}, \quad as \ x \to \infty\]
+
+
+This is just a formula, so it simply needs to be applied. The hard part is expanding $f(t)$ as the asymptotic series.
+Sometimes we need the binomial series
+\[(1+t)^\alpha = \sum_{n=0}^\infty \frac{\Gamma(\alpha + 1)}{\Gamma(n+1) \Gamma(\alpha-n+1)} t^n\]
+
+Examples
+\begin{align*}
+    I(x) = \int_0^5 \frac{e^{-xt}}{1+t^2} dt
+\end{align*}
+So we need to expand $f(t) = \frac{1}{t^2}$ as an asymptotic series around $t=0$.
+\[\frac{1}{1+t^2} = 1 - t^2 + t^4 - \hdots = \sum_{n=0}^\infty (-1)^n(t)^{2n}\]
+So $\alpha = 0$ $a_n = (-1)^n$ and $\beta = 2$. Hence
+\[I(x) \sim \sum_{n=0}^\infty \frac{(-1)^n \Gamma(2n + 1)}{x^{2n+1}} = \sum_{n=0}^\infty \frac{(-1)^n (2n)!}{x^{2n+1}}\]
+
+Another example, the non-standard modified bessel function $K_0(x)$
+\[K_0(x) = e^{-x} \int_0^\infty (t^2 + 2t)^{-1/2} e^{-xt} dt\]
+Here $f(t) = (t^2 + 2t)^{-1/2}$. Use binomial
+\[f(t) = (2t)^{-1/2}\sum_{n=0}^\infty \frac{\Gamma(-\frac12 + 1)}{\Gamma(n+1) \Gamma(-\frac12 - n + 1)} (\frac{t}{2})^n\]
+And then plug that into $I(x)$
+
+
+Lets consider the most general form of \textbf{Laplace's method} for evaluating
+\[I(x) = \int_a^b f(t) e^{x\phi(t)} dt\quad as \ x\to \infty\]
+The key idea is that the dominant contribution is where $\phi(t)$ is largest.
+
+Lets come up with a leading-order approximation when $\phi(t)$ has a maximum at $t=a$.
+
+
+Outline for a max in $\phi(t)$ for $t=a$
+\begin{enumerate}
+    \item Split the integral to `zoom' in on a neighbourhood near the maximum point of $\phi(t)$ in the interval (so $t=a$):
+    \begin{align*}
+        &\int_a^b f(t) e^{x\phi(t)} dt\quad as \ x\to \infty\\
+        &= \int_a^{a+\epsilon}  f(t) e^{x\phi(t)} dt \ + \int_{a+\epsilon}^b  f(t) e^{x\phi(t)} dt, \quad as \ x \to\infty     
+    \end{align*}
+    The first integral we will say is $\bigo(e^{x\phi(a)})$. The second $\bigo(e^{x\phi(a+\epsilon)})$.
+    \[\phi(a+\epsilon) = \phi(a) + \epsilon \phi'(a) +\ldots\]
+    \[\implies e^{x\phi(a+\epsilon)} \approx e^{x\phi(a)} e^{\epsilon x\phi'(a)}\]
+    So the second is actually $\bigo(e^{x\phi(a)} e^{\epsilon x\phi'(a)})$. Since it was a maximum, $\phi'(a) < 0$, and hence the second part is small provided
+    \[\epsilon x \phi'(a) \ll 1 \implies \epsilon x \gg 1\]
+    \item Assume the second part is negligible, with the restriction 
+    \[\epsilon \gg x^{-1}\]
+    Hence
+    \[I(x) \sim \int_a^{a+\epsilon} f(t) e^{x\phi(t)} dt\]
+
+    \item Taylor expand $f(t)$ and $\phi(t)$
+    \[\phi(t) = \phi(a) + (t-a) \phi'(a) + \ldots\]
+    \[f(t) = f(a) + (t-a) f'(a) + \ldots\]
+    \[I(x) \sim \int_a^{a+\epsilon} \left(f(a) + \ldots\right)e^{x(\phi(a) + (t-a) \phi'(a) + (t-a)^2 \phi''(a)/2 +\ldots)} dt\]
+    \item Since the integral is with respect to $t$, take out constants.
+    \[I(x) \sim f(a)e^{x\phi(a)}\int_a^{a+\epsilon} \left(\ldots\right)e^{x(t-a) \phi'(a) + (t-a)^2 \phi''(a)/2 +\ldots)} dt\]
+    \item Rescale the integration variable
+    Let $x(t-a) = s$
+    \[I(x) \sim \frac{f(a) e^{x\phi(a)}}{x} \int_0^{\epsilon x}(1 +\ldots) e^{s\phi'(a) + \frac{s^2}{x} \phi''(a) + \ldots} ds \]
+    As $x\to\infty$ all the $\frac{1}{x}$ terms inside the exponentials go to zero.
+    \[I(x) \sim \frac{f(a) e^{x\phi(a)}}{x} \int_0^{\epsilon x}(1 +\ldots) e^{s\phi'(a)} ds \]
+    This step is only true provided that for the top end of the integral: 
+    \[\frac{(\epsilon x)^2}{x} \ll 1 \implies \epsilon \ll x^{-1/2}\]
+    So we require 
+    \[x^{-1} \ll \epsilon \ll x^{-1/2}\]
+
+    \item Replace the upper limit with $x=\infty$ to zoom out again.
+    And lastly, noting that $\phi'(a) < 1$
+    
+    \begin{align*}
+        I(x) &\sim \frac{f(a) e^{x\phi(a)}}{x} \int_0^{\infty} e^{s\phi'(a)} ds\\
+        &= \frac{f(a) e^{x\phi(a)}}{x \phi'(a)} \left[e^{s\phi'(a)}\right] _0^\infty\\
+        &= -\frac{f(a) e^{x\phi(a)}}{x \phi'(a)}
+    \end{align*}
+
+    \item Evaluate the integral.
+\end{enumerate}
+
+In practice we can just copy paste the formula.
+
+If the upper limit is on the other end we just drop the minus sign
+\[I(x) \sim \frac{f(b) e^{x\phi(b)}}{x \phi'(b)}\]
+
+If we have the upper limit for an interior point:
+
+We now have to split into 3 integrals. But we note that $\phi'(c) = 0$ and $\phi''(c) < 0$
+This would give us slightly different restrictions.
+\[\epsilon \gg x^{-1/2}\]
+And
+\[\epsilon \ll x^{-1/3}\]
+integration limits become $\pm \infty$
+And evaluate as before.
+
+The three possibilities:
+\begin{itemize}
+    \item Max at $t=a$
+    \[I(x) \sim -\frac{f(a) e^{x\phi(a)}}{x \phi'(a)}\]
+    \item Max at $t=b$
+    \[I(x) \sim \frac{f(b) e^{x\phi(b)}}{x \phi'(b)}\]
+    \item Max at $t=c$
+    \[I(x) \sim \frac{\sqrt{2\pi} f(c) e^{x\phi(c)}}{\sqrt{-x\phi''(c)}}\]
+\end{itemize}
+
+
+Sometimes the maximum is not entirely clear. For example
+\[I(x) = \int_0^\infty e^{-xt - \frac1t} dt\]
+We can deal with this using a change of variables.
+
+We refer to these as \textbf{movable maxima}.
+
+\[
+    e^{-xt - \frac1t} = e^{-(xt + \frac1t)}
+\]
+I.e.
+\begin{align*}
+    f(t;x) &= xt + \frac1t\\
+    f'(t;x) &= x - \frac1{t^2}
+\end{align*}
+The maximum will be for $t = \frac{1}{\sqrt{x}}$. 
+
+So this suggests we should try a change of variables. Let $t=\frac{s}{\sqrt{x}}$ and $dt= \frac{ds}{\sqrt{x}}$
+\[\frac{1}{\sqrt{x}} \int_0^\infty e^{-\sqrt{x} (s + \frac1s)} ds\]
+Which is a Laplace form (just pretend $x = \sqrt{x}$).
+
+This has a max at $s=1$. So we'd use the central formula.
+
+
+Another example is Stirling's formula
+\[\Gamma(x+1) = \int_0^\infty e^{-t} t^x dt\]
+We can rewrite:
+\[e^{-t} t^x = e^{-t}e^{x\log t} = e^{-t+x\log t}\]
+Apply a change of variables again
+\[t = sx\]
+And go through the mechanics, giving
+\[\Gamma(n+1) \sim \sqrt{2\pi x} \left(\frac{x}{e}\right)^x\]
 
 
 
+Consider Fourier integrals
+\[I(x) = \int_a^b f(t) e^{ix\psi (t)} dt\]
+for $x\to\infty$. We approximate them by the \textbf{method of stationary phase}. 
+
+For $\psi'(c)=0$ with $a<c<b$, and $\psi'(t) \neq 0$ for $a\leq t < c$ and $c < t\leq b$, we have
+\[I(x) \sim \frac{\sqrt{2\pi} f(c) e^{ix\psi(c) e^{\pm i \pi/4}}}{x^{1/2} |\psi''(c)|^{1/2}}\]
+With $e^{i\pi/4}$ if $\psi''(c) > 0$ and $e^{-i\pi/4}$ if $\psi''(c) < 0$.
+
+
+Note that $\psi$ is not the cause of oscillation, but $e^{ix \psi}$ is.
+
+Outline method: for an interior stationary point $\psi(t) = 0$ at $t=c$
+\begin{enumerate}
+    \item Split the integral to zoom in on the neighbourhood near the maximum of $\psi(t)$ ($t=c$)
+    \item Assume the other parts are negligible
+    \item Taylor expand $f(t)$ and $\psi(t)$
+    \item Rescale the integration variable. This gives
+    \[\epsilon \ll x^{-1/3}\]
+    \item Replace upper and lower limits with $\pm\infty$ to zoom out
+    This introduces algebraically small errors.
+    \item Evaluate the integral, this gives the restriction
+    \[\epsilon \gg x^{-1/2}\]
+\end{enumerate}
+Since this isn't fantastic we have a different way to handle it
+
+
+% When applying integration by parts to fourier integrals, the Reimann Lebesque lemma is useful
+% \[\int_a^b f(t) e^{ix\psi(t)} dt, \quad x\to\infty\]
+
+
+Lets generalise Laplace integrals to the complex plane. Integrals of form
+\[I(x) = \int_C f(t) e^{x\phi(t)} dt\]
+Where $C$ is a contour in the complex $t-$plane, and $f(t)$ and $\phi(t)$ are analytic.
+Apply the \textbf{method of steepest descents} to approximate the behaviour as $x\to\infty$.
+
+The basic principle is essentially the same as Laplace's method - look for the dominant localised contribution from the integrand. For Laplace's method it was the maximum of $\phi(t)$, but since we're in complex plane this doesn't work. 
+
+The dominant contributions will come from \textbf{saddle points}. 
+
+Background complex variable information. Since $\phi(t)$ is analytic we have
+\[\phi(t) = u(\xi,\eta) + iv(\xi,\eta)\]
+Where $ t = \xi + i\eta$. The Cauchy-Riemann equations tell us that
+\[u_\xi = v_\eta, \quad u_\eta = -v_\xi, \quad \implies \nabla^2 u = u_{\eta\eta} + u_{\xi\xi} = 0\]
+A maximum or minimum in $u(\xi,\eta)$ requires $u_{\xi\xi}u_{\eta\eta} > 0$, which can't happen here.
+
+Analytic functions can grow/undulate/etc. But the points where $\odd \phi t = 0$ (stationary points) are saddle points. 
+
+We can deform contours in the complex plane however we want, provided we have the correct start and end, and don't go through any discontinuities, etc..
+
+Ideally we will avoid oscillations in the integrand, and pick an integrand such that
+\[\mathrm{Im}(\phi) = v(\xi,\eta) = \mathrm{const}\]
+Additionally we'd like there to be a point which has a dominant contribution, like in Laplace's method.
+Such a contour will
+\begin{enumerate}
+    \item Goes through a saddle point: where $\phi'(t) =0 $
+    \item in the direction of \textbf{steepest descent}
+\end{enumerate}
+
+So if on the contour $C'$:
+\[\phi(s) \equiv u + i\ \mathrm{const}\]
+
+
+Example:
+\[\phi(t) = t - \frac{t^3}{3}\]
+\[\phi'(t) = 1 - t^2\]
+\[\phi'(t) = 0 \implies t = \pm 1\]
+So that means that $\xi=\pm 1$
+So those are the saddle points.
+
+We want a path that goes through $\xi = \pm 1$ and for 
+\[v(\xi,\eta) = const\]
+\begin{align*}
+    \phi(t) &= \phi(\xi+i\eta)\\
+    &=\xi + i \eta - \frac{(\xi + i\eta)^3}{3}\\
+    &= \xi + i \eta - (\xi^3 + 3 i \xi^2 \eta - 3\xi\eta^2 - i\eta^3)/3\\
+    &= \xi - \frac13\xi^3 - \xi\eta^2 +i\left(\eta +\xi^2\eta - \frac{\eta^3}3\right)
+\end{align*}
+\begin{align*}
+    v &= Im(\phi)\\
+    &=\eta -\xi^2\eta + \frac{\eta^3}3
+\end{align*}
+At the saddle, $t = \pm1$, so $\xi = \pm 1$ and $\eta = 0$
+
+So curves of steepest descent (and ascent) will satisfy 
+\[0 = \eta(1-\xi^2 -\eta^2)\]
+There were some errors on the working but the idea was there.
+\[\xi  =\pm \sqrt{1 + \eta^2} \]
 
 
 
+Methods of steepest descents is a process:
+\begin{enumerate}
+    \item Find the saddle points and identify the \textbf{direction} of steepest descents
+    \item Deform contour to go through saddle point(s) in that direction of steepest descent
+    \item Evaluate the local contribution to the integral from the saddle
+    \item Evaluate any contributions from end points (if appropriate) - you may use steepest descent there as well. This means joining it to the path of steepest descent at the start and end of the integral (if it doesn't already)
+\end{enumerate}
+The usual rules of contour integrals will still apply - we may need residue calculus (we will relearn that later) if poles are picked up in deforming the contour.
 
+We don't actually always need saddles for this to work
 
+Consider the integral.
+\[I(x) = \int_0^1 \log t e^{ixt} dt\]
+There is no point where $\phi'(t) = i = 0$, and integration by parts fails. How do we evaluate this integral?
 
+Saddles aren't the only points with steepest descent paths - any point will have a path of steepest descent. 
+The path of steepest descent will be increasing in $\eta$, and constant in $\xi$. So we want the path where we go in the direction positively in $\eta$ around $\xi =0$ and negatively in $\xi$. Let these paths go to a point $R\to \infty$ and then join the paths. 
+Lets call the one that comes out of $(0,0) \to (0,R) =: C_1$ $(0,R)\to(1,R) =: C_2$ and $(1,R) \to (1,0) = : C_3$.
 
+For $C_1$ the greatest contribution is around the start $0\to 0+\epsilon$, $C_2$ is $0$ for sufficiently large $R$.
+On $C_3$ let $t= 1 + is$, and then the greatest contribution is around $s=0$ 
+So our integral becomes
+\begin{align*}
+I(x) &= \int_{C_1+C_2+C_3} \log t e^{ixt} dt\\
+&= \int_{C_1} \log t e^{ixt}dt + \int_{C_2} \log t e^{ixt}dt + \int_{C_3} \log t e^{ixt}dt\\
+\end{align*}
+Denote the integrals as $I_1,I_2,I_3$ on $C_1,C_2,C_3$ respectively
+Since $C_1$ is only moving on the imaginary axis, we have $t=is$
+\begin{align*}
+    I_1 &= \int_{C_1} \log t e^{ixt} dt\\
+    &= \int_0^R \log is e^{-xs} ids\\
+    &= \int_0^\infty i\log is e^{-xs}  ds
+\end{align*}
+Having let $R\to\infty$. Note this gets rid of the oscillations! We can now just use Laplace's method to evaluate the integral. But this one can be done normally
+\begin{align*}
+    I_1 &=i\int_0^\infty \left(\log(s) + \frac{i\pi}{2}\right) e^{-xs} ds\\
+    &=-i\frac{\log x}{x} - (i\gamma + \pi/2)/x
+\end{align*}
+(hes not sure about the result there)
 
+Where $\gamma$ is Euler's constant.
+(Not sure how but apparently the first integral could be done exactly)
 
+For $I_2$ plug in $t=iR+s$ and you find that it gets really small really quick (so its approximately $0$)
 
+For $I_3$, $t=1+is$, but this parametrisation goes the wrong way, so we will have to introduce a minus sign.
+\begin{align*}
+    I_3 &= \int_{C_3} \log t e^{ixt} dt\\
+    &= -\int_{0}^{\infty}\log (1+is) e^{ix(1+is)}ids\\
+    &= -ie^{ix}\int_{0}^{\infty}\log (1+is) e^{-xs}ds\\
+\end{align*}
+This can't be evaluated exactly. Apply Watson's lemma
+Write $\log(1+is)$ in a Taylor series
+\[\log(1+is) = -\sum_{n=1}^\infty \frac{(-is)^n}{n}\]
+Using Watson's lemma gives the integrand is 
+\[I_3 \sim ie^{ix} \sum_{n=1}^\infty \frac{(-i)^n (n-1)!}{x^{n+1}}\]
+As $x\to\infty$
 
-
-
-
-
-
+Now we just add the bits together!
+\begin{align*}
+    I &= I_1 + I_2 + I_3\\
+    &\sim -i\frac{\log x}{x} - \frac{(i\gamma + \pi/2)}{x} + ie^{ix} \sum_{n=1}^\infty \frac{(-i)^n (n-1)!}{x^{n+1}}
+\end{align*}
 
 
 

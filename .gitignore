@@ -1,0 +1,10 @@
+
+*.out
+
+*.gz
+
+*.log
+
+*.aux
+
+*-eps-converted-to.pdf

@@ -1,4 +1,4 @@
- \documentclass{/home/janmebows/Documents/LatexTemplates/myassignment}
+\documentclass{X:/Documents/Coding/Latex/myassignment}
 
 
 \title{Modelling With ODEs}
@@ -24,7 +24,9 @@ We can also have derivative boundary/initial conditions
 \subsection{Dynamics, Modelling and Computation}
 \subsubsection{Modelling}
 Deriving solutions for real world problems, given a worded problem and associated ICs or BCs. Use to predict and understand behaviours and complex interactions.
-\ex{Simple Pendulum}
+
+Simple Pendulum
+
 Let $\theta(t)$ be the angle away from directly down, $l$ be the length of the pendulum, $m$ be the mass of the pendulum, and $g$ be the force due to gravity.\\
 Assumptions:\\
 Mass $m$ is much greater than the mass of the string (neglect mass of string) $m >> m_{string}$. Gravity is the only force acting.\\
@@ -1678,7 +1680,7 @@ We will be expected to \textbf{know} the theorem and \textbf{apply} it.
 
 In proving the first step, we find the maximum length of time we can guarantee a unique solution after the initial time is 
 \[\epsilon = \min\left\{\alpha,\frac{\delta}{M}\right\}\]
-Where $\alpha$ is taken from $I = [t_0 - \alpha, t_0 + \alpha]$. I.e. $\alpha$ is the radius of the interval, $\delta$ is taken from the spacial interval; $J = [u_0 - \delta, u_0 + \delta]$, and we define $M$ as
+Where $\alpha$ is taken from $I = [t_0 - \alpha, t_0 + \alpha]$. I.e. $\alpha$ is the radius of the interval, $\delta$ is taken from the spatial interval; $J = [u_0 - \delta, u_0 + \delta]$, and we define $M$ as
 \[M = ||f|| = \sup_{I\times J} |f|, \ i.e. \ |f| \leq M \ on \ I\times J\]
 
 Consider $\dot u = u$ with $u(0) =1$. Noting the exact unique solution $u(t) = e^t$.
@@ -1704,21 +1706,382 @@ For $\delta < \infty$.
 It follows that the PL theorem establishes existence and uniqueness, but only for time $t \in [-\epsilon,\epsilon] = (-1,1)$.
 
 
-% \subsection{Error, Conditioning and Stability}
+Consider the ODE
+\[\odd xt = x^{1/3} = f(t,x)\]
+With $x(0) = 0$.
 
-% \subsubsection{Error}
+Set $I = \left[t_0 - \alpha,t_0+\alpha\right] = \left[-\alpha,\alpha\right]$ and $J = \left[x_0- \delta, x_0 + \delta\right] = \left[-\delta,\delta\right]$
 
-% \subsubsection{Conditioning}
+Is $f(t,x)$ lipschitz continuous?
+\begin{align*}
+    |f(t,x_2) - f(t,x_1)| &= |x_2^{1/3} - x_1^{1/3}|\\
+    &= \frac13|c^{-2/3} |x_2 -x_1|
+\end{align*}
+By blindly applying the MVT, where $c \in \left(x_1,x_2\right)$ wlog.
 
-% \subsubsection{Stability of algorithms}
+Note that 
+\[\lim_{c\to 0 } c^{-2/3}  = \infty\]
+I.e. if $c = 0$ then we cannot use the MVT for a bound on Lipschitz continuity.
+
+Hence $f(t,x)$ is not Lipschitz continuous on any interval $J$ containing $x_0 = 0$. We cannot apply the PL theorem now, and so we cannot guarantee there is a unique solution.
+
+
+\subsection{Error, Conditioning and Stability}
+A numerical solution always contains error. We need this to be small enough that the numerical solution is useful.
+\subsubsection{Error}
+Two types of error
+\begin{enumerate}
+    \item Truncation error $(e_T)$, associated with the mathematical process - typically by truncating an infinite series (Taylor series).
+    \item Round-off or Machine error $(e_R)$, associated with computer arithmetic.
+\end{enumerate}
+The local error $e$ is the sum of the two
+\[e = e_T + e_R\]
+We want to keep this as small as possible.
+
+We can also measure absolute and relative errors in an approximation. These are (respectively)
+\begin{align*}
+    e_{abs} &= |x-\bar{x}|\\
+    e_{rel} &= \left|\frac{x-\bar{x}}{x}\right|,\quad x\neq 0
+\end{align*}
+Where $x$ is the exact solution and $\bar{x}$ is an approximate solution. Note that $e_{rel}$ is a non-dimensional value.
+
+
+Example of truncation error:
+Consider evaluating the function $f(t)$ some small time step $h$ in the future using only data at time $t$. If $f$ has $N+1$ continuous derivatives
+\[f^{(n)}(t) = \frac{d^nf}{dt^n}\]
+For $n=1,\ldots, N+1$.
+
+Then
+
+\begin{align*}
+    f(t+h) = f(t) + hf'(t) + \frac{h^2}{2} f^{(2)}(t) + \ldots + \frac{h^{N}}{N!} f^{(N)}(t) + R_N(\xi)
+\end{align*}
+Where
+\[R_N(\xi) = \frac{h^{N+1}}{N+1!} f^{(N+1)}(\xi)\quad \text{ For }\xi \in \left[t, t+h\right]\]
+
+Truncate the series by dropping $R_N(\xi)$. 
+\[f(t+h) \approx \sum_{n=0}^N \frac{h^n}{n!} f^{(n)}(t)\]
+We say the truncation error is 
+\[e_T = R_N(\xi)\]
+Which has order $\bigo(h^{N+1})$. If there exists a constant $k$ such that 
+\[|e_T| < K h^{N+1}\]
+For $h \in \left(0,h_{max}\right)$
+Hence
+\[K = \max_{\xi \in (t, t+h_{max})} \left|f^{(N+1)}{(N+1)!}\right|\]
+We say the approximation is $N^{th}$ order accurate.
+
+\subsubsection{Conditioning}
+A problem is \textit{well conditioned} if small changes in the input data only makes small changes in the solution. Otherwise it is ill or poorly conditioned.
+
+Consider a scalar function $f(x)$. A small change/perturbation to the input data $x$ (say to $x+e = x(1+\epsilon)$ where $\epsilon = e/x$). With $\epsilon \ll 1$.
+This yields the solution $f(x+e)$. To determine whether $f(x)$ is well conditioned, we need to check if
+\[f(x+e) - f(x)\]
+has small magnitude. Assuming $f$ is differentiable, we can use taylor series:
+\[f(x+e) = f(x) + ef'(\xi), \quad x \leq \xi \leq x +e\]
+For small $e$ and well behaved $f$, we have $f'(\xi) \approx f'(x)$, such that
+\[f(x+e) - f(x) \approx e f'(x)\]
+Then $f(x)$ is well conditioned if the absolute error $ef'(x)$ is small magnitude for all possible inputs $x$. Otherwise it is ill-conditioned.
+
+Ideally we would measure this smallness as relative error. 
+
+
+The condition number is defined as 
+\[c = \left|\frac{\text{relative error in solution}}{\text{relative error in data}}\right|\]
+A well conditioned problem has $c$ close to unity, large $c$ means it is ill-conditioned. For IVPs, conditioning is often measured in terms of absolute error.
+
+
+An example; considering 
+\[\dot x = -x, \quad x(0) = 1\]
+The exact solution is 
+\[x(t) = e^{-t} \equiv x(t:1)\]
+
+We are considering the initial value as a parameter.
+
+Now consider the perturbed problem
+\[x(0) = 1 + \epsilon, \quad \epsilon \ll 1\]
+Then 
+\[x(t) = (1+\epsilon) e^{-t} \equiv x(t:1+\epsilon)\]
+The absolute error:
+\[x(t:1+\epsilon) - x(t:1 = \epsilon) = e^{-t}\]
+With max value $\epsilon$ at $t=0$ and is decreasing monotonically as $t\to\infty$.
+We deduce the IVP is well conditioned
+
+For this problem the relative error would be
+\[e_{rel} = \left|\frac{\epsilon e^{-t}}{e^{-t}}\right| = |\epsilon| \ll 1\]
+So the condition number is
+\[c = \left|\frac{e_{rel}}{input_{rel}}\right| = \left|\frac{\epsilon}{\epsilon}\right| = 1 \]
+So it is definitely well conditioned.
+
+Another example
+\[\odd xt = x, \quad x(0)=1\]
+Exact sol
+\[x(t) = e^t \equiv x(t:1)\]
+Perturbed solution $x(0) = 1+\epsilon$
+\[x(t) = (1+\epsilon)e^{t} \equiv x(t:1+\epsilon)\]
+The absolute error would be
+\[\left|(1+\epsilon) e^t - e^t\right| = |\epsilon| e^t\]
+Which grows unboundedly as $t\to\infty$. Hence the problem is ill-conditioned under this measure
+
+The relative error is
+\[\left|\frac{\epsilon e^t}{e^t}\right| = |\epsilon| \ll 1\]
+And the condition number is
+\[\frac{\epsilon}{\epsilon} = 1\]
+Which indicates this is a well conditioned problem under this measure.
+
+So there is a bias depending on which measure you use! 
+
+\subsubsection{Stability}
+An algorithm is (numerically) stable if it always produces the solution to a nearby problem, otherwise it is unstable.
+
+Consider a scalar function $f(x)$ and suppose that we evaluate it using an algorithm $\mathrm{alg}(x)$. The absolute error in the solution is 
+\[|\mathrm{alg}(x) - f(x)|\]
+Suppose that we can show that 
+\[\mathrm{alg}(x) = f(x+e)\]
+for some small $e$, i.e. the algorithm yields the solution to the nearby problem of evaluating $f(x+e)$. Then the algorithm is numerically stable.
+
+At each step an approximation gains an amount of error $e = (e_T + e_R)$. This error then affects the accuracy of the approximation at subsequent steps. We say the error propagates.  \textbf{If the error grows as it propagates then the algorithm is unstable, if it decays then it is stable.}
+
+
+\subsubsection{Conditioning and Stability}
+We will hence use an \textit{algorithm} to solve a \textit{problem}. It is important to distinguish between \textbf{difficult} problems and \textbf{bad} algorithms.
+A numerical solution my be bad because
+\begin{enumerate}
+    \item The problem is ill-conditioned;
+    \item The numerical method is not stable;
+    \item Or both
+\end{enumerate}
+To get a good solution, we require a well-conditioned problem and a stable numerical method. The solution we obtain will be to a problem near the one we are trying to solve (so it is stable) and the error will be small (well conditioned).
+
+
+We can choose a new algorithm, but we can't quite pick a new problem. It is hard to improve conditioning, but it is easy to change algorithm to a more stable one. As we consider numerical solutions for IVPs, we will \textbf{assume that we have well conditioned problems}, and focus mainly on numerical stability.
+
+
+\subsection{Finite Differences}
+We start with a familiar IVP
+\[\odd xt = f(t,x), \quad x(t_0) = x_0\]
+
+We know everything on the RHS, but we need to fix up the derivative. The idea behind Finite Difference methods is to use a Taylor series approximation.
+
+We don't know the slope at $x(t)$ but we do know the value of $x(t)$ and $x(t+h)$.
+We can take the slope with
+\[slope = \frac{x(t+h) - x(t)}{h}\]
+
+Using Taylor series:
+\begin{align*}
+    x(t+h) &= x(t) + hx'(t) + \frac{h^2}{2!} x''(\xi)\\
+    hx'(t) &= x(t+h)-x(t)\\
+    x'(t) &= \frac{x(t+h)-x(t)}{h} - \frac{h}{2} x''(\xi)
+\end{align*}
+Where $\xi \in \left[t,t+h\right]$
+
+Since the first term is $\bigo(1/h)$ and the second is $\bigo(h)$: 
+\[\frac{x(t+h)-x(t)}{h} \gg \frac{h}{2} x''(\xi) \quad as \ h\to 0 \]
+And so the truncation error $e_T = \frac{h}{2} x''(\xi) = \bigo(h)$. 
+
+Now substitute this into the ODE
+\begin{align*}
+    \frac{x(t+h)-x(t)}{h} +\bigo(h) = f(t,x)\\
+    \frac{x_{j+1} - x_j}{h} +\bigo(h) = f(t_j,x_j)\\
+    x_{j+1} = x_j + h(f(t_j,x_j)) + \bigo(h^2)
+\end{align*}
+Where $t_j = t_j + jh$ and $x_j \approx x(t_j)$
+
+This is forward Euler's method (forward finite differences).
+
+It has local discretisation error $\ell(h) = \bigo(h^2) = he_T$. When we say ``local'' we refer to the error in taking $1$ step using this method.
+
+The global error from taking multiple steps is obtained by:
+
+Suppose we take $N$ steps. $t_N = t_0 + Nh$, then the global discretisation error is
+\begin{align*}
+    g(h) &= N\times \bigo(h^2) = \frac{t_N - t_0}{h} \bigo(h^2)\\
+    &=\bigo(h)
+\end{align*}
+Hence Euler's method is 1st order accurate.
 
 
 
-% \subsection{Finite Differences}
+Another method: backwards finite differences, so using $t-h$ instead of $t+h$.
+The slope of the tangent
+\[\frac{x(t) - x(t-h)}{h}\]
+
+Taylor series in $x(t-h)$
+\begin{align*}
+    x(t-h) &= x(t) - hx'(t) + \frac{h^2}{2} x''(\xi), \quad \xi \in \left[(-h,t\right)\\
+    x'(t) &= \frac{x(t) - x(t-h)}{h} + \bigo(h)
+\end{align*}
+With $e_T = \bigo(h)$, substitute into the ODE
+\begin{align*}
+    \frac{x_j - x_{j-1}}h + \bigo(h) &= f(t_j,x_j)\\
+    x_j &= x_{j-1} + hf(t_j,x_j) + \bigo(h^2)
+\end{align*}
+
+
+This is the backwards Euler method (surprise surprise). Just like the forward method,
+\[\ell(h) = \bigo(h^2), \quad g(h) = \bigo(h)\]
+I.e. the same as the forward Euler method.
+
+
+Since the point we try to calculate depends on the point we are trying to calculate i.e. $x_j = \ldots f(x_j,x_j)$, it can be a bit harder to use backwards Euler.
+
+If we combine the two methods, we get Central Differences
+\begin{align*}
+    x(t+h) = x(t) + hx'(t) + \frac{h^2}{2} x''(t) + \frac{h^3}{3!} x'''(\xi^+)\\
+    x(t-h) = x(t) - hx'(t) + \frac{h^2}{2} x''(t) - \frac{h^3}{3!} x'''(\xi^-)\\
+\end{align*}
+By subtracting the two, we get
+
+\begin{align*}
+    x(t+h) - x(t-h) = 2hx'(t) + \bigo(h^3)\\
+    x'(t) = \frac{x(t+h) - x(t-h)}{2h} + \bigo(h^2)    
+\end{align*}
+Hence $e_T = \bigo(h^2)$. Which is better than using forward/backwards.
+
+This is the central difference method for $x'$.
+
+Substituting into the ODE gives
+\begin{align*}
+    \frac{x_{j+1} - x_{j-1}}{2h} + \bigo(h^2) = f(t_j,x_j)\\
+    x_{j+1} = x_{j-1} + 2hf(t_j,x_j) + \bigo(h^3)
+\end{align*}
+Hence
+\[\ell(h) = \bigo(h^3),\quad g(h) = \bigo(h^2)\]
+This is known as the leapfrog method, which is second order accurate. The dilemma here is that this extra order of accuracy does not inherently imply a better approximation.
 
 
 
+So we have forward, backward and central differences, which are (respectively):
+\begin{align*}
+    x_j' &= \frac{x_{j+1} - x_j}{h} + \bigo(h)\\
+    x_j' &= \frac{x_{j} - x_{j-1}}{h} + \bigo(h)\\
+    x_j' &= \frac{x_{j+1} - x_{j-1}}{2h} + \bigo(h^2)\\
+\end{align*}
+These are the \textbf{finite difference formulae}.
 
+With corresponding Euler methods for the ODE $\dot x = f(t,x)$:
+\begin{align*}
+    x_{j+1} &= x_j + h f(t_j,x_j) + \bigo(h^2) \\
+    x_{j+1} &= x_j + h f(t_{j+1},x_{j+1}) + \bigo(h^2)\\
+    x_{j+1} &= x_{j-1} + 2h f(t_j,x_j) + \bigo(h^3)
+\end{align*}
+We also call these finite difference formulae, but we will call them Update/time stepping formulae. The $\bigo()$ are local truncation errors, which we denote $\ell(h)$. We are moreso interested in the Global truncation error
+\[g(h) = \frac1h \ell(h)\]
+
+\emph{TIL - Josh is bad at latex and is slow.}
+
+
+The generalised finite difference formulae for $\frac{d^rx}{dt^r}$
+\[x^{(r)}(t_j) \equiv x_j^{(r)}\]
+
+\begin{align*}
+    x_j^{(r)} = \sum_{i=-p}^q a_i x_{j+i} + \bigo(h^m)
+\end{align*}
+For some constants $a_i$ to derive an order $m$.
+
+E.g.
+
+Let $r=1$, $p=0$ and $q=2$
+\begin{align*}
+    x_j' &= \sum_{i=0}^2 a_i x_{j+i} + \bigo(h^m)\\
+    &= a_0 x_{j} + a_1 x_{j+1} + a_2 x_{j+2} + \bigo(h^m)\\
+    &= a_0 x_{j} + \{\left(\sum_{k=0}^\infty \frac{h^k}{k!} x_j^{(k)}\right) + a_2 \left(\sum_{k=0}^\infty \frac{(2h)^{k}}{k!} x_j^{(k)}\right) + \bigo(h^m)\\
+\end{align*}
+
+Equate coefficients for the derivatives
+\begin{align*}
+    x_j:\  a_0 + a_1 + a_2 &= 0\\
+    x_{j}':\  ha_1 + 2ha_2 &= 0\\
+    x_{j}'':\ \frac{h^2}{2} a_1 + \frac{4h^2}{2} a_2 &= 0
+\end{align*}
+Now solve the system:
+Use (3), then sub into (2), then sub into (1).
+\begin{align*}
+    a + 4a_2 = 0 \implies a_1 = -4a_2\\
+    a_1 + 2a_2 = \frac1h\\
+    -4a_2 + 2a_2 = \frac1h\\
+    a_2 = \frac{-1}{2h}\\
+    \implies a_1 = -4a_2 = \frac{4}{2h}\\
+    \implies a_0 = -a_1 -a_2 =  -\frac{3}{2h}
+\end{align*}
+
+Alternatively just use matrices in matlab right?
+
+Hence
+
+\[x_j ' = \frac1{2h}\left(-3x_j + 4x_{j+1} - x_{j+2}\right) +\bigo(h^m)\]
+Note that the coefficients sum up to $0$. This is a handy check for consistency. What is the interpretation of this? This holds for any function, and we require that a constant function must have zero derivative.  
+
+How accurate is this? I.e. what is $m$? To obtain this, look at the next term for those Taylor series, $x_j'''$. 
+\[\frac{h^3}{6} a_1 + \frac{8h^3}{6} a_2 = -\frac{h^3}{8} \frac2h = \frac{-h^2}{4}\]
+Hence $m = 2$.
+I.e. The error is $\bigo(h^2)$, and so the formula is second order accurate.
+If the coefficient of $x_j'''$ was $0$, we would then look at $x_j^{(4)}$. And iterate until we get a non-zero coefficient.
+
+Note, we have $p+q+1 = 3$ unknowns $(a_0,a_1,a_2)$, and so we needed 3 equations (corresponding to $x_j,x_j',x_j''$). We need $r+1 =2$ equations for $x_j$ and $x_j'$. So we actually had an oversubscribed system. In Luke's words, the equation for $x_j''$ is a \textit{bonus}.   
+
+
+\subsubsection{Explicit versus Implicit methods}
+
+Forwards Euler method (a.k.a Explicit Euler's method)
+\[x_{j+1} = x_j + h f_j\]
+Where $f_j := f(t_j,x_j)$.
+
+This is an explicit method, since the new term does not appear on the RHS. I.e.
+\begin{align*}
+    x_0 &= x(t_0)\\
+    x_1 &= x_0 + h f_0\\
+    x_2 &= x_1 + h f_1\\
+\end{align*}
+Which is explicit, since $x_1$ doesn't appear on the RHS and we know $x_0$. Same thing for $x_2$ and so on.
+
+
+Backwards Euler (a.k.a Implicit Euler's method)
+\begin{align*}
+    x_{j+1} = x_{j} + hf_{j+1}
+\end{align*}
+Since $x_{j+1}$ appears on both sides and may not necessarily be explicitly extracted, it is implicit.
+So given $x_0$
+\begin{align*}
+    x_1 = x_0 + hf_1\\
+    x_1 - hf_1 = x_0
+\end{align*}
+
+In general we don't know how to solve this, i.e. we don't know if we can find $x_1$ exactly.
+
+
+Lets say $f(t,x) = x$ then
+\begin{itemize}
+    \item Explicit Euler:
+    \begin{align*}
+        x_{j+1} = x_j + h x_j\\
+        x_{j+1} = x_j(1+h)
+    \end{align*}
+    \item Implicit Euler:
+    \begin{align*}
+        x_{j+1} = x_j + hx_{j+1}\\
+        (1-h)x_{j+1} = x_j\\
+        x_{j+1} = \frac{x_j}{1-h}\\
+        x_{j+1} = (1-h)^{-1} x_j\\
+        x_{j+1} = (1+h+h^2+\hdots) x_j
+    \end{align*}
+    The last step shows the relationship between the two.
+\end{itemize}
+So this one was possible, though multiplication is nicer.
+
+What if $f = e^{-x}$
+
+\begin{itemize}
+    \item Explicit Euler
+    \begin{align*}
+        x_{j+1} = x_j + h e^{-x_j}
+    \end{align*}
+    \item Implicit Euler
+    \begin{align*}
+        x_{j+1} = x_j + h e^{-x_{j+1}}\\
+        x_{j+1} - h e^{-x_{j+1}} = x_j
+    \end{align*}
+    Not easy to find $x_{j+1}$ explicitly here.
+\end{itemize}
 
 
 

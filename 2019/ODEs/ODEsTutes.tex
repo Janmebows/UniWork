@@ -1,4 +1,4 @@
-\documentclass{/home/janmebows/Documents/LatexTemplates/myassignment}
+\documentclass{X:/Documents/Coding/Latex/myassignment}
 
 \title{Modelling With ODEs Tutorials}
 
@@ -221,4 +221,70 @@ $\frac14 tr(J)^2 = 4$ stable node.
 
 \end{enumerate}
 
+
+\section{Tute 5}
+\begin{enumerate}
+    \item 
+    \[\odd ut = u^2, \quad u(0)=1\]
+    PL - if the interval $t_- \leq t_0 < t_+$ and $u_- < u_0 < u_+$ and $u^2$ is continuous in there, and Lipschitz continuous on the $u$ interval then it has a unique solution
+    It is continuous.
+    Lipschitz:
+
+    \begin{align*}
+        |x^2-y^2| = 2C|x-y|\\
+    \end{align*}
+    Hence by PL there exists a unique solution.
+    Pick the interval with $t_0 = 0$ and $u_0 = 1$
+
+    Pick $\alpha$ as the radius of temporal interval and $\delta$ as radius of spatial interval.
+
+    Define 
+    \[M = ||f|| = \sup_{I\times J} |f| = \sup_{J} |u^2| = (1+\delta)^2 \]
+    \[\frac{\delta}{M} = \delta / (1+\delta)^2\]
+    \[\epsilon = \min\{\alpha,\delta/M\} = \min\{\alpha, \delta/(1+\delta)^2\} < 1\]
+    And
+    \[\max\{\frac{\delta}{(1+\delta)^2}\} = \frac14, \quad \delta=1\]
+    (apparently)
+
+
+    \item 
+    \[\odd ut = 1 + u^2 \ u(0) = 0\]
+    \begin{align*}
+        u_1 = 0 + \int_0^{t} 1 ds\\
+        u_1 = t\\
+        u_2 = 0 + \int_0^t 1 + s^2 ds\\
+        u_2 = t + \frac{t^3}3\\
+        u_n = \int_0^t 1+ u_{n-1}^2(s) ds
+    \end{align*}
+
+    \begin{verbatim}
+    syms t
+    u = 0 
+    for k=1:10
+       u = int(1+u^2,t,0,t);   
+    end    
+    \end{verbatim}
+\item Finite diff formula
+\[x_{n+1} = (2+h^2) x_n - x_{n-1} , \quad h=step\]
+    \begin{enumerate}
+        \item Which ODE does this pair with
+        \begin{align*}
+            x(t+h) = (2+h^2) x(t) - x(t-h)\\
+            x(t+h) = 2x(t) + h^2x(t) - x(t-h)\\
+            x(t) = \frac{x(t+h) - 2x(t) + x(t-h)}{h^2} \\
+            x(t) = x''(t-h)\\
+            x(t) = x''(t), \quad h\to 0 
+        \end{align*}
+
+
+        \item Order of local discretisation error
+        \begin{align*}
+            
+        \end{align*}
+        \item Is this explicit or implicit
+        \begin{align*}
+             
+        \end{align*} 
+    \end{enumerate}
+\end{enumerate}
 \end{document}
