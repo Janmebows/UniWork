@@ -2,7 +2,7 @@
 %%1c
 close all
 clear all
-epsilon = 0.2;
+epsilon = 0.1;
 %obtain a numerical solution to the bvp
 solinit1=bvpinit(linspace(0,1,11),[0 1]);
 sol1=bvp4c(@(x,y)BVPODE1(x,y,epsilon),@boundaries1,solinit1);

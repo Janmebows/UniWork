@@ -1984,7 +1984,7 @@ Let $r=1$, $p=0$ and $q=2$
 \begin{align*}
     x_j' &= \sum_{i=0}^2 a_i x_{j+i} + \bigo(h^m)\\
     &= a_0 x_{j} + a_1 x_{j+1} + a_2 x_{j+2} + \bigo(h^m)\\
-    &= a_0 x_{j} + \{\left(\sum_{k=0}^\infty \frac{h^k}{k!} x_j^{(k)}\right) + a_2 \left(\sum_{k=0}^\infty \frac{(2h)^{k}}{k!} x_j^{(k)}\right) + \bigo(h^m)\\
+    &= a_0 x_{j} + a_1\left(\sum_{k=0}^\infty \frac{h^k}{k!} x_j^{(k)}\right) + a_2 \left(\sum_{k=0}^\infty \frac{(2h)^{k}}{k!} x_j^{(k)}\right) + \bigo(h^m)\\
 \end{align*}
 
 Equate coefficients for the derivatives
@@ -2082,6 +2082,470 @@ What if $f = e^{-x}$
     \end{align*}
     Not easy to find $x_{j+1}$ explicitly here.
 \end{itemize}
+
+\subsubsection{Consistency}
+A finite difference formula is considered \textit{consistent} with an ODE if the local discretization error $\ell(h) \to 0$ as $h\to 0$. This is equivalent to saying that at any fixed point $t_i$ in the domain, the finite difference formula becomes the same as the ODE as $h\to 0$. We can use \textit{consistency analysis} to find this.
+
+Consider the FDF
+\[x_{j+1} = x_j + hf_j\]
+(Euler's method)
+
+To derive this we took the derivative and approximated it with a taylor series to get the finite differences formula for the derivative. Substitute this into the ODE and then FDF with timestep. 
+
+We want to reverse the process. If we instead wrote the (example) FDF as
+\[x(t_j+h) = x(t_j) + hf(t_j,x(t_{j}))\]
+And applied a Taylor series to $x(t_j+h)$
+\[x(t_j+h) = x(t_j) + hx'(t_j) + \frac{h^2}{2} x''(\xi), \quad \xi \in (t_j,t_j+h)\]
+
+Substitute this back into the example FDF
+\begin{align*}
+    x(t_j+h) &= x(t_j) + hf(t_j,x(t_{j}))\\
+    x(t_j) + hx'(t_j) + \frac{h^2}{2} x''(\xi)&= x(t_j) + hf(t_j,x(t_{j}))\\
+    hx'(t_j) + \frac{h^2}{2} x''(\xi)&= hf(t_j,x(t_{j}))\\
+    x'(t_j) &= f(t_j,x(t_{j}))-\frac{h}{2} x''(\xi)\\
+    x'(t_j) &= f(t_j,x(t_{j})), \quad h\to 0
+\end{align*}
+Hence this FDF is consistent with the ODE
+\[\odd xt = f(t,x)\]
+And we find $e_T = \bigo(h)$ and $\ell(h) = \bigo(h^2)$
+
+\subsubsection{Convergence}
+We have \textit{convergence} to the true solution if the global discretisation error $g(h)\to 0$ as $h\to0$. This is a stronger requirement than consistency, and is essential for accurate solutions.
+
+\textbf{Lax's Equivalence theorem} states
+\[Consistency + Stability = Convergence\]
+
+\subsubsection{Stability analysis}
+We want to determine if an algorithm (an FDF) gives a solution to a nearby problem (i.e. if it is stable).
+
+For example if we applied Euler's method to $\odd xt = -100x$ with $x(0)=1$, we would hope for
+\[x(t) = e^{-100t}\]
+always
+
+Euler's method gives
+\begin{align*}
+    x_0 = 1\\
+    x_1 = x_0 + h(-100x_0) = (1-100h)x_0\\
+    \vdots\\
+    x_n = (1-100h)^n x_0 = (1-100h)^n
+\end{align*}
+If say $h = 0.1$ then $x_n = (-9)^n$ which GROWS in $n$, and oscillates (we wanted exponential decay!).
+
+If we however had $h = 0.001$
+\[x_n = (1-(100*0.001))^n x_0 = (1-0.1)^n = 0.9^n\]
+Which does in fact decay, and we lose the oscillation.
+Hence Euler's method is stable for $h=0.001$.
+More rigorously, 
+\begin{align*}
+    |1-100h|<1 \implies 100h < 2\\
+    h < 0.02
+\end{align*}
+Since for stability we require $x_n\to 0$ as $n\to \infty$
+To remove the oscillation we also require 
+\[0<1-100h < 1 \implies h < 0.01\]
+(Given $h$ is positive)
+
+So we would say that Euler's method is \textbf{conditionally stable} for this IVP.
+
+If we used backwards(implicit) Euler for the same problem, we get
+\begin{align*}
+    x_0 = 1\\
+    x_1 = x_0 - 100h x_1 \implies x_1 = \frac{x_0}{1+100h}\\
+    \vdots\\
+    x_n = \frac{x_0}{(1+100h)^n}
+\end{align*}
+And $1+100h > 0$ for $h >0$, and hence $x_n\to 0$ as $n\to\infty$ for all $h>0$ and we have $x_n > 0$ for all $n$
+
+So backwards Euler is unconditionally stable (its always stable)
+
+
+
+
+We want to generalise the analysis for general IVPs
+\[\odd xt = f(t,x), \quad x(t_0) = x_0\]
+For Eulers method
+\[x_{n+1} = x_n + hf(t_n,x_n)\]
+So
+\[x(t_n + h) = x(t_n) + hx'(t_n) + \frac12 h^2 x''(\xi)\]
+
+Combine this with Euler's method (subscripts for approximation, brackets for true val)
+\begin{align*}
+    x(t_n+h) - x_{n+1} &= x(t_n) - x_n +h(x'(t_n) - f(t_n,x_n)) + \frac12 h^2 x''(\xi)\\
+    &= \frac12 h^2 x''(\xi), \text{ if } x_n = x(t_n)
+\end{align*}
+
+Using the fact that $x'(t_n) = f(t_n,x(t_n))$.
+
+But, in general $x_n \neq x(t_n)$.
+
+From the MVT
+\begin{align*}
+    f(t_n,x(t_n)) - f(t_n,x_n) = (x(t_n) - x_n)f_x(t_n,\eta)
+\end{align*}
+Where $\eta \in [x_n,x(t_n)]$
+\begin{align*}
+    \implies x(t_{n+1}) - x_{n+1} = \left(x(t_n) - x_n\right)(1 + h f_x(t_n,\eta)) + \frac12 h^2 x''(\xi)
+\end{align*}
+So what we have is 
+\[\text{Global error at } n+1 = \text{Global error at }n\times\text{something} + \text{Local error}\]
+
+The `something' term, $1+hf_x(t_n,\eta)$ corresponds to the growth of global error. So the global errors grow if
+\[|1+hf_x| > 1\]
+Hence, Euler's method is stable if
+\[|1+hf_x| < 1 \implies -2 < hf_x < 0\]
+
+
+For backwards Euler, we find (we won't bother deriving it) it is stable if
+\[|1-hf_x| > 1 \implies hf_x < 0 \ or \ hf_x > 2\]
+
+
+Consider the `test' problem
+\[\odd yx = \lambda y, \quad y(0) = 1, \quad \lambda \in \mathbb{C}\]
+
+The stable region of a FDF is the set of values (regions) of $Z = \lambda h\in \mathbb{C}$ for which the method is stable.
+
+Forwards:
+\begin{align*}
+  |1 + hf_y|< 1\\
+  |1+\lambda h| < 1\\
+  |1 + z| < 1  
+\end{align*}
+So for values of $z$ captured in the unit disc centered at $Re(z)=-1$. 
+
+For backwards Euler 
+\begin{align*}
+    |1-hf_y| >1\\
+    |1-z| >1
+\end{align*}
+This region is for the values of $z$ \textbf{outside} of the disc centered at $Re(z) = 1$.
+
+Since the second region is so big, we would prefer backwards.
+
+Backwards Euler is $A-stable$. because it covers $Re|z|<0$. This would mean $Re(\lambda) < 0$. 
+And hence forwards Euler's method is not $A-stable$. 
+
+
+E.g. Heun's method (improved/modified Euler) id
+\[x_{n+1} = x_n + \frac12 h \{f(t_n,x_n) + f(t_{n+1},x^*_{n+1})\}\]
+Where 
+\[x^*_{n+1} = x_n + hf(t_n,x_n)\]
+
+So we get the simplicity of forwards Euler, with the improved stability of backwards.
+
+Applying Heun's method to the test problem:
+\begin{align*}
+    x_{n+1}^* = x_n(1+\lambda h)\\
+    x_{n+1} = x_n + \frac12h\{\lambda x_n + \lambda x_{n+1}^*\}\\
+    x_{n+1} = x_n\left(1 + \lambda h + \frac12 (\lambda h)^2\right)\\
+\end{align*}
+
+By looking at the Taylor series, we can see how much of an improvement this is:
+\begin{align*}
+    x(t_{n+1}) = x(t_n + h) = x(t_n) + hx'(t_n) + \frac12 h^2 x''(t_n) + \frac{h^3}{6} x'''(\xi)\\
+    =x(t_n) \{1 + \lambda h + \frac12(\lambda h )^2\} + \frac16 h^3 x'''(\xi)
+\end{align*}
+
+Looking at the error bit
+\begin{align*}
+    x(t_{n+1}) - x_{n+1} = \left(x(t_n) - x_n\right)\left(1 + \lambda h + \frac12 (\lambda h)^2\right) + \frac{h^3}{6} x'''(\xi)
+\end{align*}
+
+Hence for stability
+\[|1 + \lambda h + \frac12 (\lambda h)^2| < 1\]
+\[|1 + z + \frac12 z^2| < 1, \quad z =\lambda h\]
+Which is a slight improvement on Euler's method.
+
+\subsubsection{Round-off error}
+\[e = e_T + e_R\]
+Where $e_T$ is truncation and $e_R$ is round-off error. 
+
+$e_R$ becomes important as $h$ gets small
+
+Consider the forwards difference equation
+\[x_j' = \frac{x_{j+1} - x_{j}}{h} + e_T, \quad e_T = -\frac12 hx''(\xi), \ \xi \in (t_j,t_{j+1})\]
+
+Define the round-off error 
+\[\epsilon_j = x(t_j) - x_j\]
+The total error
+
+\begin{align*}
+    e = x'(t_j) - x_j &= x'(t_j) - \frac{x_{j+1} - x_{j}}{h}\\
+    &= x'(t_j) - \frac1h\left\{(x(t_{j+1}) - \epsilon_{j+1}) - (x(t_j) - \epsilon_j)\right\}\\
+    &=\left\{x'(t_j) - \frac{x(t_{j+1}) - x(t_j)}h\right\} + \frac{\epsilon_{j+1} - \epsilon_j}{h}
+\end{align*}
+The term in the curly braces is the truncation error (apparently)
+\[e_T = x'(t_j) - \frac{x(t_{j+1}) - x(t_j)}h=-\frac12 h x''(\xi)\]
+And the other term is the round off error
+\[e_R = \frac{\epsilon_{j+1} - \epsilon_j}{h}\]
+
+Now
+\[|e| = |e_T + e_R| \leq |e_T| + |e_R|\]
+\[
+    \begin{cases}
+        |e_T| \leq \frac12 h \max|x''(\xi)| = \frac12 h k\\
+        |e_R| \leq \frac{|\epsilon_{j+1}|+|\epsilon_{j}|}{h} \leq \frac{2\epsilon}{h}
+    \end{cases}
+\]
+Where $\epsilon = \max_j|\epsilon_{j}|$
+Thus
+\[|e| \leq \frac{Kh}{2} + \frac{2\epsilon}{h} \to 0 + \infty \ as \ h\to0\]
+
+So the optimal step size (which minimises the error bound), $h_m$
+\begin{align*}
+    \odd{}h\left( \frac{Kh}{2} + \frac{2\epsilon}{h}\right) &=0\\
+    \frac K2 - \frac{2\epsilon}{h_m^2} &= 0\\
+    h_m &= 2\sqrt{\frac{\epsilon}{K}}
+\end{align*}
+
+\subsubsection{Stiff systems}
+A example stiff problem 
+\[\odd xt = -\alpha x, \quad x(0) = 1,\ and\ \alpha>0\]
+The exact solution is (astonishingly)
+\[x = e^{-\alpha t}\]
+We would expect to require small step sizes for small values of $t$, and large step sizes for larger values of $t$. This is to accommodate for the rapid change in $x$ for small $t$, and near zero change for large $t$. 
+
+One issue is we have made the assumption that we have only one step size which doesn't change - so we can't do that.
+
+Another issue - lets try using Euler's method on this. We would require for stability:
+\[|1-\alpha h| < 1 \implies h < \frac{2}{\alpha}\]
+
+This actually is a boundary layer problem - there is a boundary layer near $t=0$ of size $\approx \frac1 \alpha$. The problem is stiff due to this boundary layer.
+
+\subsubsection{Linearisation}
+Just about everything is non-linear. 
+
+Consider the IVP
+\[\odd xt = -x^2,\quad x(0)=1\]
+Lets ignore the fact that this is separable and can be solved easily explicitly. If we want to use a solver, e.g. Euler's method
+
+\[x_{n+1} = x_n - h x_n^2\]
+
+Which is stable for
+\[|1-2hx| <1\]
+Note this stability actually depends on $x$.
+
+In this case $x$ is decreasing with time and is always positive (since there is a fixed point at $x^*=0$, hence $0 < x \leq 1$.
+Hence
+\[|1-2hx| < 1 \implies 0<h<1\]
+Is the interval of stable step sizes.
+
+
+Implicit methods are not straightforward to apply, e.g. backwards Euler
+\begin{align*}
+    x_{n+1} = x_n - hx_{n+1}^2\\
+    hx_{n+1}^2 + x_{n+1} - x_n = 0\\
+    x_{n+1} = \frac{-1 \pm \sqrt{1 + 4hx_n}}{2h}
+\end{align*}
+Which is an explicit expression in terms of $x_n$. Do we want the positive or negative branch of the square root? 
+For small $h$, the square root becomes
+\[\sqrt{1+4hx_n} = 1 + \frac12 4 h x_n + \bigo(h^2)\]
+\[\implies x_{n+1} = \frac1{2h} \{-1\pm (1+2hx_n + \bigo(h^2))\}\]
+\[=\begin{cases}
+    \frac1{2h}(-2-2hx_n + \bigo(h^2) & +ve\ branch\\
+    \frac1{2h}(2hx_n + \bigo(h^2) = x_n + \bigo(h) & -ve\ branch\\
+\end{cases}\]
+
+So we want the positive branch.
+
+We could alternatively linearise the problem, by writing (read: cheating)
+\[\odd{x_n}t = -x_nx_{n+1}\]
+To give
+\[x_{n+1} = x_n -hx_nx_{n+1} \implies x_{n+1} = \frac{x_n}{1+hx_n}\]
+Which is explicit, but we've kinda cheated not only the game, but ourselves.
+
+This is unconditionally stable for $x >0$ (that sounds like a condition to me).
+
+
+
+\subsection{Predictor-Corrector (PECE) methods}
+Because PC is too PC. The E's mean evaluate.
+
+The general PECE algorithm is 
+\begin{enumerate}
+    \item Step from $x_n$ to $x_{n+1}$
+    \item Predict: Using an explicit method to give $x_{n+1}^p$ 
+    \item \[x_{n+1^p} = x_n + h f_n\]
+    \item Evaluate $f_{n+1}^p = f(t_{n+1},x_{n+1}^p)$
+    \item Correct: Using an implicit method to give $x_{n+1}^c$
+    \[x_{n+1}^c = x_n + hf_{n+1}^p\]
+    \item Evaluate: $f_{n+1}^c = f(t_{n+1},x_{n+1}^c)$
+    \item Set $x_{n+1} = x_{n+1}^c$ or, we can repeat the CE steps.
+    \item If we repeat $m$ times, we get $PE(CE)^m$.
+\end{enumerate}
+
+We have already met a PECE method - Heun's method.
+
+Accuracy is usually judged based on the size of $|x_{n+1}^p - x_{n+1}^c|$ since (for exmaple with Heun's method).
+Forwards Euler, the local error is 
+\[x_{n+1} - x(t_{n+1}) = -\frac12 h^2 x''(\xi_1)\]
+Backwards Euler, the local error is
+\[x_{n+1} - x(t_{n+1}) = -\frac12 h^2 x''(\xi_2)\] 
+
+\begin{align*}
+    x_{n+1}^p - x_{n+1}^c &= \left(x_{n+1}^p - x(t_{n+1})\right) - \left(x_{n+1}^c - x(t_{n+1})\right)\\
+    &= -\frac12h^2 x''(\xi_1) - \frac12 h^2 x''(\xi_2)\\
+    &= -\frac12 h^2 \left(x''(\xi_1) + x''(\xi_2)\right)\\
+    &\approx -h^2 x''(\xi) =2\ell(h) = \bigo(h^2)
+\end{align*}
+
+\section{Extensions of numerical methods}
+\subsection{Higher-order IVPS}
+Consider an $n^{th}$ order ODE
+\[\frac{d^nx}{dt^n} = f(t,x,x',\ldots,x^{(n-1)})\]
+With ICs 
+\[x(0) = c_0, x'(0) = c_1, x^{(n-1)}(0) = c_{n-1}\]
+To solve it, convert it into a system of first order ODEs
+\[y_0 = x, \ y_1 = x', \ldots, y_{n-1} = x^{(n-1)}\]
+Such that $y_i' = y_{i+1}$ with IC $y_i(0) = c_i$
+
+For the last one it gets interesting
+\[y'_{n-1} = x^{(n)} = f(t,y_0,\ldots,y_{n-1})\]
+
+Is a system of $n$ first order ODEs, with $n$ initial conditions.
+
+Suppose $f$ is linear in all $y$'s, i.e.
+\[f = \alpha_0(t) y_0 + \alpha_1(t)y_1 + \ldots + \alpha_{n-1}(t) y_{n-1}\]
+(Note we have made this homogeneous)
+
+Then we can write the system in matrix vector form
+\[\vec y' = M\vec y\]
+Where 
+\[y = \begin{pmatrix}
+    y_0\\\ldots\\y_{n-1}
+\end{pmatrix}, \quad M = \begin{pmatrix}
+    0&1&0&&\ldots&0\\0&0&1&0\ldots0\\\vdots&\vdots&\ddots&\ddots&\ddots&\ddots&\vdots\\0 &&\ldots&&&1\\ \alpha_0 &\alpha_1 & & \ldots && \alpha_{n-1}
+\end{pmatrix}\]
+E.g. consider
+\[x'' = x, \quad x(0) = 1, \quad x'(0) = -1\]
+Write $y_0 = x$ and $y_1 = x'$, and
+\[f(t,x,x') = x \implies f(t,y_0,t_1) = y_0\]
+\[y_0' = y_1 ,\quad y_1' = f = y_0\]
+With $y_0(0) = 1, \quad y_1(0) = -1$
+
+Since $f$ is linear, we can use the matrix vector form, with $\alpha_0 = 1$ and $\alpha_1 = 0$
+\[\vec y' = M\vec y = \begin{pmatrix}
+    0&1\\1&0
+\end{pmatrix} \vec y, \quad \vec y(0) = \begin{pmatrix}
+    1\\-1
+\end{pmatrix}\]
+
+Suppose we want to solve the general system using backwards Euler,
+we have
+\[y_0^{(m)} = y_0^{(m-1)} + h y_1^{(m)}\]
+And in general
+\begin{align*}
+    y_0^{(m)} - h y_1^{(m)} &= y_0^{(m-1)}\\
+    y_1^{(m)} - h y_2^{(m)} &= y_1^{(m-1)}\\
+    &\vdots\\
+    y_i^{(m)} - h y_i^{(m)} &= y_{i-1}^{(m-1)}\\
+    &\vdots\\
+    y_{n-1}^{(m)}- h f_m &= y_{n-1}^{(m-1)}
+\end{align*}
+If $f$ is linear, we write this as the matrix system $M\vec y^{(m)} = \vec y^{(m-1)}$
+
+Where
+\[M = \begin{pmatrix}
+    1&-h&0&\ldots&0\\
+    0&1&-h&0&\ldots&0\\
+    &&\ddots&\ddots&&&\\
+    &&&&1&-h\\
+    \beta_0^m &\beta_1^m &\ldots&& \beta_{n-2}^m &1+\beta_{n-1}^m
+\end{pmatrix}\]
+Where $\beta_j^m = -h \alpha_j (t_m)$
+
+We require the matrix to be `diagonally dominant' for stability. so we would require $h < 1$.
+
+
+There is an alternative method - a more direct approach to solve $n^{th}$ order IVPs, but will be awful for large $n$. 
+
+Consider a second order IVP
+\[x'' = f(t,x,x'), \quad x(0) = c_0, \ x'(0) = c_1\]
+
+Derive an FDF for the IVP.
+
+Write the central difference formula for the second derivative
+\[x_n '' \approx \frac{x_{n+1} - 2x_n + x_{n-1}}{h^2} = f(t_n,x_n,x_n')\]
+
+\[x_{n+1} = 2x_n - x_{n-1} + h^2 f_n\]
+Where $f_n = f(t_n,x_n,x_n')$
+
+If $x'$ appears in $f$, we can use FDF on $x'$ too.
+\[x_n' = \frac{x_{n+1} - x_{n-1}}{2h}\]
+
+The errors in the derivative approximations $x', x''$ have 
+\[e_T = \bigo(h^2)\]
+If we used the forwards/backwards approximations for $x'$, we would have
+\[e_T = \bigo(h)\]
+Then we risk compromising the accuracy of the FDF.
+
+
+Even if $x'$ didn't appear in $f$, we require it for the initial condition.
+\[x'(0) = c_1 \approx \frac{x_1 - x_{-1}}{2h} \implies x_{-1} = x_1 - 2hc_1\]
+
+
+Lets consider 
+\[x'' + a(t)x' + b(t) x = r(t)\]
+Gives the FDF
+\[\frac{x_{n+1} - 2x_n - x_{n-1}}{h^2} + a_n \frac{x_{n+1} - x_{n-1}}{2h} + b_nx_n = r_n\]
+Where $a_n = a(t_n)$ and likewise for $b_n = b(t_n)$.
+
+Simplification (rearrange and multiply by $h^2$ gives) 
+\[A_nx_{n+1} - B_nx_{n} + C_n x_{n-1} = D_n\]
+Where
+\[A_n = 1 + \frac{h}{2}a_n, \quad B_n =2-h^2b_n  ,\quad C_n = 1 -\frac{h}{2} a_n  ,\quad D_n = h^2 r_n\]
+
+Hence
+\[x_{n+1} = \frac{B_nx_{n} - C_nx_{n-1} + D_n}{A_n}\]
+
+Use $n=0$ for the first step, i.e. 
+\[x_1 = \frac{B_0x_0 - C_0 x_{-1} +D_0}{A_n}\]
+
+What does $x_{-1}$ mean? 
+Appeal to our ICs
+\[x_0 = c_0 , \quad x_{-1} = x_1 - 2hc_1\]
+\[\implies x_1  =\frac{B_0c_0 + 2h c_1C_0 + D_0}{A_0(1 + C_0/A_0)}\]
+
+
+\subsection{Boundary Value Problems (BVPs)}
+Use \verb|bvp4c()| problem solved. 
+
+Consider the second order ODE-BVP
+\[\frac{d^2y}{dx^2} = f(x,y,\odd yx)\] 
+For $x \in \left[a,b\right]$ with BCs $y(a) = \alpha, y(b) = \beta$
+
+The Dirichlet BCs since they are both for the function rather than derivatives.
+
+
+Numerical solution is almost the same process as before.
+\[y'' + a(x)y' + b(x) y = r(x)\]
+Let $h = \frac{b-a}{N}$. Where $N$ is the number of points we want to consider, and let $x_n = x_0 + nh$. With $x_0 = a$, $x_N = b$.
+
+
+\[y_{n+1} = \frac{B_ny_{n} - C_ny_{n-1} + D_n}{A_n}\]
+\[A_n y_{n+1} - B_ny_n + C_ny_{n-1} = D_1\]
+Now the BCs become $y_0 = \alpha$, $y_N = \beta$. 
+
+We have
+\begin{align*}
+    n=1 : \, &A_1 y_2 - B_1 y_1 + C_1y_0 = D_1\\
+    \implies &A_1 y_2 - B_1 y_1 = D_1 - \alpha C_1\\
+    n=2 : \, & A_2 y_3 - B_2 y_2 + C_2 y_1 = D_2\\
+    &\vdots\\
+    n=N-1 : \, & A_{N-1} y_n - B_{N-1} y_{N-1} + C_N y_{N-2} = D_{N-1}\\
+    \implies & -B_{N-1} y_{N-1} + C_N y_{N-2} = D_{N-1} - \beta A_{N+1}
+\end{align*}
+
+This is a system of equations that have to be solved simultaneously.
+Note that the system is sparse (tridiagonal) so its not that hard to work with.
+
+
+
+
+
+\subsection{}
+
+
+
 
 
 

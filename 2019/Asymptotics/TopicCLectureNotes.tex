@@ -2373,4 +2373,401 @@ Now we just add the bits together!
 
 
 
+An example with a saddle point:
+
+\[I(x) = \int_0^1 e^{ixt^2}dt\]
+As $x\to\infty$. This is slightly cooked - the saddle is also an end point of the integration contour
+
+We have $f(t) =1$ and $\phi(t) = it^2$.
+
+Saddles
+\begin{align*}
+    \phi'(t) = 2it= 0\\
+    \implies t=0
+\end{align*}
+So there is a saddle at $t=0$ which is also one of the end points - makes things very easy since we don't need to deform the contour to go through the saddle.
+
+Contours of steepest descent; $t=\xi + i\eta$. 
+\begin{align*}
+    \phi(t) &= it^2\\
+    &=i\left(\xi^2 +2i\xi \eta -\eta^2\right)\\
+    &= i\xi^2 - 2\xi \eta - i\eta^2\\
+    &= -2\xi\eta + i(\xi^2-\eta^2)
+\end{align*}
+So we want the imaginary part to be constant through $t=0$.
+\begin{align*}
+    Im(\phi) = \xi^2 -\eta^2\\
+    Im(0) = 0 \\
+    \implies \eta = \pm \xi
+\end{align*}
+This gives both the steepest ascent and descent contours. Which ones correspond to descent?
+
+Look at the real part to see this $Re(\phi) = -2\xi\eta$. Along $\eta = \xi$ we have $u=-2\xi^2$, which decreases away from the saddle point (so that's the descent path). For $\eta = -\xi$, $u = 2\xi^2$ which increases away from the saddle point.
+
+So we want $\eta = \xi$.
+
+
+We want a steepest descent path coming into $t=1$. Through this point, $Im(\phi)$ is
+\[v(1,0) = 1^2-0^2 = 1\]
+\begin{align*}
+    1 = \xi^2 - \eta^2 \implies \xi = \pm \sqrt{\eta^2 + 1}, \ \xi \geq 1
+\end{align*}
+Along $\xi = \sqrt{\eta^2 + 1}$, $u= -2\eta \sqrt{\eta^2 + 1}$ which decreases as $\eta \to \infty$ (descent).
+
+Along $\xi = -\sqrt{\eta^2 + 1}$, $u - 2\eta\sqrt{\eta^2 +1}$, which increases as $\eta \to \infty$ (ascent).
+
+So we have 2 of the paths we need. We can parameterise them as
+\begin{align*}
+    1:&\ t = s + is = (1+i)s\\
+    3:&\ t = \sqrt{s^2 + 1} + is 
+\end{align*}
+These do not actually join up, so we need another path to join them together
+\[2:\ t = s+ iR, \quad R < s < \sqrt{R^2+1}\]
+Where $R\to\infty$. 
+Which will be some (horizontal) line joining the two.
+
+
+
+\begin{align*}
+    I(t) &= \int_0^1 e^{ixt^2}\\
+    &= \int_{C_1 + C_2 + C_3} e^{ixt^2} dt\\
+    &= I_1(x) + I_2(x) + I_3(x)
+\end{align*}
+
+\begin{align*}
+    I_1(x) &= \int_{C_1} e^{ixt^2} dt\\
+    &= \int_0^\infty e^{xi(1+i)^2 s^2}(1+i)ds\\
+    &= (1+i)\int_0^\infty e^{-2xs^2}ds 
+\end{align*}
+Using the change of variables gives the $(1+i)ds$. And use 
+\[u = 2xs^2 \implies \frac{u^{-1/2}\sqrt{2}}{4x^{1/2}}du = ds\]
+Plus use $1+i = \sqrt{2}e^{i\pi/4}$
+\begin{align*}
+    I_1(x) &= \sqrt{2} e^{i\pi/2} \frac{\sqrt{2}}{4x^{1/2}} \int_0^\infty u^{-1/2} e^{-u} du\\
+    &= \sqrt{2} e^{i\pi/2} \frac{\sqrt{2}}{4x^{1/2}} \Gamma(1/2)\\
+    &= \sqrt{2} e^{i\pi/2} \frac{\sqrt{2}}{4x^{1/2}} \sqrt{\pi}\\
+    I(x) &= 
+\end{align*}
+
+Show $I_2(x) =0$ (we won't here but take $\lim_{R\to\infty}$)
+
+Path for $I_3(x)$ with $t = \sqrt{s^2 +1} + is$ (note the minus sign because we parameterised it the wrong way).
+\begin{align*}
+    I_3(x) &= \int_{C_3} e^{ixt^2}dt\\
+    &=- \int_0^\infty \exp\{ix(s^2 + 1 + 2is\sqrt{s^2 +1} - s^2)\}\left((1/2)2s(s^2+1)^{-1/2}\right) ds\\
+    &= -e^{ix} \int_0^\infty e^{-2xs\sqrt{s^2 +1}}\left(s(s^2+1)^{-1/2} + i\right) ds
+\end{align*}
+Use Laplace's method, and using
+\[s(s^2 +1)^{-1/2} = s(1+ \ldots) \sim s , \quad s\to 0\]
+
+\begin{align*}
+    -I_3(x)& \sim e^{ix} \int_0^\epsilon e^{-2xs}(s+i) ds, \quad s\to 0 \quad let \ u =2xs\\
+    &= e^{ix}\int_0^{2x\epsilon} e^{-u} \left(\frac{u}{2x} + i\right) \frac{1}{2x}du\\
+    &\sim e^{ix} \left[\frac{1}{4x^2} \int_0^\infty e^{-u}u du + \frac{i}{2x} \int_0^\infty e^{-u}du\right]\\
+    &= e^{ix} \left(\frac{1}{4x^2} + \frac{i}{2x}\right)
+\end{align*}
+
+We could get a more exact solution  (without trimming a series) by recognising that near $t=1$, we have $t = 1+is$. Since we zoomed in on that region anyway before, lets do it slightly sooner
+\begin{align*}
+    -I_3 &\sim \int_0^\infty e^{ix(1+is)^2}i ds\\
+    &=\int_0^\epsilon e^{ix(1+2is - s^2)} ids\\
+    &= e^{ix} \int_0^\epsilon e^{-2xs} e^{-ixs^2}ids\\
+    &= ie^{ix} \int_0^\epsilon e^{-x2s} \sum_{n=0}^\infty \frac{(-i)^n x^n s^{2n}}{n!} ds, \quad now \ u = 2xs\\
+    &\sim ie^{ix} \int_0^\infty e^{-u} \sum_{n=0}^\infty \frac{(-i)^n x^{-n} u^{2n}}{2^{2n}n!} \frac{1}{2x}du\\
+    &= ie^{ix} \sum_{n=0}^\infty \frac{(-i)^n (2n)!}{2^{2n+1}n! x^{n+1}}\sim e^{ix}\left(\frac{i}{2x}+ \frac{1}{4x^2} \right)
+\end{align*}
+Using Laplace's method. And is the same as before.
+
+Putting it all together:
+\begin{align*}
+    I(x) &\sim \frac{e^{i\pi/4}\sqrt{\pi}}{2x^{1/2}} - ie^{ix} \sum_{n=0}^\infty \frac{(-i)^n(2n)!}{2^{2n+1}n! x^{n+1}}
+\end{align*}
+Notes
+\begin{itemize}
+    \item Contribution from the end point is negligible compared to the contribution from the saddle
+    \item Was lucky (he cooked this example so) that we could evaluate the saddle contribution exactly (this doesn't always happen).
+\end{itemize}
+
+
+
+An example where the original contour doesn't pass through the saddle:
+\[I(x) = Re\frac{1}{i\pi} \int_C e^{ix\cosh t} dt\]
+Where $C$ is a contour with end points $-\infty -i\pi/2$ to $\infty + i\pi/2$.
+
+This is a type of Sommerfield contour. We have $f(t)=1$ and $\phi(t) = i\cosh t$.
+
+\[\phi'(t) = i\sinh t\]
+So there is a saddle at $t=0$. The path of steepest descent through it is:
+Let $t=\xi + i\eta$
+\begin{align*}
+    \phi(t) =& i\cosh t\\
+    &= i\cosh(\xi+i\eta)\\
+    &= i\left(\cosh(\xi)\cosh(i\eta) + \sinh(\xi)\sinh(i\eta)\right)\\
+    &= i\left(\cosh(\xi)\cosh(i\eta) + \sinh(\xi)\sinh(i\eta)\right)\\
+    &= i\left(\cosh \xi \cos \eta + i\sinh \xi \sin\eta\right)\\
+    &=-\sinh \xi \sin \eta + i\cosh\xi \cos \eta
+\end{align*}
+So through $t=0$, $Im(\phi) = \cosh\xi\cos\eta = 1$. So the path of steepest descent/ascent is
+\[1 = \cosh \xi \cos \eta\]
+For larget $\xi$: this goes to $\pm i\pi/2$ as $\xi\to\pm \infty$. 
+For small $\xi$: We have $1\approx(1+\xi^2/2 + \ldots)(1-\eta^2/2 + \ldots)$, so near $t=0$, $\xi= \pm \eta$
+
+For steepest descent, we need to check the real part near the origin. For $\eta \approx -\xi$
+\[Re(\phi) \approx -\sinh\xi \sin(-\xi) = \sinh\xi\sin\xi \implies ascent\]
+For $\eta \approx \xi$
+\[Re(\phi) \approx - \sinh\xi \sin \xi \implies descent\]
+So we want to integrate along the $\eta=\xi$ contour. This is also a Sommerfield contour, since it starts at $-\infty -i\pi/2$ and ends at $\infty + i\pi/2$.
+So we can deform the contour straight to this!
+
+So we have 
+\begin{itemize}
+    \item Saddle location
+    \item Steepest descent path and direction (call it $C_s$)
+    \item How to deform the contour through the saddle in the correct direction.
+\end{itemize}
+Near $t=0$ we have
+\begin{itemize}
+    \item Steepest descent path is parameterised $t = (1+i)s$ for $0<s<\infty$
+    \item $\cosh t \sim 1 + t^2/2 = 1 + (1+i)^2 s/2 = 1 + is^2$, as $s\to 0$.
+\end{itemize}
+
+Now lets evaluate the integral
+
+\begin{align*}
+    J_0(x) &= Re \frac1{i\pi} \int_C e^{ix\cosh t} dt\\
+    I(x) &= \int_C e^{ix\cosh t} dt\\
+    &= \int_{C_S} e^{ix\cosh t} dt\\
+    &\sim \int_{-\epsilon}^\epsilon e^{ix\cosh t} \odd ts ds \quad (\epsilon\to 0)\\
+    &= \int_{-\epsilon}^\epsilon e^{ix(1+is^2)} (1+i)ds\\
+    &= (1+i)e^{ix}\int_{-\epsilon}^\epsilon e^{-xs^2} ds\\
+    &= (1+i)e^{ix}\int_{-x\epsilon^2}^{x\epsilon^2} e^{-u}\left(\frac12 u^{-1/2} x^{-1/2}\right) du \quad (u=xs^2)\\
+    &= \frac{(1+i)e^{ix}}{2\sqrt{x}} \int_{-x\epsilon}^{x\epsilon^2} e^{-u}u^{-1/2} du\\
+    &\sim \frac{(1+i)e^{ix}}{2\sqrt{x}} \int_{-\infty}^{\infty} e^{-u}u^{-1/2} du\\
+    &= \frac{(1+i)e^{ix}}{\sqrt{x}} \int_{0}^{\infty} e^{-u}u^{-1/2} du\\
+    &=\frac{\sqrt{2} e^{i\pi/4} \sqrt{\pi}e^{ix}}{\sqrt{x}}\\
+\end{align*}
+
+\begin{align*}
+    J_0 &\sim Re\left(\frac{1}{i\pi} \left(\frac{\sqrt{2} e^{i\pi/4} \sqrt{\pi}e^{ix}}{\sqrt{x}}\right)\right)\\
+    &= Re\left(\frac{1}{e^{i\pi/2}} \frac{\sqrt{2}e^{i\pi/4}e^{ix}}{\sqrt\pi\sqrt{x}}\right)\\
+    &= Re\left( \frac{\sqrt{2}e^{i(x-\pi/4)}}{\sqrt\pi\sqrt{x}}\right)\\
+    J_0(x) &\sim \frac{\sqrt{2}}{\sqrt{\pi}\sqrt{x}} \cos(x-\pi/4)
+\end{align*}
+As $x\to\infty$
+
+
+Lets evaluate this definition of the Gamma function
+\[\frac1{\Gamma(x)} = \frac{1}{2\pi i} \int_C e^t t^{-x} dt\]
+With a contour $C$ starting at $t = -\infty -ia$ with $a>0$, avoids the branch cut along the negative real axis due to the $t^{-x}$ term, and ends at $t = -\infty + ib$ with $b >0$.
+So we can deform the integral around anything without passing through the negative real axis.
+
+This is a movable saddle problem, but this can be fixed via a change of variables.
+
+Lets use $t=xs$, giving
+\[\frac1{\Gamma(x)} = \frac{1}{2\pi i x^{x-1}} \int_{C'} e^{x(s-\log s)} dt\]
+Where $C'$ is the transformed version of the integral.
+
+We have $f(s) = 1$ and $\phi(s) = s-\log s$
+Hence $\phi'(s) = 1-\frac1s$, and there is a saddle for $\phi'(s) = 0$ hence $s=1$.
+
+
+Let $s = \xi+i\eta$.\\
+And rewrite in the form (gross form) 
+\[s = \xi + i\eta = \sqrt{\xi^2 + \eta^2} e^{i\arctan(\eta/\xi)}\]
+We will use both
+\begin{align*}
+    \phi(s) &= \xi + i\eta - \log\left(\sqrt{\xi^2 + \eta^2} e^{i\arctan(\eta/\xi)}\right)\\
+    &=\xi - \log \left(\sqrt{\xi^2 + \eta^2}\right) + i\left(\eta - \arctan(\eta/\xi)\right)
+\end{align*}
+And so we have 
+\[Re(\phi) = \xi - \log(\sqrt{\xi^2+\eta^2})\]
+\[Im(\phi) = \eta - \arctan(\eta/\xi)\]
+
+So through $s=1$, $(\xi,\eta) = (1,0)$, we have $Im(\phi) = 0$
+\begin{align*}
+    \eta -\arctan(\eta/\xi) = 0
+\end{align*}
+Which gives $\eta = 0$ and $\xi = \eta \cos \eta$.
+
+$\eta =0$ gives positive real part (ascent), hence $\xi = \eta\cos\eta$ will be descent
+
+We care about the direction of the path at the saddle.
+\begin{align*}
+    \xi = \eta \cot \eta \implies \dd\xi\eta = \cot \eta - \eta(1+\cot^2\eta)\\
+    \implies \dd\xi\eta\pipe_{\eta=0} = 0
+\end{align*}
+So the path is vertical near the saddle.
+
+We will now parameterise near the saddle as $s=1+iv$.
+
+Taylor expand $\phi(s)$ near $s=1$
+\[\phi(s) \sim 1 + \frac{(s-1)^2}{2} - \frac{(s-1)^3}{3} + \ldots\]
+Then we have
+\begin{align*}
+    \frac1{\Gamma(x)} &= \frac{1}{2\pi i x^{x-1}} \int_{C'} e^{x(s-\log s)} dt\\
+    &=\frac{1}{2\pi i x^{x-1}} \int_{C_S} e^{x(s-\log s)} dt\\
+    &=\frac{1}{2\pi i x^{x-1}} \int_{-\epsilon}^{\epsilon} e^{x(1 + \frac{(s-1)^2}{2} - \frac{(s-1)^3}{3} + \ldots)}i dv\\
+    &=\frac{e^{x}}{2\pi x^{x-1}} \int_{-\epsilon}^{\epsilon} e^{x(\frac{(iv)^2}{2} - \frac{(iv)^3}{3} + \ldots)} dv\\
+    &=\frac{e^{x}}{2\pi x^{x-1}} \int_{-\epsilon}^{\epsilon} e^{-xv^2/2} e^{x\frac{(iv)^3}{3} + \ldots)} dv\\
+\end{align*}
+Let $u=\sqrt{x}v$
+\begin{align*}
+    \frac1{\Gamma(x)} &= \frac{e^{x}}{2\pi x^{x-1}} \int_{-x^{1/2}\epsilon}^{x^{1/2}\epsilon} e^{-u^2/2} e^{i\frac{u^3}{3\sqrt{x}} + \ldots)} \frac{1}{\sqrt{x}}du\\
+    &\sim \frac{e^{x}}{2\pi x^{x-1}\sqrt{x}} \int_{-\infty}^{\infty} e^{-u^2/2}du\\
+\end{align*}
+Let $q = u^2/2$
+\begin{align*}
+    \frac1{\Gamma(x)} &= \frac{e^{x}}{2\pi x^{x-1}\sqrt{x}\sqrt{2}} \int_{-\infty}^{\infty} e^{-q}q^{-1/2}dq\\
+    &= \frac{\sqrt{\pi}e^x}{\pi x^{x-1} \sqrt{x}\sqrt{2}} = \frac{e^x}{x^{x-1/2} \sqrt{2\pi}}
+\end{align*}
+Which gives
+\[\Gamma(x) \sim \sqrt{2\pi} x^{x-1/2} e^{-x}, \quad x\to\infty\]
+
+
+Back to the Airy equation (woah we're looping back to the start)
+
+An integral representation of Airy functions of the first kind
+\[A_i(x) = \frac1{2\pi} \int_{C'} e^{i(t^3/3 + xt)}dt\]
+Where $C'$ starts at $\infty$ with $2\pi/3 < \arg(t) < \pi$ and ends at $\infty$ with $0<\arg(t) < \pi/3$
+We could use steepest descents to again find the behaviour as $x\to\infty$, but if we look at $x\to-\infty$, it oscillates, so we have to use the method of steepest descents!
+
+Lets first see how we get this integral representation for it:
+
+The Airy equation
+\[y'' - xy = 0\]
+Let 
+\[y(x) = \frac1{2\pi i} \int_C q(t)e^{tx} dt\]
+So find $C$ and $q(t)$ which satisfy the DE.
+Note that the differentiation of $y$ is with respect to $x$.
+\begin{align*}
+    \frac1{2\pi i} \int_C t^2 q(t)e^{tx} dt - \frac1{2\pi i} \int_Cx q(t)e^{tx} dt =0
+\end{align*}
+Integration by parts in the second part gives
+\[\frac{1}{2\pi i} \int_C \left[t^2 q(t) + q'(t)\right] e^{tx} dt - \frac1{2\pi i} \left[q(t) e^{tx}\right]_{t=a}^{t=b} = 0
+\]
+Where $a,b$ are the end points of the contour.
+
+For this to hold, we require
+\begin{itemize}
+    \item $t^2 q(t) + q'(t) = 0$
+    Giving $q(t) = e^{-t^3/3}$ (up to a constant)
+    \item We require $q(t)e^{tx}$ to vanish at the end points.
+    So we need
+    \begin{align*}
+        q(t)e^{tx} = e^{tx - t^3/3}
+    \end{align*}
+\end{itemize}
+This will vanish as $|t| \to \infty$ since its an exponential. And for any $x$ when $-t^3/3$ has a negative real part.
+So we need
+\[Re(-t^3/3) < 0\]
+Which happens when
+\begin{itemize}
+    \item $0<\arg(t)<\pi/3$
+
+    \item or $2\pi/3 < \arg(t) < \pi$
+
+    \item or $-2\pi/3 < \arg(t) < -\pi/3$
+\end{itemize}
+We need the end points to be at infinity in these sectors, and we need to start in one and end in another (otherwise the integral hasn't gone anywhere).
+
+This actually gives us 2 independent solutions (and one dependent solution). I.e. the two possible pairs.
+
+The choice for $Ai(x)$ starts at $\infty$ with $2\pi/3 < \arg(t) < \pi$ and ends at $\infty$ with $0<\arg(t) < \pi/3$ (as we said before)
+
+We could proceed as per what we have been doing for $x\to\infty$. But lets look at the behaviour for $x\to-\infty$, or $x\to\infty$ for
+\[Ai(-x) = \frac{1}{2\pi} \int_{C'} e^{i(t^3/3-xt)} dt\]
+
+
+The saddle moves depending on the value of $x$, so let $t = x^{1/2}z$ to prevent this. Giving
+\[Ai(-x) = \frac{x^{1/2}}{2\pi} \int_{C'} e^{ix^{3/2}(z^3/3-z)} dz\]
+Saddle points:
+\[\phi(z) = i(z^3/3-z)\]
+\[\phi'(z) = i(z^2-1)\]
+Which has saddles at $z=\pm 1$. Find steepest descent contours.
+
+Let $z= \xi + i\eta$
+\begin{align*}
+    \phi(z) &= i(z^3/3-z)\\
+    &=i\left((\xi + i\eta)^3/3 - (\xi + i\eta)\right)\\
+    &=i \left((\xi^3 + 3i\xi^3\eta - 3\xi\eta^3 - i\eta^3)/3 - (\xi + i\eta)\right)\\
+    &=-\xi^2\eta + \eta^3/3 + \eta + i \left(\xi^3/3 - \xi\eta^3 - \xi\right)
+\end{align*}
+We want the imaginary part to be constant
+\begin{align*}
+    Im(\phi) = \xi^3/3 - \xi\eta^2 - \xi
+\end{align*}
+So at $z=\pm 1$
+\[Im(\phi) = \pm 1/3 \mp 1 = \mp 2/3\]
+And so the steepest descent/ascent curves for $z=1$ are
+\[-2/3 = \xi^3/3 - \xi\eta^2 - \xi \implies \eta = \pm \sqrt{\xi^2/3 - 1 + 2/(3\xi)}\]
+\[2/3 = \xi^3/3 - \xi\eta^2 - \xi \implies \eta = \pm \sqrt{\xi^2/3 - 1 - 2/(3\xi)}\]
+
+We only care about the local direction around the saddle (and whether they are ascent or descent curves).
+
+Say we have a (simple) saddle at $z = z_0$ (in this case $z=\pm 1$). Then we have (using a taylor series expansion, and noting that the derivative was zero)
+
+\begin{align*}
+    \phi(z) - \phi(z_0) &\sim \frac{(z-z_0)}{2} \frac{d^2\phi}{dz^2} \pipe_{z=z_0}\\
+     &= \frac{\rho^2 e^{i2\theta}{2}} ae^{i \alpha}    \\
+     &= \frac{\rho^2 a}{2} \left(\cos(\alpha-2 \theta) + i \sin(\alpha + 2\theta)\right)
+\end{align*}
+Where $z-z_0 = \rho e^{i\theta}$ i.e. $\theta$ is the direction we are interested in, and $\phi''(z_0) = ae^{i \alpha}$.
+
+Steepest descent paths when the imaginary part is zero, and decreases. So we want
+\[\sin(\alpha + 2 \theta) = 0, \quad \cos(\alpha + 2\theta)< 0\]
+So $\alpha + 2\theta = k\pi$ to satisfy the first, and applying the cos condition
+\[\theta  = \frac{-\alpha + \pi}{2} \quad and \quad \frac{-\alpha + 3\pi}{2} \]
+For us, $\phi''(z) = i2z$, and at $z=1$, $\phi''(1) = 2i = 2e^{i\pi/2}$, giving $\alpha = \pi/2$
+So the directions of steepest descent are then
+\[\theta = \frac{\pi}{4} , \quad \frac{-3\pi}{4}\]
+For the saddle at $z=-1$ we get $\alpha = -\pi/2$, giving
+\[\theta = -\frac{\pi}{4}, \quad \frac{3\pi}{4}\]
+
+Now we need to deform the contour onto both of these paths, but as usual we only care about the local behaviour.
+\begin{align*}
+    Ai(-x) &=  \frac{x^{1/2}}{2\pi} \int_{C'} e^{ix^{3/2}(z^3/3-z)} dz
+    &=\frac{x^{1/2}}{2\pi}\int_{C1 + C2} e^{ix^{3/2}(z^3/3-z)} dz
+\end{align*}
+For the saddle at $z=-1$, we parameterise with $z = -1 + e^{-i\pi/4}s$ and near this, we get (using taylor series)
+\[\phi(z) \sim 2i/3 - i(z+1)^2 + \ldots\]
+
+Now lets consider the integral along that path
+\begin{align*}
+    I_1(x) &= \frac{x^{1/2}}{2\pi}\int_{C1} e^{ix^{3/2}(z^3/3-z)} dz\\
+    &\sim \frac{x^{1/2}}{2\pi}\int_{-\epsilon}^\epsilon e^{x^{3/2}(2i/3 - i(z+1)^2 + \ldots)}e^{-i\pi/4} dz\\
+    &\sim \frac{x^{1/2}e^{(2i/3)x^{3/2}} e^{-i\pi/4}}{2\pi} \int_{-\epsilon}^\epsilon e^{-x^3/2 s^2} ds \\
+    & = \frac{x^{1/2}e^{(2i/3)x^{3/2}} e^{-i\pi/4}}{2\pi} \int_{-x^{3/4}\epsilon}^{x^{3/4}\epsilon} e^{-u^2} \frac{1}{x^{3/4}}du \\
+    & = \frac{e^{(2i/3)x^{3/2}} e^{-i\pi/4}}{2\pi x^{1/4}} \int_{-\infty}^{\infty} e^{-u^2} du \\
+    & = \frac{e^{(2i/3)x^{3/2}-i\pi/4}}{2\sqrt{\pi} x^{1/4}} 
+\end{align*}
+The other integral can be parameterised with $z = 1 + e^{i\pi/4}s$ and 
+\[\phi(z) \sim -2i/3 + i(z-1)^2 + \ldots\]
+Same procedure as the other
+
+\begin{align*}
+    I_2(x) &= \frac{x^{1/2}}{2\pi}\int_{C2} e^{ix^{3/2}(z^3/3-z)} dz\\
+    &\sim \frac{x^{1/2}}{2\pi}\int_{-\epsilon}^\epsilon e^{x^{3/2}(-2i/3 + i(z-1)^2 + \ldots)}e^{i\pi/4} dz\\
+    &\sim \frac{x^{1/2}e^{(-2i/3)x^{3/2}} e^{i\pi/4}}{2\pi} \int_{-\epsilon}^\epsilon e^{-x^3/2 s^2} ds \\
+    & = \frac{x^{1/2}e^{(-2i/3)x^{3/2}} e^{i\pi/4}}{2\pi} \int_{-x^{3/4}\epsilon}^{x^{3/4}\epsilon} e^{-u^2} \frac{1}{x^{3/4}}du \\
+    & = \frac{e^{(-2i/3)x^{3/2}} e^{i\pi/4}}{2\pi x^{1/4}} \int_{-\infty}^{\infty} e^{-u^2} du \\
+    & = \frac{e^{(-2i/3)x^{3/2}+i\pi/4}}{2\sqrt{\pi} x^{1/4}} 
+\end{align*}
+The full behaviour
+\begin{align*}
+    Ai(-x) &= I_1(x) + I_2(x)\\
+    &\sim \frac{e^{(2i/3)x^{3/2}-i\pi/4}}{2\sqrt{\pi} x^{1/4}}  + \frac{e^{(-2i/3)x^{3/2}+i\pi/4}}{2\sqrt{\pi} x^{1/4}} \\
+    &\sim \frac{\cos\left((2/3)x^{3/2} - \pi/4\right)}{\sqrt{\pi} x^{1/4}}, \quad x\to\infty
+\end{align*}
+
+
+
+
+
+
+
+
+
+
+
+
 \end{document}
