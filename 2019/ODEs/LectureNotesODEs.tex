@@ -2542,43 +2542,183 @@ Note that the system is sparse (tridiagonal) so its not that hard to work with.
 
 
 
-\subsection{}
+\subsection{Shooting methods}
+
+Consider 
+\[y'' = f(x,y,y'), \quad y(a) = \alpha, y(b)= \beta\]
+Write $z_1 = y$, $z_2 = y'$ to produce the equivalent system:
+\begin{align*}
+    z_1' &= z_2\\
+    z_2' &= f(x,z_1,z_2)
+\end{align*}
+With $z_1(a) = \alpha$ and $z_1(b) = \beta$. 
+Since this second condition is a bit hard to actually catch, we replace it with the guess $z_2(\alpha) = \gamma$.
+
+Hence we have a 1st order IVP system.
+
+E.g. 
+\[y'' = \frac32 y^2, \quad y(0) = 4, \ y(1) = 1\]
+This becomes the system
+\begin{align*}
+    z_1' &= z_2\\
+    z_2' &= \frac32 z_1^2
+\end{align*}
+With $z_1(0) = 4$ and $z_2(0) = \gamma$
+
+The shooting method involves guessing values for $\gamma$ to try and get closer to the boundary.
+
+Sometimes there are multiple solutions as well. For this problem $\gamma = -8$ and $\gamma = -35.9$ are both solutions to this IVP system (BVP problem). So we do not have unique solutions.
+
+Relating this to the PL theorem, since it is Lipschitz continuous on the bounded interval. We have unique solutions for the IVP, but not for the BVP. The PL theorem strictly only applies to IVPs. 
+
+It is very possible that with this method, the boundary value may never be hit, but could be managed based on some tolerance.
+
+
+If the problem is linear, we don't have to guess $\gamma$. We can use \textit{superposition}.
+\begin{enumerate}
+    \item Use first guess $\gamma=\gamma_1$ to give $z_1^{(1)}$ and $z_2^{(1)}$, 
+    \item Use second guess $\gamma=\gamma_2$ to give $z_1^{(2)}$ and $z_2^{(2)}$,
+    \item Superimpose
+    \[z_1 = c_1 z_1^{(1)} + c_2 z_1^{(2)}\]
+    \[z_2 = c_1 z_2^{(1)} + c_2 z_2^{(2)}\] 
+    \item Use the solution to satisfy boundary solutions
+    \begin{align*}
+        z_1(a) &= c_1z_1^{(1)}(a) + c_2z_1^{(2)}(a)\\
+        &= c_1 \alpha + c_2 \alpha = (c_1+c_2)\alpha \implies c_1 + c_2 = 1\\
+        z_1(b) &= c_1z_1^{(1)}(b) + c_2z_1^{(2)}(b) = \beta\\
+    \end{align*}
+    \item Solve the two equations simultaneously to find $c_1, c_2$
+\end{enumerate}
+
+
+\subsection{Inhomogeneous Systems}
+Consider non-autonomous homogeneous ODEs
+\[\odd{\vec x}{t} = A(t) \vec x, \quad \vec x(t_0) = x_0\]
+Suppose that $\vec x^{(1)}(t) \ldots \vec x^{(n)}(t)$ form a fundamental set of solutions for the $n$ dimensional system above. I.e. this is any set of $n$ linearly independent solutions. Then
+\[\Phi(t) = \left[\vec x^{(1)}(t) \ldots \vec x^{(n)}(t)\right]\]
+Is a fundamental matrix for the system.
+The solution of an IVP can then be written as
+\[\vec x(t) = \Phi(t)\vec c\]
+Where $\vec c$ is a vector of constants to satisfy $\vec x(t_0) = \vec x_0$. Hence
+\[\vec c = \Phi^{-1}(t_0) \vec x_0\]
+And the solution to the IVP is
+\[\vec x(t) = \Phi(t) \Phi^{-1}(t_0) \vec x_0\]
+
+Since the columns of $\Phi(t)$ are linearly independent vectors, it is invertible 
+
+Define the state transition matrix 
+\[\Psi(t,t_0) = \Phi(t) \Phi^{-1}(t_0)\]
+Which maps the state of the system at time $t_0$ to the state at time $t$, i.e. 
+\[\vec x(t) = \Psi(t,t_0) \vec x_0\]
+Note that $\Psi(t,t_0)$ is another fundamental matrix, and satisfies $\Psi(t_0,t_0) = I$
+
+E.g. $\vec x' = A \vec x$ with $\vec x = \left[x,y\right]^T$ and 
+\[A = \begin{pmatrix}
+    -2t&1+2t\\0&1
+\end{pmatrix}\]
+
+Clearly this is a non-autonomous system
+
+
+So
+\begin{align*}
+    x' &= -2tx + (1+2t)y\\
+    y' &= y \implies y = c_2 e^t
+\end{align*}
+And sub $y$ into $x'$
+\[x' = -2tx + (1+2t)c_2 e^t\]
+\[\implies x' + 2tx = c_2(1+2t)e^t\]
+Which can be solved using integrating factor
+
+\[e^{\int 2t} = e^{t^2}\]
+\begin{align*}
+    (e^{t^2} x)' = c_2 (1+2t)e^{t+t^2}\\
+    e^{t^2} x = c_2 e^{t+t^2} + c_1\\
+    x = c_2 e^{t} + c_1 e^{-t^2}    
+\end{align*}
+
+So the two linearly independent solutions are
+\[\vec x^{(1)} = \begin{pmatrix}
+    e^{-t^2}\\0
+\end{pmatrix}, \quad and \quad \vec x^{(2)} = \begin{pmatrix}
+    e^{t}\\e^t
+\end{pmatrix}\]
+
+So
+\[\Phi = \begin{pmatrix}
+    e^{-t^2} & e^t\\ 0 & e^t
+\end{pmatrix} \implies \Phi^{-1}(t) = \begin{pmatrix}
+    e^{t^2} & e{^-t^2}\\0 & e^{-t}
+\end{pmatrix}\]
+
+And
+\[\Psi = \Phi(t) \Phi^{-1}(t_0) = \begin{pmatrix}
+    e^{t_0^2 - t^2} & -e^{t_0^2 - t^2} + e^{t-t_0}\\
+    0 & e^{t-t_0}
+\end{pmatrix}\]
+
+
+Now we can immediately solve the IVP for any initial value.
+
+
+Now consider the nonhomogeneous equivalent
+\[\odd{\vec x}t = A(t)\vec x + \vec b(t), \quad \vec x(t_0) = \vec x_0\]
+
+Since the general solution of the homogeneous system is $\vec x = \Phi \vec c = \Psi x_0$, it is natural to seek a solution of the form
+\[\vec x(t) = \Psi(t,t_0) \vec w(t)\]
+Using variation of parameters, where
+\[\vec w = \int \Psi^{-1}(t,t_0) \vec b(t) dt + \vec c\]
+For some constant vector of integration $\vec c$ (which gives the homogeneous solution)
+Being careful with limits, we get the general solution
+\[\vec x(t) = \Psi(t,t_0)\vec c + \int_{t_0}^t \Psi(t,s) \vec b(s) ds\]
+Thus the solution is
+\[\vec x(t) = \Psi(t,t_0)\vec x_0 + \int_{t_0}^t \Psi(t,s) \vec b(s) ds\]
+
+
+Of course for an exact solution, this integration must be possible. 
 
 
 
 
+E.g. 
+\[x' = A\vec x + \vec b\]
+\[x' = \begin{pmatrix}
+    0&1\\-2&-3
+\end{pmatrix} \vec x + \begin{pmatrix}
+    0\\2e^{-t}
+\end{pmatrix}\]
+
+This is autonomous so its relatively easy to solve - get the eigenvalues/vectors. 
+
+The homogeneous part is linear, so the fundamental solutions have form
+\[\vec x = c_1\vec v_1 e^{\lambda_1 t} + c_2 \vec v_2 e^{\lambda_2 t}\]
+In this case $\lambda_1 = -2$, $\vec v_1 = (1,-1)^T$ and $\lambda_2 = -2$, $\vec v_2 = (1,-2)^T$
+
+This gives 
+\[\Phi = \begin{pmatrix}
+    e^{-t} & e^{-2t}\\-e^{-t} & -2e^{-2t}
+\end{pmatrix} \implies \Phi^{-1} = \begin{pmatrix}
+    2e^t & e^t\\ -e^{2t} & -e^{-2t}
+\end{pmatrix}\]
+
+\[\Psi = \begin{pmatrix}
+    \cdot
+\end{pmatrix}\]
 
 
+And 
+\[\Psi(t,s) \vec b(s) = \begin{pmatrix}
+    2e^{-t} -2e^{s-2t}\\
+    -2e^{-t} + 4e^{s-2t} 
+\end{pmatrix}\]
 
+\[\int_{t_0}^t \Psi(t,s) \vec b(s) ds = \begin{pmatrix}
+    2(t-t_0)e^{-t} - 2e^{-t} + 2e^{t_0-2t}\\ 
+    -2(t-t_0)e^{-t} + 4e^{-t} - 4e^{t_0-2t} 
+\end{pmatrix}\]
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+And hence the solution is
+\[\vec x = \Psi(t,t_0) \vec x_0 + \int_{t_0}^t \Psi(t,s) \vec b(s) ds\]
 
 
 

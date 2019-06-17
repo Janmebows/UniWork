@@ -152,25 +152,148 @@
 		Leading order equation:
 		\[\ddn{y_0}t2 + y_0 = 0\]
 		Gives
-		\[y_0 = R(T,\tau)\cos(t+\theta(T,\tau))\]
-		And using the boundary conditions, require $R(0,0) = 1$ and $\theta(0,0) = 0$
+		\[y_0 = R(T,\tau)\cos(t+\theta(T,\tau)) = A(T,\tau)e^{it} + \overline{A(T,\tau)}e^{it}\]
+
+		To eliminate the resonant terms, obtain $y_1$ as per lectures (but there are now arbitrary functions of $\tau$ too)
+
+		And let $A' := \dd{A}{T}$
+		\begin{align*}
+			\ddn{y_1}t2 + y_1 &= -(y_0^2-1)\dd{y_0}t - 2\pdd{y_0}tT\\
+			&=-(A^2e^{i2t} + 2A\overline{A} + \overline{A}^2 e^{-i2t} -1)i(Ae^{it} - \overline{A}e^{-it}) - 2i(A'e^{it} + \overline{A}'e^{it})\\
+			&=-i\left(e^{it}(A^2\overline{A} - A + 2A') +e^{it}(-A\overline{A}^2 + 2A\overline{A}') + A^3e^{i3t} - \overline{A}^3e^{i3t}\right)
+		\end{align*}
+		\[A^3\overline{A} - A + 2A' = 0\]
+		Let $A = \rho(T,\tau)e^{i\theta(T,\tau)}$
+		\begin{align*}
+			\rho^3 - \rho + 2\rho' + i\theta' \rho =0\\
+			\rho^3 - \rho + 2\rho' = 0, \quad i\theta' \rho = 0
+		\end{align*}
+
+		For non-trivial solutions
+		\begin{align*}
+			\dd\theta T = 0\\
+			\implies \theta = \phi(\tau)
+		\end{align*}
+
+		Treating the $\rho$ equation as an ODE gives  (similar to lectures since no derivatives of $\tau$ are involved)
+		\[\rho = \frac{e^{T/2}}{\sqrt{c + e^{T}}}\]
+		I.e.
+		\begin{align*}
+			\rho = \frac{e^{T/2}}{\sqrt{F(\tau) + e^{T}}}
+		\end{align*}
+
+		And noting that $\rho = \frac12 R$, gives
+		\[y_0 = \frac{2e^{T/2}}{\sqrt{F(\tau) + e^{T}}}\cos(t+\phi)\]
+		Applying initial conditions:
+		\begin{align*}
+			\dd{y_0}{t}(0,0,0) &= 0 \\
+			\implies -\frac{2}{\sqrt{F(0) + 1}}\sin(\phi(0)) &=0\\
+			\sin(\phi(0)) = 0 &\implies \phi(0) = 0
+		\end{align*}
+		And
+		\begin{align*}
+			y_0(0,0,0) &= 1\\
+			\implies  \frac{2}{\sqrt{F(0) + 1}}\cos(\phi(0)) &= 1\\
+			2 &= \sqrt{F(0) + 1}\\
+			F(0) &= 4-1 = 3
+		\end{align*}
+
 
 		%Everything below here is matlab
 
 		\item %find y1 (use computer algebra bc it will not be easy to solve)
-		To find $y_1$ first sub $y_0$ into the $\bigo(\epsilon)$ equation
 		\begin{align*}
-			\ddn{y_1}t2 + 2\pdd{y_0}tT + y_0^2\dd{y_0}t - \dd{y_0}t + y_1 = 0\\
-			\ddn{y_1}t2 + 2\left(\right) + y_0^2\dd{y_0}t - \dd{y_0}t + y_1 = 0\\
+			\dd{y_0}{t} &= -\frac{2e^{T/2}}{\sqrt{F(\tau) + e^{T}}}\sin(t+\phi) \\
+			\dd{y_0}{T} &= \frac{F(\tau)e^{T/2}}{(F(\tau) +e^{T})^{3/2}} \cos(t+\phi)\\
+			\pdd{y_0}tT &= -\frac{F(\tau)e^{T/2}}{(F(\tau) +e^{T})^{3/2}} \sin(t+\phi)
 		\end{align*}
+		By putting the equation into \verb|Matlab| and using \verb|dsolve()| it gives
+		\[y_1 = -\frac{e^{\frac{3T}{2}}\sin\left(3\phi +3t\right)-4\alpha\cos\left(t\right)\left(F+e^T\right)^{3/2}+4\beta\sin\left(t\right)\left(F+e^T\right)^{3/2} }{4\left(F+e^T\right)^{3/2}}\]
+		Where $\alpha$ and $\beta$ are arbitrary functions of $\tau$.
+
+		And using the boundary conditions (using \verb|Matlab| to obtain the derivatives):
+		\begin{align*}
+			\dd{y_1}{t}(0,0,0) + \dd{y_0}{T}(0,0,0) &= 0 \\
+			\frac{9}{32} - \beta(0) &=0\\
+			\beta(0) &= \frac{9}{32}
+		\end{align*}
+		\begin{align*}
+			y_1(0,0,0) &= 0\\
+			\alpha(0) &= 0 
+		\end{align*}
+
+
 		\item %identify the resonant terms in epsilon^2 which contain derivatives of the unknown function of tau in y0. Set one of these to 0 by funding the unknown functions (one is easy to solve, the other look at T to infty)
 		\[\ddn{y_2}t2 + \ddn{y_0}T2 + 2\pdd{y_1}tT + 2\pdd{y_0}t\tau + y_0^2 \dd{y_1}t + y_0\dd{y_0}T - \dd{y_1}t - \dd{y_0}T + y_2 = 0\]
-		
+		\[\ddn{y_2}t2 + y_2 = -\ddn{y_0}T2 - 2\pdd{y_0}t\tau -y_0 \dd{y_0}T + \dd{y_0}T - y_0^2 \dd{y_1}t + \dd{y_1}t - 2\pdd{y_1}tT\]
 
 
+		Matlab is used for all of this.
+
+		The forcing terms are those that accompany $\cos(t+\phi)$ and $\sin(t+\phi)$ I think?
+
+		Matlab gives (collecting coefficients of $\sin$ and $\cos$):
+		Need to set the terms with derivatives of $F$ and $\phi$ to $0$.
+
+
+\begin{align*}
+	&\left(\frac{2e^T\beta \left(\tau \right)}{e^T+F}-\beta \left(\tau \right)\right)\cos\left(t\right)\\
+	&+\left(\frac{3e^{\frac{3T}{2}}}{2{\left(F+e^T\right)}^{3/2}}-\frac{9e^{\frac{5T}{2}}}{4{\left(F+e^T\right)}^{5/2}}+\frac{3e^{\frac{5T}{2}}}{2{\left(F+e^T\right)}^{3/2}\left(e^T+F\right)}\right)\cos\left(3\phi +3t\right)\\
+	&+\frac{e^T\beta \left(\tau \right)}{e^T+F}\cos\left(t+2\phi\right)\\
+	&+\left(\frac{e^{2T}}{{F}^2+2e^TF+e^{2T}}-\frac{e^T}{e^T+F}\right)\cos\left(2t+2\phi\right)\\
+	&+\frac{e^T\beta \left(\tau \right)}{e^T+F}\cos\left(3t+2\phi\right)\\
+	&+\left(\frac{e^{T/2}}{2\sqrt{e^T+F}}+\frac{e^{\frac{3T}{2}}}{{\left(e^T+F\right)}^{3/2}}-\frac{3e^{\frac{5T}{2}}}{2{\left(e^T+F\right)}^{5/2}}+\frac{8e^{T/2}\dd{\phi}{\tau}}{\sqrt{e^T+F}}\right)\cos\left(t+\phi\right)\\
+	&+\frac{3e^{\frac{5T}{2}}}{4{\left(F+e^T\right)}^{3/2}\left(e^T+F\right)}\cos\left(3\phi +5t+2\phi\right)\\
+	&+\frac{3e^{\frac{5T}{2}}}{4{\left(F+e^T\right)}^{3/2}\left(e^T+F\right)}\cos\left(3\phi +t-2\phi\right)\\
+	&+\left(\frac{2e^T\alpha \left(\tau \right)}{e^T+F}-\alpha\right)\sin\left(t\right)\\
+	&+\left(-\frac{e^T\alpha \left(\tau \right)}{e^T+F}\right)\sin\left(t+2\phi\right)\\
+	&+\frac{e^T\alpha \left(\tau \right)}{e^T+F}\sin\left(3t+2\phi\right)\\
+	&+\left(-\frac{4e^{T/2}\dd{F}{\tau}}{{\left(e^T+F\right)}^{3/2}}\right)\sin\left(t+\phi\right)\\
+	&+\frac{e^{2T}}{{F}^2+2e^TF+e^{2T}}-\frac{e^T}{e^T+F}
+\end{align*}
+
+	Set the terms containing derivatives of $\tau$ and $F$ to zero.
+
+	I.e.
+	\[\frac{e^{T/2}}{2\sqrt{e^T+F}}+\frac{e^{\frac{3T}{2}}}{{\left(e^T+F\right)}^{3/2}}-\frac{3e^{\frac{5T}{2}}}{2{\left(e^T+F\right)}^{5/2}}+\frac{8e^{T/2}\dd{\phi}{\tau}}{\sqrt{e^T+F}} =0\]
+	\[-\frac{4e^{T/2}\dd{F}{\tau}}{{\left(e^T+F\right)}^{3/2}} =0\]
+	The latter yields $\dd{F}{\tau} = 0$ and hence $F$ is constant. From before, $F(0) = 3$ and hence $F = 3$.
+	For the former, noting that there is no $\tau$ in the other terms, 
+	\[\phi = \tau c\]
+	Where
+	\begin{align*}
+		c &= \sqrt{e^T+3}\left(\frac{-\frac{e^{T/2}}{2\sqrt{e^T+3}}-\frac{e^{\frac{3T}{2}}}{{\left(e^T+3\right)}^{3/2}}+\frac{3e^{\frac{5T}{2}}}{2{\left(e^T+3\right)}^{5/2}}}{8e^{T/2}}\right)\\
+		&= -\frac{1}{16} - \frac{e^T}{8(e^T+3)^{1/2}} + \frac{3e^{2T}}{16(e^{T}+3)^{3/2}}
+	\end{align*}
+
+	Hence we finally arrive at
+	 \[ y_0 = \frac{2e^{T/2}}{\sqrt{3 + e^{T}}}\cos\left(t+\tau \left(-\frac{1}{16} - \frac{e^T}{8(e^T+3)^{1/2}} + \frac{3e^{2T}}{16(e^{T}+3)^{3/2}}\right)\right)\]
+	 Or 
+	 \[ y_0 = \frac{2e^{\epsilon t/2}}{\sqrt{3 + e^{\epsilon t}}}\cos\left(t\left(1+\epsilon^2  \left(-\frac{1}{16} - \frac{e^{\epsilon t}}{8(e^{\epsilon t}+3)^{1/2}} + \frac{3e^{2\epsilon t}}{16(e^{\epsilon t}+3)^{3/2}}\right)\right)\right)\]
 		\item %compare with numerics and comment
+
+		Figure~\ref{fig:q2} plots the numerical solution against the multiple scales solution. They match quite well until near the end of the plot ($t=100$) where there appears to be a slight departure in phase. This either means $\phi$ is wrong, or there is some other discrepancy. 
+	\begin{figure}[h]
+		\centering
+		\label{fig:q2}
+		\includegraphics[width=0.8\linewidth]{TopicCA4Q2.eps}
+		\caption{Comparison of numerical and multi-scale solutions for $\epsilon = 0.05$}
+	\end{figure}
+
 	\end{enumerate}
 \end{enumerate}	
+
+\clearpage
+
+
+
+
+
+
+
+
+
+
 
 
 \section*{Matlab Code}

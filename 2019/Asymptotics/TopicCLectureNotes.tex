@@ -2246,7 +2246,7 @@ Since this isn't fantastic we have a different way to handle it
 % When applying integration by parts to fourier integrals, the Reimann Lebesque lemma is useful
 % \[\int_a^b f(t) e^{ix\psi(t)} dt, \quad x\to\infty\]
 
-
+\subsection{Steepest Descents}
 Lets generalise Laplace integrals to the complex plane. Integrals of form
 \[I(x) = \int_C f(t) e^{x\phi(t)} dt\]
 Where $C$ is a contour in the complex $t-$plane, and $f(t)$ and $\phi(t)$ are analytic.
@@ -2316,6 +2316,7 @@ Methods of steepest descents is a process:
 \end{enumerate}
 The usual rules of contour integrals will still apply - we may need residue calculus (we will relearn that later) if poles are picked up in deforming the contour.
 
+\subsubsection{No saddles}
 We don't actually always need saddles for this to work
 
 Consider the integral.
@@ -2372,7 +2373,7 @@ Now we just add the bits together!
 \end{align*}
 
 
-
+\subsubsection{Saddle point}
 An example with a saddle point:
 
 \[I(x) = \int_0^1 e^{ixt^2}dt\]
@@ -2489,7 +2490,7 @@ Notes
 \end{itemize}
 
 
-
+\subsubsection{Deformed contour}
 An example where the original contour doesn't pass through the saddle:
 \[I(x) = Re\frac{1}{i\pi} \int_C e^{ix\cosh t} dt\]
 Where $C$ is a contour with end points $-\infty -i\pi/2$ to $\infty + i\pi/2$.

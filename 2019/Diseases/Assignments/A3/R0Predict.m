@@ -11,7 +11,9 @@ set(groot, 'DefaultLineLineWidth', 1, ...
 
 
 %Speeds up the code for multiple runs
+%get the dataset once only
 if ~exist('dataMat','var')
+    %dataMat has format [#people, #infected, #action]
     dataMat = readmatrix('NorovirusDataA3.txt');
     %print the first few rows
     dataMat(1:5,:)
@@ -22,7 +24,8 @@ end
 amountOfData = length(dataMat(:,1))
 propDiedOut = sum(dataMat(:,2)<=0.1*dataMat(:,1))/amountOfData
 
-%dataMat = [#people, #infected, #action]
+
+
 %consistency
 rng(1)
 
@@ -40,10 +43,11 @@ variance = sigma* speye(3);
 varR0 = 0.01;
 distStruct.ProposalDist = @(x) mvnrnd(x,diag([varR0,0.01,0.01]));
 distStruct.PriorPDF = @(x) normpdf(x,2.5,sigma);
-distStruct.LogLikelihoodFunc =@(params,data) LogLikelihood(params,data);
+distStruct.LogLikelihoodFunc =@(params) LogLikelihood(params,dataMat);
 %constrain a_1,a_2 in [0,2]
-distStruct.ProposalConstraints = @(vars) ProposalConstraints(vars,[0,0,0],[5,2,2]);
-%overshoot, undershoot and approximately close
+distStruct.ProposalConstraints = @(vars) ...
+    ProposalConstraints(vars,[0,0,0],[5,2,2]);
+%overshoot, undershoot and approximately close to the true solutions
 startVars = [4,1.5,1.5;
              0.5,0.5,0.5;
              2,0.7,0.7];
@@ -53,21 +57,24 @@ for index = 1:3
     startPoint = startVars(index,:)
     exitflag = 1;
     while exitflag~=0
-        [varsTemp,accrate,exitflag]= MetropolisHastingsPassLikelihood(distStruct,startPoint,dataMat,10000);
+        [varsTemp,accrate,exitflag]= MetropolisHastingsPassLikelihood...
+            (distStruct,startPoint,10000);
+        %using exitflag change the variance to get a reasonaable acceptance
+        %rate between 0.2, 0.27
         if exitflag==-1
             %acceptance was too low
             %variance is too high
             varR0 = varR0 *2/3;
             distStruct.ProposalDist = @(x) mvnrnd(x,diag([varR0,0.01,0.01]));
             warning('retrying with decreased variance')
-        else if exitflag==1
+        elseif exitflag==1
             %acceptance was too high
             %variance is too low
             varR0 = varR0*2;
             distStruct.ProposalDist = @(x) mvnrnd(x,diag([varR0,0.01,0.01]));
             warning('retrying with decreased variance')
-            end
         end
+        %store all the solution sets
         vars(:,:,index) = varsTemp;
     end
     
@@ -82,6 +89,7 @@ for burnin = 0:1
         hold on
         subplot(3,1,i)
         hold on
+        %trace plots & trendlines
         plot(vars(:,i,1),'b')
         plot(cumVars(:,i,1),'k')
         plot(vars(:,i,2),'m')
@@ -100,18 +108,17 @@ end
     xlabel('Iteration')
 
 %% 
-
-%%Clean new data
+%%Analysis
 %just take one set since they all converged
 %and omit the burnin
 varsClean = vars(500:end,:,3);
 
-close all
 %density plot
 %and obtain estimates for R0, a1, a2
-
+%axis labels for later
 labs = ["$$R_0$$","$$\alpha_1$$","$$\alpha_2$$"];
 
+%est is the estimated [R0,a1,a2]
 est = [0,0,0];
 for i=1:3
     figure   
@@ -126,9 +133,12 @@ for i=1:3
     est(i) = val(ind);
     saveas(gcf,"Probdensity"+num2str(i),"epsc")
 end
+%print out R0,a1,a2
 est
+%print out R0a1, R0a2
 est(2:3) * est(1)
 
+%covariance-scatter plots
 for i=1:2
     for j=i+1:3
         figure

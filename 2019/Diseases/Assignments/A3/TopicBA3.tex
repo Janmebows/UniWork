@@ -37,6 +37,7 @@ The Metropolis-Hastings (MH) algorithm is a Markov Chain Monte Carlo (MCMC) meth
 
 
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
 \section{Assumptions}
@@ -112,7 +113,7 @@ If accepted, set $x_{i+1} = x'$ or if rejected, set $x_{i+1} = x_i$ and restart 
 The modified MH algorithm uses log likelihood for the $a$ calculation instead:
 \[\log(a(x_i,x')) = \log(p(x')) + \log(r(x_i|x')) - \log(p(x_i)) - \log(r(x'|x_i)) \]
 
-
+The likelihood calculations are made using an amended copy of the final size distribution code from Ross et al\parencite{BLACK2015159}.
 
 Using the modified MH algorithm, attempt to obtain parameters $R_0, \alpha_1, \alpha_2$ where $\alpha_i$ corresponds to the reduction of $R_0$ caused by treatment $i$. The code used for this is listed in the appendix.
 This is done in \verb|MATLAB|, by running the script \verb|R0Predict.m|
@@ -127,7 +128,7 @@ This is done in \verb|MATLAB|, by running the script \verb|R0Predict.m|
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Analysis and Results}
  An effective treatment will have $\alpha < 1$, with a theoretically perfect treatment having $\alpha = 0$.  
 
@@ -141,7 +142,8 @@ Figure~\ref{fig:binscatter} displays the dependency between the different parame
 
 Figure~\ref{fig:binscatter} also shows that the expected values for $R_0,\alpha_1,\alpha_2$ taken assuming no covariances closely resemble where they would belong with covariances included.
 
-Since it appears that all the assumptions for the model are reasonably satisfied and there is clear convergence in the MH algorithm, the values obtained should be close to the true values. The values obtained are
+Since it appears that all the assumptions for the model are reasonably satisfied and there is clear convergence in the MH algorithm, the values obtained should be close to the true values. 
+Figure~\ref{fig:density} plots the kernel-density curves for the parameters, which is the distribution of candidate values for the parameters. The accepted values correspond to the peaks on the density plots. The values obtained are
 \begin{verbatim}
 est =
 
@@ -153,19 +155,27 @@ The value for $R_0$ appears reasonable, as many of the wards experienced quite l
 
 The corresponding values for $\alpha_1 R_0$ and $\alpha_2 R_0$ obtained are, respectively, $1.9242$ and $1.5518$. Since both values are still larger than $1$ they do not prevent the possibility of a major outbreak, and better alternatives should still be researched. However, the reduction is still significant, and if enforced early in an outbreak, could make a significant difference to the number of infections.
 
-\begin{figure}[tbh]
+\clearpage
+\begin{figure}[tb]
 	\centering
-	\includegraphics[width=\linewidth]{MHplot0.eps}
+	\includegraphics[width=0.8\linewidth]{MHplot0.eps}
 	\caption{Superimposed trace plots for the estimations of the parameters from the modified MH algorithm}
 	\label{fig:fullrun}
 \end{figure}
-
 \begin{figure}[tbh]
 	\centering
-	\includegraphics[width=\linewidth]{MHplot1.eps}
+	\includegraphics[width=0.8\linewidth]{MHplot1.eps}
 	\caption{First 1000 iterations of the MH algorithm. Clearly the burn in has completed after approximately 500 iterations for the three parameters }
 	\label{fig:burnin}
 \end{figure}
+
+
+\clearpage
+
+The distributions for $R_0$, $\alpha_1$ and $\alpha_2$ are shown in figure~\ref{fig:density}, where $R_0$ is the reproduction number, $\alpha_1$ and $\alpha_2$ multiply with $R_0$ to get the effective reproduction numbers under $T_1$ and $T_2$ respectively. 
+The values stated above correspond to the peaks on these plots, but it is worth acknowledging that there is a reasonable probability that $R_0$ could be between $2$ and $2.6$ and $\alpha_1$ could even be greater than $1$, corresponding to an \textit{increase} in infectivity under $T_1$.
+
+
 
 \begin{figure}[tbh]
 	\centering
@@ -175,6 +185,17 @@ The corresponding values for $\alpha_1 R_0$ and $\alpha_2 R_0$ obtained are, res
 	\caption{Bin scatter plots of the parameters identifying any correlations and their effect on the value. Top-left: $(R_0,\alpha_1)$, Top-right: $(R_0, \alpha_2)$, Bottom: $(\alpha_1,\alpha_2)$}
 	\label{fig:binscatter}
 \end{figure}
+
+
+\begin{figure}[tbh]
+	\centering
+	\includegraphics[width=0.45\linewidth]{Probdensity1.eps}
+	\includegraphics[width=0.45\linewidth]{Probdensity2.eps}
+	\includegraphics[width=0.45\linewidth]{Probdensity3.eps}
+	\caption{Probability density curves for the parameters - the horizontal axis is the parameter while the vertical is the probability}
+	\label{fig:density}
+\end{figure}
+
 
 
 
@@ -206,5 +227,5 @@ The treatments still do not reduce $R_0$ below the threshold of $R_0 =1$, meanin
 
 
 
-\includepdf[pages=1-]{Honours2019Assignment3}
+%\includepdf[pages=1-]{Honours2019Assignment3}
 \end{document}

@@ -135,6 +135,50 @@
       \range{pages}{12}
       \keyw{Review; Norovirus; Basic Reproduction Number; Estimating Disease Prevalence; Mathematical Modelling; Norovirus; Transmission}
     \endentry
+    \entry{model}{article}{}
+      \name{author}{3}{}{%
+        {{hash=ab1050120a2a59f15a5be476de31a1f3}{%
+           family={Gaythorpe},
+           familyi={G\bibinitperiod},
+           given={K.A.M.},
+           giveni={K\bibinitperiod}}}%
+        {{hash=336a7cdf4f52b3a0945a883265770c81}{%
+           family={Trotter},
+           familyi={T\bibinitperiod},
+           given={C.L.},
+           giveni={C\bibinitperiod}}}%
+        {{hash=1d9c80c6d97ca1a5a55ba07bbdf63966}{%
+           family={Conlan},
+           familyi={C\bibinitperiod},
+           given={A.J.K.},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {eng}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier Ltd}%
+      }
+      \strng{namehash}{ada3604b4977f152a6bf918485babff2}
+      \strng{fullhash}{ada3604b4977f152a6bf918485babff2}
+      \strng{bibnamehash}{ada3604b4977f152a6bf918485babff2}
+      \strng{authorbibnamehash}{ada3604b4977f152a6bf918485babff2}
+      \strng{authornamehash}{ada3604b4977f152a6bf918485babff2}
+      \strng{authorfullhash}{ada3604b4977f152a6bf918485babff2}
+      \field{sortinit}{G}
+      \field{sortinithash}{5e8d2bf9d38de41b1528bd307546008f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0264-410X}
+      \field{journaltitle}{Vaccine}
+      \field{number}{37}
+      \field{title}{Modelling norovirus transmission and vaccination}
+      \field{volume}{36}
+      \field{year}{2018}
+      \field{pages}{5565\bibrangedash 5571}
+      \range{pages}{7}
+      \keyw{Norovirus ; Mathematical Model ; Deterministic ; Odes ; Markov Model ; Vaccine}
+    \endentry
   \enddatalist
 \endrefsection
 \endinput

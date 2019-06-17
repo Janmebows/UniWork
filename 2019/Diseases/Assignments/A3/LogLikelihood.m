@@ -1,7 +1,13 @@
 function logLikelihood = LogLikelihood(params,data)
-%Amended SIR finalsize code from Josh
+%Amended SIR finalsize code from Ross
 %Amended by Andrew Martin
 %calculates log likelihood for a given R0,alpha1,alpha2
+%Input:
+%params-  [R0,a1,a2] 
+%data  - [N,I,T_i] where N is the total population, I is number infected
+%and T_i is the treatment used
+%Output:
+%logLikelihood - the logged likelihood of the data given the params
 logLikelihood = 0;
 % R0      = params(1);
 % alpha1  = params(2);
@@ -22,7 +28,7 @@ for iterator=1:length(data)
     %could vectorise, but this is more meaningful
     for Z2 = 0:N
         for Z1 = Z2+1:N-1
-            %infection probability (jump prob)
+            %infection probability (jump prob) - modified from Ross
             infProb = 1 / ( 1 + ((N-1)/(relevantParam*(N-Z1))));
             q(Z1+2) = q(Z1+2) + q(Z1+1)*infProb;
             q(Z1+1) = q(Z1+1)*(1-infProb);
