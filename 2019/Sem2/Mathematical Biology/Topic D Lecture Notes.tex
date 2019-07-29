@@ -1,0 +1,88 @@
+\documentclass{X:/Documents/Coding/Latex/myassignment}
+%%Document info
+\title{Mathematical Biology (App Topic D)}
+\begin{document}
+
+\maketitle
+
+\section{Introduction - Basic Ideas}
+
+
+\subsection{Dimensional Analysis}
+Units on both sides of an equation have to be the same - they have to be dimensionally consistent.
+
+For example Coulomb's Law - for the force between two particles with charges $q_1$ and $q_2$ respectively
+\[F = k_e \frac{q_1q_2}{r^2}\]
+Where $q_1,q_2$ have units $Q$ (Coulombs). $r$ will have units $[L]$ - square braces will mean units
+And $F \implies \frac{[M][L]}{[T]^2}$
+So
+\[ \frac{[M][L]}{[T]^2} = \frac{[k_e][Q]^2}{[L]^2}\]
+\[[k_e] = \frac{[M][L]^3}{[T]^2[Q]^2}\]
+As an aside - we will denote temperature as $[\Theta]$
+
+This means we can write any physical relationship as a dimensionless equation in form
+\[f(\vec \beta) = 0\]
+Where $\beta_i$ are dimensionless groups.
+E.g. if we have time, length, gravity and mass, we can form the dimensionless group
+\[\frac{gT^2}{L}\] since the units of them will cancel out (g has units $L/T^2$).
+
+The mass can't be involved in this relationship since it can't form a dimensionless group. It is possible that we have `forgotten' some other term which could contain mass also.
+
+Meaning 
+\[f(\frac{gT^2}{L}) = 0\]
+I.e. $gT^2/L$ is a zero of the function, and hence
+\[\frac{gT^2}{L} = k\]
+Or we could rewrite as
+\[T = \sqrt{\frac{kL}{G}}\]
+
+
+Consider the power of an atomic bomb. 
+We want to know the energy, we know that the function will have to relate to $E$ (units $[ML/T^2]$),$R$ (units $[L]$),$t$ (units $[T]$), and the air density $\rho$ (units $[M/L^3]$).
+\begin{align*}
+	[E] &= \frac{[M][L]^2}{[T]^2}\\
+	\frac{[E]}{[\rho]} &= \frac{[L]^5}{[T]^2}\\
+	\frac{[E][t^2]}{[\rho]} &= [L]^5\\
+	\frac{[E][t^2]}{[\rho][R^5]} &= [1]\\
+\end{align*}
+Where $[1]$ is dimensionless
+
+And hence
+\[\frac{[E][t^2]}{[\rho][R^5]} = k\]
+We have graphs of the $R$ at various $T$
+\[R^5 = \frac{E}{k\rho} t^2\]
+\[\implies R^5 \propto t^2\]
+Since we know $E$ is constant, $k$ constant and $\rho$ won't really change early on.
+
+So if we take the logs
+\[5\log R = 2\log t + const\]
+\[\log t = \frac52 \log R + const\]
+
+Of course this doesn't tell us what $k$ is, and this is the only problem.
+
+\subsection{Nondimensionalisation and Scaling}
+We will mostly skip this part because we've done it a fair bit
+
+
+\subsection{Types of Models}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
