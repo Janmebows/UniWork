@@ -59,11 +59,1746 @@ So if we take the logs
 
 Of course this doesn't tell us what $k$ is, and this is the only problem.
 
-\subsection{Nondimensionalisation and Scaling}
-We will mostly skip this part because we've done it a fair bit
+\subsection{Non-dimensionalisation and Scaling}
+We will mostly skip this part because we've done it a fair bit in past
+
+An example for reynolds number - to obtain euler and stokes equations
+Navier-stokes
+\[\nabla \cdot u = 0\]
+\[\rho \frac{Du}{Dt} = -\nabla p + \mu \nabla^2 u\]
+Where
+\[\frac{Du}{Dt} = \dd ut + (u\cdot \nabla) u\]
+Have a general length scale $x = L \hat{x}$, a velocity scale $u = U \hat u$ and a time scale $t = \frac{L}{U} \hat{t}$ (which we would inevitably get anyway), lastly the pressure scale $p = \pi \hat{p}$ (not the number - a parameter)
+
+So we get
+\begin{align*}
+	\nabla \cdot u = 0\\
+	\frac{U}{L} \nabla \cdot \hat u = 0\\
+	\hat u = 0\\
+\end{align*}
+
+And the momentum equation
+LHS:
+\begin{align*}
+	\rho \frac{Du}{Dt} \\
+	\rho\left(U\frac{U}{L} \dd{\hat{u}}{\hat{t}} + \frac{U^2}{L} (\hat{u}\cdot \nabla) \hat{u}\right)\\
+	\rho \frac{U^2}{L}\left( \dd{\hat{u}}{\hat{t}} +(\hat{u}\cdot \nabla) \hat{u}\right)\\
+\end{align*}
+The RHS
+\begin{align*}
+	-\nabla p + \mu \nabla^2 u\\
+	-\frac{\pi}{L} \nabla^2 \hat{p} + \frac{\mu U}{L^2} \nabla \hat{u}
+\end{align*}
+
+Equating:
+\begin{align*}
+	\rho \frac{U^2}{L}\left( \dd{\hat{u}}{\hat{t}} +(\hat{u}\cdot \nabla) \hat{u}\right) &=-\frac{\pi}{L} \nabla^2 \hat{p} + \frac{\mu U}{L^2} \nabla \hat{u}\\
+	\dd{\hat{u}}{\hat{t}} +(\hat{u}\cdot \nabla) \hat{u} &=-\frac{\pi}{\rho U^2} \nabla^2 \hat{p} + \frac{\mu }{\rho L U} \nabla \hat{u}\\
+\end{align*}
+Note that
+\[\frac{\mu}{\rho UL} = \frac{1}{Re}\]
+And for large (infinite) Reynolds number
+\begin{align*}
+	\dd{\hat{u}}{\hat{t}} +(\hat{u}\cdot \nabla) \hat{u} &=-\frac{\pi}{\rho U^2} \nabla^2 \hat{p}\\
+	\dd{\hat{u}}{\hat{t}} +(\hat{u}\cdot \nabla) \hat{u} &=- \nabla^2 \hat{p}\\
+\end{align*}
+by letting $\pi = \rho U^2$
+
+For the stokes equation we instead take small Reynolds number
+\begin{align*}
+	\rho \frac{L^2U^2}{\mu UL}\left( \dd{\hat{u}}{\hat{t}} +(\hat{u}\cdot \nabla) \hat{u}\right) &=-\frac{\pi L^2}{L\mu U} \nabla^2 \hat{p} + \nabla \hat{u}\\
+	\rho \frac{LU}{\mu }\left( \dd{\hat{u}}{\hat{t}} +(\hat{u}\cdot \nabla) \hat{u}\right) &=-\frac{\pi L}{\mu U} \nabla^2 \hat{p} + \nabla \hat{u}\\
+	Re\left( \dd{\hat{u}}{\hat{t}} +(\hat{u}\cdot \nabla) \hat{u}\right) &=-\frac{\pi L}{\mu U} \nabla^2 \hat{p} + \nabla \hat{u}\\
+	0 &=-\frac{\pi L}{\mu U} \nabla^2 \hat{p} + \nabla \hat{u}\\
+	0 &=-\nabla^2 \hat{p} + \nabla \hat{u}\\
+\end{align*}
+By letting $\pi = \mu U/L$.
+
+This shows that with non-dimensionalisation, assumptions for the problem have to be taken into account. And you can get different equations (and more simple ones sometimes).
+
+
+
+
+
 
 
 \subsection{Types of Models}
+
+
+
+\section{Biochemical Reactions}
+\subsection{Mass Action}
+Consider a chemical reaction
+\[A + B \xrightarrow{k} C\]
+Where $k$ is the reaction constant. This is a one way reaction. 
+
+Standard notation is $[A] = a$ concentration of $A$, and likewise for $[B] =b$ and $[C] = c$.
+
+Units:
+\begin{itemize}
+	\item Moles per litre a.k.a Molar $M$ (so thats a number per litre). SI would be moles per $m^3$ but Molar is more common. Sometimes there is mass per litre/metre cubed
+\end{itemize}
+
+The rate of change of product (in this case just production) over time will depend on: number of collisions of $A,B$ multiplied by the probability of it being a successful collision (enough kinetic energy to initiate reaction).
+
+Assume the probability, $k$, is constant, and the number of collisions is proportional to $a,b$. This gives
+
+\[\odd ct = kab\]
+Which is the Law of Mass Action (we use Law loosely here - its just a model).
+
+A reaction like this is called an `Elementary reaction'
+
+If you instead had a model of form
+\[nA + mB \xrightarrow{k} C\]
+You can think of it like
+\[A + A+ \ldots + A + B + \ldots + B \xrightarrow{k} C\]
+Then it would have equation:
+\[\odd ct = k a^n b^m\]
+(Addition $\to$ power)
+
+
+We also consider reversible reactions
+\[A + B \xleftrightharpoons[k_-]{k_+} C \]
+
+Where $k_+$ is the forward reaction constant, and $k_-$ is the backward reaction constant
+\[\odd ct = k_+ ab - k_- c\]
+\[\odd at = -k_+ ab + k_- c\]
+\[\odd bt = -k_+ ab + k_- c\]
+
+\[\odd{(c+a)}{t} = a\]
+\[\odd{(c+b)}{t} = a\]
+Since nothing is lost from the system (conservation of mass).
+
+Hence
+\[c(t) + a(t) = c_i + a_i\]
+Where $c_i,a_i$ are the initial quantities of $c,a$ respectively.
+
+And the same for $b$
+\[c(t) + b(t) = c_i + b_i\]
+And hence
+\[a(t) = c_i + a_i - c(t)\]
+\[b(t) = c_i + a_i - c(t)\]
+
+Which we can plug into the $\odd ct$ DE.
+
+\subsection{Enzymes}
+
+Proteins (mostly) which help speed up biochemical reactions (a biochemical catalyst)
+Particularly with the induced-fit theory (i.e. they fit the substrate/s, and then change shape to bind/separate substrate/s to give the product/s)
+
+A particular enzyme is specific to a reaction (the lock-and-key).
+
+They require very specific temperatures and pH levels to work - otherwise they will become denatured and won't be able to carry out the reaction (or will be less effective).
+
+\subsection{Michaelis-Menten Kinetics}
+Consider the enzymatic reaction
+\[E + S \xleftrightharpoons[k_-]{k_+} E + P\]
+In this case $E$ will be an enzyme, and is a catalyst since it isn't lost from the reaction, $S$ is the substrate, and $P$ is the product.
+
+We know there is an intermediate step where the enzyme and substrate are `reacted' together to form an intermediate complex, $C$, which then decays into $E$ and $P$ to finish the reaction:
+
+\[E + S \xleftrightharpoons[k_-]{k_1} C \xrightarrow{k_2} E + P\]
+This is the Michaelis-Menten scheme
+
+We want to set up a system of ODEs for this scheme
+\begin{align*}
+	\odd st = - k_1 es + k_- c\\
+	\odd et = -k_1 es + k_- c + k_2 c\\
+	\odd ct = k_1 es - k_- c - k_2 c\\
+	\odd pt = k_2 c
+\end{align*}
+
+Note that the units of $k_1 = [1/Ct]$ (per time \& concentration) are different from $k_- = [1/t]$ and $k_2 = [1/t]$.
+
+Initial conditions
+\begin{align*}
+	s(0) &= s_i > 0\\
+	e(0) &= e_i > 0\\
+	c(0) &= 0\\
+	p(0) &= 0
+\end{align*}
+
+So we also get
+\[\odd{(e+c)}t = 0 \]
+So $e+c = e_i+c_i = e_i$ since $c_i = 0$ by our previous assumption.
+
+So we can simplify the system quite quickly since we can ignore the $e$ equation.
+
+
+The reduced system 
+\begin{align*}
+	\odd st & = -k_1 s (e_i-c) + k_- c = -k_1 se_i + (k_1 s + k_-)c\\
+	\odd ct & = k_1 s (e_i-c) - k_- c - k_2c = k_1 se_i - (k_1 s + k_- + k_2)c\\
+\end{align*}
+With $s(0) = s_i$ and $c(0) = 0$.
+Which are two non-linear ODEs for $s$ and $c$.
+
+Allegedly $e_i \ll s_i$ usually, and so we can have a small parameter $\epsilon = \frac{e_i}{s_i}$ (Asymptotics coming back to haunt me)
+
+Non-dimensionalise:
+\[t = T \tilde{t},\quad s = s_i \tilde{s}, \quad c = \epsilon s_i \tilde{c}\]
+(And drop the tildes immediately)
+\begin{align*}
+	\frac{s_i}{T}\odd st & = -k_1 s_i s(\epsilon s_i - \epsilon s_i c) + (k_1 s_i s + k_-) \epsilon s_i c\\
+	& = -k_1 T s(\epsilon s_i - \epsilon s_i c) + (k_1 s_i s + k_-) \epsilon T c\\
+	\odd st &= \epsilon k_1 s_i T\left(c s - s\right) + \epsilon k_- T c
+\end{align*}
+We want to choose the time scale relative to the time it takes to form product. I.e. we want $\odd st = \bigo(1)$ 
+So choose $T = \frac1{\epsilon k_1 s_i}$, and calling $\frac{k_-}{k_1 s_i} =:A$
+
+\[\odd st = cs -s + A c\]
+And plugging into the $c$ DE 
+\[\epsilon\odd ct = s - cs - (A+B)c\]
+Where $B := \frac{k_2}{k_1 s_i}$, and we will call $A+B = k_m = \frac{k_- + k_2}{k_1s_i}$
+\[\epsilon\odd ct = s - cs - k_mc\]
+
+Take a perturbation series
+
+\begin{align*}
+	s = s_0 + \epsilon s_1 + \ldots\\
+	c = c_0 + \epsilon c_1 + \ldots	
+\end{align*}
+
+At $\bigo(1)$
+\begin{align*}
+	\odd{s_0}t &= c_0s_0 - s_0 + Ac_0\\
+	0 &= s_0 - c_0s_0 - k_mc_0\\
+	\implies c_0 &= \frac{s_0}{k_m + s_0}\\
+	\implies \odd{s_0}t &= \frac{s_0^2}{k_m + s_0} - s_0 + \frac{As_0}{k_m+s_0}\\
+	&= \frac{1}{k_m+s_0} \left[s_0^2 - s_0(k_m+s_0) + As_0\right]\\
+	&= \frac{s_0}{k_m+s_0} \left[A - k_m\right]\\
+	&=  \frac{-Bs_0}{k_m+s_0}
+\end{align*}
+
+$B$ is often called $V_{max}$ i.e. the max velocity of the reaction. And $k_m$ is the concentration at which the uptake is $V_{max}/2$.
+
+This solultion is a Michaelis-Menten function.
+
+We can solve this DE also (but its not very convenient):
+\begin{align*}
+	\odd{s_0}t &= \frac{-Bs_0}{k_m + s_0}\\
+	\int \frac{k_m+s_0}{s_0} ds_0 &= Bt + const\\
+	k_m \log(s_0) + s_0 &= -Bt + const\\
+\end{align*}
+Using the IC gives $1 = const$. So
+\[k_m\log s_0 + s_0 = 1- Bt\]
+
+We have a problem that $c_0 \neq 0$. So we can't satisfy the IC. Since we killed the $\odd ct$ term.
+
+This is known as a singular perturbation problem, since it is killing the highest derivative and changes the way the function operates. Whereas a regular perturbation problem is one where we don't get rid of the highest derivative.
+
+So we can now consider this as a boundary layer problem like in Asymptotics.
+$c$ will have some rapid growth at the start with the slower process after. So we would apply the same methods as before. I.e. we have an outer solution now but we need an inner solution.
+
+To obtain the inner solution we have to rescale to reintroduce the highest derivative to leading order.
+
+In this case we will only need to rescale time
+\[T = \frac{t}{\epsilon}\]
+Giving
+\[\odd{}t = \dd Tt\dd{}T = \frac{1}{\epsilon} \dd{}T\]
+And hence
+\begin{align*}
+	\frac1 \epsilon \dd sT = cs -s + Ac\\
+	\odd cT = s - cs - k_m c
+\end{align*}
+Same perturbation series idea
+\[s = s_0 + \epsilon s_1 + \ldots\]
+\[c = c_0 + \epsilon c_1 + \ldots\]
+
+Giving
+\[\dd{s_0}T = 0 \implies s_0 = const = 1\]
+
+And for the $c$ equation
+\begin{align*}
+	\odd{c_0}T &= 1 - c_0 - k_m c_0\\
+	&= 1 - (1+k_m)c_0
+\end{align*}
+Giving
+\[c_{0,inner} = \frac{1-e^{-\left(k_m+1\right)T}}{k_m+1}\]
+
+Get the composite solution (and overlap) - the composite for $s_0$ is what we had before
+\[s_0 + k_m \log s_0 = 1 - Bt\]
+For $c_0$
+\begin{align*}
+	\lim_{T\to \infty} c_{0,inner} &= \lim_{t \to 0} c_{0,outer} \\
+	\lim_{T\to \infty} \frac{1-e^{-\left(k_m+1\right)T}}{k_m+1} \\
+	\frac{1}{k_m+1} = \frac{1}{1+k_m}\\
+\end{align*}
+
+So the $c_{comp}$ solution is
+\[c_{comp} = \frac{1-e^{-\left(k_m+1\right)t/\epsilon}}{k_m+1} +\frac{s_0}{k_m + s_0} - \frac{1}{k_m +1} = \frac{-e^{-\left(k_m+1\right)t/\epsilon}}{k_m+1} +\frac{s_0}{k_m + s_0} \]
+
+
+The concept of $V$ - the reaction velocity is just
+\[V = \odd pt\]
+i.e. the rate of forming the final product (we would consider the dimensionless version but biochemists would write the dimensional version).
+
+
+From the text (pg 9-16 of Mathematical Physiology) - we can see that enzymatic reactions can get quite complicated with varying effects and relationships between enzymes and substrates. It shows the effects of inhibition (competitive vs allosteric) and cooperativity
+
+Terms:
+\begin{itemize}
+	\item Competitive inhibition - another compound can fit in the slot for the enzyme, inhibiting the reaction we are watching 
+	\item Allosteric inhibition - other active sites on the can be used by other compounds, changing the shape of the active site. This can prevent (or slow down) the reaction for the substrate we care about.
+	\item A ligand is anything that binds to the enzyme and can either be called an effector or a modifier
+	\item Cooperativity is when the enzyme can bind multiple sets of the substrate and run the reaction simultaneously. This gives rise to the hill equation
+	\[h(c) :=\frac{c^n}{k + c^n}\]
+	Where $n$ is (usually) an integer related to the number of substrates that can bind to the enzyme.
+\end{itemize}
+
+
+Example:
+For the reaction
+\begin{align*}
+	E + X \xleftrightharpoons[k_{-1}]{k_1} E_1\\
+	E_1 + X \xleftrightharpoons[k_{-2}]{k_2} E_2\\
+	E + S \xrightarrow{k_3} P + Q + E
+\end{align*}
+
+The system of DEs (we care about $s, x, e, e_1, e_2, p$) would be
+\begin{align*}
+	\odd{s}{t} &= -k_3 se_1\\
+ 	\odd{e}{t} &=  - k_1 ex + k_{-1} e_1 + k_3 e_1s\\
+ 	\odd{x}{t} &= \alpha - \beta x - k_1 e x + k_{-1}e x - k_2 e_1 x + k_{-2} e_2\\
+ 	\odd{e_1}{t} &= k_1 e x - k_{-1} e_1 - k_2 e_1 x + k_{-2} e_2 - k_3 e_1 s\\
+ 	\odd{e_2}{t} &= k_2 e_1 x - k_{-2} e_2\\ 
+ 	\odd{p}{t} &= k_3 e_1 s
+ \end{align*} 
+
+So the reaction velocity will end up as
+\[V = k_3 e_1 s\]
+Whatever that may be.
+
+If we use a quasi-steady-state analysis. Assume we have a small amount of enzyme and a lot of substrate.
+
+In this case that would mean the rate of production of $e_1,e_2$ is very small. I.e. 
+\begin{align*}
+	\odd{e_1}{t} \approx 0\\
+	\odd{e_2}{t} \approx 0\\
+\end{align*}
+
+Conservation (adding the $e,e_1,e_2$ equations and adding the $s,p$ equations) gives
+\begin{align*}
+	\odd{}t (e+e_1 + e_2) =0\\
+	\odd{}t (s + p) = 0
+\end{align*}
+But the $s+p$ one is not entirely necessary.
+
+Using the quasi-steady state analysis derive an equation for $\odd xt$
+So lets write $e$ and $e_2$ in terms of $e_1$
+\[k_2 e_1 x = k_{-2} e_2 \implies e_2 = \frac{k_2 x e_1}{k_{-2}}\]
+And in the $e_1$ equation
+\begin{align*}
+	0 &=k_1 e x - k_{-1} e_1 - k_2 e_1 x + k_{-2} e_2 - k_3 e_1 s\\
+	0 &=k_1 e x + k_{-1} e_1 - k_3 e_1 s\\
+	e_1 &= \frac{k_1 x e}{k_{-1} + k_3 s}
+\end{align*}
+Plug into the $e_2$ statement, and plug into the $x$ equation
+
+\[e_2 = \frac{k_1k_2 x^2 e}{k_{-2}(k_{-1} + k_3 s)}\]
+\begin{align*}
+ 	\odd{x}{t} &= \alpha - \beta x - k_1 e x + k_{-1}e x - k_2 e_1 x + k_{-2} e_2\\
+ 	\odd{x}{t} &= \alpha  - \beta x - k_3 e_1 s 
+\end{align*}
+
+
+Now use $e + e_1 + e_2 = \mu$ since they must be constant (mass action)
+\begin{align*}
+	e + e_1 + e_2 = \mu\\
+	e \left[1 + \frac{k_1x}{k_{-1} + k_3 s} + \frac{k_1 k_2 x^2}{k_{-2} (k_{-1} +k_3s)}\right] = \mu\\
+	\frac{e}{k_{-1} + k_3 s} \left[ k_{-1} + k_3s + k_1x + \frac{k_1 k_2 x^2}{k_{-2}} \right] = \mu\\
+\end{align*}
+
+And going back to 
+\begin{align*}
+	\odd xt &= \alpha - \beta x - k_3 e_1 s\\
+	&=\alpha - \beta x - k_3 \frac{k_1 x e}{(k_{-1} + k_3 s)} s\\
+	&=\alpha - \beta x - k_3 k_1 x s \left[\frac{\mu }{k_{-1} + k_3 s + k_1 x + \frac{k_1 k_2}{k_{-2}} x^2}\right]\\
+\end{align*}
+
+Which is the form required by the question (after you do some non-dimensionalisation).
+
+\section{Excitable systems}
+Considering transport through the membrane of cells (active and passive).
+
+
+Note that 
+\begin{itemize}
+	\item Excitable systems involve ions and molecules with some kind of charge with SI Coulomb (C).
+	\item Total charge is always conserved
+	\item Charges exert forces on one another (like charges repel, unlike attract). Electric potential $V$ is the potential energy of a unit of charge due to such forces, measured in volts (V) or Joules per Coulomb ($JC^{-1}$).
+	\item A concentration of positive particles has a large positive potential and a concentration of negative particles has a large negative potential
+	\item Electrical current, $I$ is defined as the rate of flow of charge measured in Amperes $A$ (or equivalently $Cs^{-1}$).
+\end{itemize}
+\subsection{Circuits}
+For a simple electric circuit
+% \begin{circuitikz} \draw 
+% (0,0) -- (4,0) 
+%  to[C] (4,2) 
+
+% ;
+% \end{circuitikz} 
+
+
+% \begin{circuitikz} \draw
+% (0,0) to[battery] (0,4)
+% 	to[ammeter](4,4)--(4,0)
+% 	to[lamp] (0,0)
+% 	;	
+% \end{circuitikz}
+\begin{itemize}
+	\item $q(t)$ is the charge 
+	\item $I(t) = \odd qt$ is the current
+	\item $V(t)$ is the potential difference (analogous to pressure in fluids)
+	\item $R$ is the resistance in Ohms $\Omega$
+	\item $g = \frac1R$ is the conductance
+	\item $C$ is the capacitance measured in Farads, $F.$
+\end{itemize}
+Mathematical Traits:
+\begin{itemize}
+	\item Ohm's Law - the potential difference (a.k.a voltage drop) across a resistor is proportional to the current through the resistor
+	\[V_R(t) = IR = I\frac{1}{g}\]
+	\item Faraday's Law - the potential difference across a capacitor is proportional to the charge stored
+	\[V_c(t) = \frac{q(t)}{C}\]
+	\item Kirchoff's Law - the voltage supplied is equal to the total voltage drop
+	\[V(t) = V_R(t) + V_C(t) = \frac{I}{g} + \frac{q}{C}\]
+\end{itemize}
+
+% \begin{circuitikz}\draw
+% (0,0) to[]	
+% \end{circuitikz}
+(Looking at the circuit in the notes)
+For elements in parallel, the total current is the sum of the currents in the branches
+\begin{align*}
+	I(t) &= I_1 + I_2 + I_3 \\
+	&=g_1V + g_2 V + g_3 V
+\end{align*}
+We have
+\begin{align*}
+	V &= \frac{q}{C}\\
+	\dd Vt &= \frac1C \odd qt \\
+	&= \frac1C I\\
+	&= \frac{V}{C} (g_1+g_2+g_3)
+\end{align*}
+
+
+\subsection{Membrane Potential}
+We can't quite use $I = gV$ in a cell - instead we would use
+\[I = g(V) \left(V - V^*\right)\]
+So $g(V)$ is a function of $V$ and $V^*$ is a `hurdle' - described below
+
+
+Consider a system with a semi-permeable membrane dividing two regions - where both sides are neutrally charged with positive charges $X^+$ and negative charges $Y^-$. (one side could have more $X$ and $Y$ than the other) It allows $X$ to pass through, but not $Y$.
+Say one side has more $X$ and $Y$ than the other. Some $X$ will pass through the membrane via diffusion, to reduce the concentration gradient, but this movement generates a potential difference. There would be a point where the repulsion due to this potential would overcome the effects of diffusion. This potential is $V^*$ (the Nernst potential) - the potential at which the diffusive flux is balanced by the electric-field generated flux.
+The Nernst potential will be a constant based on the ion as far as we're concerned.
+
+\subsection{Gating}
+Exponentially it has been found that $g$ is not constant, it depends on $V$ and $t$.
+
+As an example explanation - the channels to allow ion flow are not always open. 
+The transition rate from closed to open will depend on $V$.
+
+Now we write the membrane conductance as $gn$ where $n$ is the proportion of channels which are open. 
+
+The example of simple gating:
+Letting $O$ denote open channels and $C$ as closed channels, the reaction scheme is
+\[C \xleftrightharpoons[\beta(V)]{\alpha(V)} O\]
+
+Where $\alpha(V)$ and $\beta(V)$ represent the voltage dependent rates of opening/closing the gates. If we use the law of mass action
+\[\odd nt = \alpha(V) (1-n) - \beta(V)n\]
+We can rewrite this as 
+\[\tau_n(V) \odd nt = n_{\infty}(V) - n\]
+\begin{align*}
+	n_{\infty}(V) = \frac{\alpha}{\alpha+\beta}\\
+	\tau_n(V) = \frac{1}{\alpha+\beta}
+\end{align*}
+
+Where $n_\infty$ is the equilibrium value for $n$, and $\tau_n(V)$ is the timescale for approach to equilibrium (both of which can be obtained experimentally).
+
+
+\subsubsection{Multiple Gates}
+Assume now that each channel consists of multiple gates, each of which can be open or closed.
+Lets assume we have 2 gates of the same type, and $S_i$ is the proportion of channels with $i$ gates open. Then the reaction scheme is
+\[S_0 \xleftrightharpoons[\beta(V)]{2\alpha(V)} S_1 \xleftrightharpoons[2 \beta(V)]{\alpha(V)} S_2\]
+Where the factors of $2$ arise since there are two possible states with one gate open and one closed. Note that we have the overall constraint that 
+\[S_0 + S_1 + S_2 = 1\]
+Using mass action kinetics to eliminate $S_1$ we get
+\begin{align*}
+	\odd {S_0}t &= \beta(V) (1-S_0-S_2) - 2 \alpha(V) S_0\\
+	\odd {S_2}t &= \alpha(V) (1-S_0-S_2) - 2 \beta(V) S_2
+\end{align*}
+Where in general $V$ could be a function of time and space. 
+The proportion of open gates $n$ is given by
+\[n = \frac12 S_1 + S_2 = \frac12(1-S_0+S_2)\]
+\begin{align*}
+	\odd nt &= -\frac12 \odd {S_0}t + \frac12\odd{S_2}t\\
+	&= \alpha(V) (1-n) - \beta(V) n
+\end{align*}
+Which is the same form as what we had for the simple gating scenario.
+
+The system will be satisfied by 
+\[S_0 = (1-n)^2,\quad S_1 = 2n(1-n),\quad S_2 = n^2\]
+We can show this by plugging these forms into the mass action solutions.
+
+We can also verify that the system decays to this via a perturbation
+\begin{align*}
+	S_0 &= (1-n)^2 + z_0\\
+	S_2 &= n^2 + z_2
+\end{align*}
+And substituting these into the $S_0,S_2$ equations and using $\odd nt$ we get
+\begin{align*}
+	\odd{z_0}t = -2 \alpha z_0 - \beta(z_0+ z_2)\\
+	\odd{z_2}t = -\alpha(z_0+z_2) - 2 \beta z_2
+\end{align*}
+Or in matrix notation
+\[\odd{}t \begin{pmatrix}
+	z_0\\z_2
+\end{pmatrix} = \begin{pmatrix}
+	-(2 \alpha+ \beta) & -\beta\\
+	-\alpha & -(\alpha + 2 \beta)
+\end{pmatrix} \begin{pmatrix}
+	z_0\\z_2
+\end{pmatrix}\]
+
+This matrix will have eigenvalues
+\[\lambda_1 = -(\alpha + \beta), \quad \lambda_2 = -2(\alpha+\beta)\]
+And so these DEs will exponentially decay to zero, and so we will decay to the solutions given before.
+
+
+We can generalise this to $k$ identical gates, the fraction of open channels will be $n^k$, where the $n$ DE is the same as here. 
+
+And so the conductance for a channel with $k$ identical gates will be
+\[g n^k\]
+
+\subsubsection{Non-identical Gates}
+So now if we allow for non-identical gates in the channel.
+For now we will assume a channel with two types of gates, $m,h$. We will assume $2$ $m$ gates and $1$ $h$ gate.
+Let $S_{ij}$ denote the proportion of channels with $i$ of the $m$-gates open and $j$ of the $h$-gates open.
+So there are 6 possible configurations for the channel.
+If we let $m$ denote the proportion of open $m$ gates and $h$ be the proportion of open $h$ gates,
+
+Then using the law of mass action, we can show
+
+\begin{align*}
+	S_{00} = (1-m)^2(1-h)\\
+	S_{10} = 2m(1-m)(1-h)\\
+	S_{20} = m^2(1-h)\\
+	S_{01} = (1-m)^2 h\\
+	S_{11} = 2m(1-m)h\\
+	S_{21} = m^2h
+\end{align*}
+So that the proportion of open channels is $m^2h$ where $m$ and $h$ satisfy
+\begin{align*}
+	\odd mt = \alpha(V) (1-m) - \beta(V) m\\
+	\odd ht = \gamma(V) (1-h) - \delta(V) h
+\end{align*}
+Where $\gamma,\delta$ are the rates of switching between the closed and open states for the $h$ gates.
+
+And the conductance will be $g m^2 h$
+
+
+\subsection{Hodgkin-Huxley model}
+A model to explain the mechanisms underlying the electrical signals in the axon of a giant squid.
+
+\subsubsection{Structure of a Neuron}
+Effectively a Neuron is a cell with a nucleus with a large extruding `cable' which is the axon, which then connects to a transmitter section.
+
+
+
+When a cell becomes partially depolarised, a series of events takes place:
+\begin{enumerate}
+	\item Upstroke phase - Sodium channels open in response to depolarisation allowing positively charged sodium ions to enter the cells, decreasing the polarisation until the cell becomes positively charged
+	\item Excited phase - on a slower timescale, potassium channels open, allowing potassium ions to leave. Sodium ions continue to enter and the potential difference falls (back to negative).
+	\item Downstroke phase - the cell becomes negatively charged and so the sodium channels close (making it even more negatively charged!) and so the cell is `hyperpolarised'
+	\item Refactory and Recovery Phases - The sodium channels are now mostly inactive, and slowly become active again until the cell returns to its original state.
+	\item Propagation - these impulses propagate down the axon through repetition. This gives us a \textbf{travelling wave}
+\end{enumerate}
+\subsubsection{Hodgkin-Huxley model}
+Let
+\begin{itemize}
+	\item $q$ - charge density per unit length
+	\item $C$ - capacitance of the membrane per unit area
+	\item $a$ - radius of the axon
+	\item $I_i$ - the outward current (rate of movement of ions) per unit area of membrane
+	\item $V$ - membrane potential 
+\end{itemize}
+
+Since it is cylindrical, surface area of a unit length is $2\pi a$.
+So
+\[q = 2\pi a C V \implies \odd qt = 2\pi a C \odd Vt\]
+We have several currents due to: capacitance, potassium, sodium, and leakage
+\[I_C + 2\pi a I_{Na} + 2\pi a I_{K} + 2\pi a I_{L} = 0\]
+Which is $=0$ since charge must be conserved - and hence total current must be $0$.
+\[\implies 2\pi aC \odd Vt = -2\pi a\left(I{Na} + I_{K} + I_{L}\right)\]
+\[\implies C \odd Vt = -\left(I_{Na} + I_K + I_L\right)\]
+From earlier in the course we expect the ionic currents to have form
+\[I = g(V) (V-V^*)\]
+I.e.
+\begin{align*}
+	I_{Na} = g_{Na}(V) (V-V_{Na})\\
+	I_{K} = g_{K}(V) (V-V_{K})\\
+	I_{L} = g_{L}(V-V_{L})\\
+\end{align*}
+Note that we have assumed that $g_{L}$ does not depend on $V$
+
+Hence
+\begin{align*}
+	C \odd Vt = -\left(I_{Na} + I_K + I_L\right)\\
+	C \odd Vt = -\left[g_{Na}(V) (V-V_{Na}) +  g_{K}(V) (V-V_{K}) +  g_{L}(V-V_{L})\right]
+\end{align*}
+Introduce (kinda like the gates in a channel)
+\begin{itemize}
+	\item $m$ - the sodium activation variable
+	\item $h$- the sodium \textbf{in}activation variable
+	\item $n$ - the potassium activation
+\end{itemize}
+We somehow obtain
+\begin{align*}
+	\tau_m(V) \odd mt = m_\infty (V) - m\\
+	\tau_h(V) \odd ht = h_\infty (V) - h\\
+	\tau_n(V) \odd nt = n_\infty (V) - n\\
+\end{align*}
+
+For constant $V$, $m \to m_{\infty}(V)$ exponentially with time constant $\tau_m$, and likewise for the others.
+
+(From experimentation) the potassium conductance depends on $n^4$, i.e. it is likely a four-gate channel, and Sodium depends on $m^3 h$.
+Hence the conductances have form:
+\begin{align*}
+	g_{Na} &= \bar{g}_{Na} m^3 h\\
+	g_{K} &= \bar{g}_{K} n^4
+\end{align*}
+
+We wont properly discuss the $\tau$ and $\infty$ functions because they are grotty but we don't really care.
+
+We can simplify the system in to a pair of coupled equations.
+\[C \odd Vt = - \left(\bar{g}_{Na} m^3 h + \bar{g}_{K} n^4 + \bar{g}_L \right)\left(V - V_{eq}\right)\] 
+Where
+\[V_{eq} = \frac{\bar{g}_{Na} m^3 h V_{Na} + \bar{g}_K n^4 V_{K} + \bar{g}_L V_l}{\bar{g}_{Na} m^3 h + \bar{g}_K n^4 + \bar{g}_L}\]
+Let $\nu = V - V_{eq}$
+\begin{align*}
+	\odd \nu t=  - \frac1C \left(g_{Na} (\nu) (\nu - \nu_{Na}) + g_K(\nu) (\nu- \nu_K) + g_L(\nu - \nu_L)\right)\\
+	\tau_m(\nu) \odd mt = m_{\infty}(\nu) - m\\
+	\tau_h(\nu) \odd ht = h_{\infty} (\nu) - h\\
+	\tau_n(\nu) \odd nt = n_\infty (\nu) - n
+\end{align*}
+
+We can obtain experimentation values for $\nu_K$, $\nu_{Na}$, $\nu_L$, $g_{Na}$, $g_K$, $g_L$, $C$.
+
+We can plot the $\tau$'s and $x_{\infty}$'s. And we observer
+\[\tau_m \ll \tau_h, \tau_n\]
+So we can approximate by saying that $m \approx m_{\infty}(\nu)$.
+
+Using numerics you find that
+\[n+h \approx n_{\infty} + h_{\infty} \approx const = \bar{h} \approx 0.85\]
+Use this to eliminate h.
+
+We have reduced the system to 2 equations:
+\begin{align*}
+	C \odd \nu t &= - \left[\bar{g}_{Na} m^3_\infty (\nu) (\bar{h}-n)(\nu - \nu_{Na}) + \bar{g}_{K} n^4 (\nu - \nu_K) + \bar{g}_L (\nu- \nu_L)\right]\\
+	\tau_n (\nu) \odd nt &= n_{\infty}(\nu) - n
+\end{align*}
+
+We now take $\tau_n$ to be approximately constant, $\tau_n \approx \bar{\tau}_n = 5ms$. Also non-dimensionalise 
+\[\nu = \nu_{Na} \tilde{\nu}, \quad t = \bar{\tau}_n \tilde{t}\]
+And immediately drop tildes.
+\[\odd nt = n_{\infty}(\nu) - n = k(\nu,n)\]
+\[\epsilon \odd \nu t = - g(\nu,n) = - \left[\gamma_K n^4(\nu + \nu_K^*) + \gamma_L(\nu - \nu_L^*) + m_\infty^3(\nu) (\bar{h}-n) (\nu-1)\right] \]
+The sign for $\nu_K^*$ changes because all of the non-dimensional parameters are positive even though the nernst potential for potassium is negative.
+
+
+Where the new dimensionless parameters are $\epsilon, \gamma_K, \gamma_L, \nu_K^*, \nu_L^*$
+And note that $\epsilon, \gamma_L$ are small parameters (except $\gamma_L$ near $\nu_K^*$)
+
+
+To do proper analysis, we look for the fixed point(s). 2D system so look for intersection of nullclines.
+We get the fixed point at
+\[\nu = 0, n =n_\infty(0) > 0\]
+
+Take a linear perturbation near the fixed point
+\[\nu = \hat{\nu}, n = n_{\infty}(0) + \hat{n}\]
+Where $|\hat{\nu}| , |\hat{n}| \ll 1$. We get using taylor series
+\[\odd{}t \begin{pmatrix}
+	\hat{n}\\\hat{\nu}
+\end{pmatrix} = \begin{pmatrix}
+	k_n & k_{\nu}\\-g_n/\epsilon & -g_\nu / \epsilon
+\end{pmatrix} \begin{pmatrix}
+	\hat{n}\\\hat{\nu} 
+\end{pmatrix} = \mathbf{J} \begin{pmatrix}
+	\hat{n}\\\hat{\nu}
+\end{pmatrix}\]
+And evaluate around $(n_{\infty(0),0)})$.
+
+Eigenvalues of the Jacobian
+\[\tr J = -1 - g_\nu / \epsilon, \quad \det J = \frac{g_\nu + n_{\infty_\nu} g_n}{\epsilon}\]
+
+
+Noting that $n_{\infty}$ was an increasing function so $n_{\infty_\nu} > 0$, and similarly $g$ is increasing in $\nu$. 
+\begin{align*}
+	g_n &= m_{\infty}^3 (\nu) (1- \nu) + 4n^3 \gamma_K( \nu + \nu_K^*)\\
+	g_n(0,n_{\infty}(0)) &= m_{\infty}^3(0) + 4n^3_{\infty}(0) \gamma_K \nu_K^* > 0
+\end{align*}
+
+
+
+We hence find
+\[\tr J < 0, \quad \det J > 0\]
+Giving 2 eigenvalues with negative real parts - so this is a stable fixed point.
+
+
+
+We drew some phase-plane diagrams here:
+Starting with the nullclines
+\[\dd nt = 0 \implies n = n_{\infty}(\nu)\]
+\[\odd \nu t = 0 \implies g(\nu,n) = 0\]
+\[g(\nu,n) = 0 \implies \frac{n^4}{\bar{h} - n} = \frac{(1- \nu) m_{\infty}^3(\nu)}{\gamma_k \nu_k^*(1+\frac{\nu}{\nu_k^*})}\]
+Assuming $\gamma_L$ is negligible(I think?)
+
+We find that the $\nu$ nullcline has the same qualitative shape as the right-hand side since $\frac{n^4}{\bar{h} - n}$ is monotonically increasing for $n < \bar{h}$.
+We get just the one fixed point ($\nu = 0, n = n_{\infty}(0)$.
+
+The `hump' in the $g(\nu,n) = 0$ nullcline is where we can generate the large excursion from the fixed point. 
+Noting that 
+\[\dd \nu t = -\frac1 \epsilon g(\nu,n)\]
+We get a large movement in the $\nu$ direction, until we hit the curve $g(\nu,n)$ and then we have increasing $n$ and follow the hump to the top, and we cut through the $n=n_{\infty}(\nu)$ curve near horizontally, and then follow the $g(\nu,n)$ curve to the fixed point.
+
+If we looked at $\nu$ against time in this trajectory, we would have a steep increase, a small decrease, a steep decrease into a negative value, and then a slow approach to $\nu=0$.
+This significant change we call an `action potential', since it would be related to the actual electrical pulse used by the body.
+
+
+If we were to decrease $\nu$ to a point below the steady state.
+
+
+\subsection{Fitzhugh-Nagumo equations}
+They both wanted to essentially obtain a callnonical type form for action potential behaviour.
+
+\[\epsilon \odd \nu t = A \nu (\nu - a) (1 - \nu) - w + I_{ext}^* , \quad \odd wt = -w + b \nu\]
+$w$ is kind of like if we had $w = n - n_{eq} = n- n_{\infty}(0)$ from before.
+Where $I_{ext}$ is some external current
+\[0 < A < \bigo(10)\]
+\[0 < a < 1\]
+$b$ suff large.
+
+Lets first consider the system with $I_{ext}^* = 0$
+
+Nullclines:
+\[w = A \nu (\nu -a ) (1- \nu)\]
+\[w = b \nu\]
+
+We want $b$ suff large so that we only get 1 intersection here (as opposed to the possibility of $2$ or $3$.)
+
+Plotting the nullclines (in the $(\nu,w)$ plane) makes the behaviour quite clear.
+
+Taking $I_{ext} \neq 0$ will correspond to a vertical shift in the $\nu$ nullcline, making no real change to the behaviour (still excitable), unless $I_{ext}$ is very large, where the excitable behaviour is lost. There is a `sweet spot' for $I_{ext}$ such that the $w$ nullcline intersects in-between the humps of the $\nu$ nullcline, which gives an orbital which keeps looping (an oscillation).
+Changing the value of $b$ will change the slope of the $w$ nullcline, potentially giving $2,3$ intersections (fixed points) (as said before).
+
+
+\section{Partial differential equation models}
+Obviously we care about space and time so ODEs are too boring for this course.
+
+\subsection{Conservation Equations}
+If we have some closed volume $V$ inside of the domain $\mathcal{D}$, with $V's$ surface $S$, with a `chemical concentration' (doesn't have to be a concentration, but for the sake of argument. Density would also work) $c(\vec x,t)$. $c$ will have to have units of `amount of stuff' per unit volume
+
+Then the total amount of stuff in $V$ will be
+\[\text{total stuff in }V = \iiint_{V} c dV \]
+Stuff can only leave $V$ through its surface, $S$. So any change in $c$ will be due to
+\begin{itemize}
+	\item Production/loss
+	\item entering/leaving via $S$
+\end{itemize}
+Hence
+\[\dd{}t \iiint_V cdV = - \iint_S \vec J \cdot \hat{\vec n} dS + \iiint_V f(\vec x,t) dV\]
+Where
+\begin{itemize}
+	\item $\vec J$ is the flux of $c$ (number of molecules crossing a unit area per unit time)
+	\item $\hat{\vec n}$ is the unit outward normal to $S$
+	\item $f(\vec x,t)$ is the rate of production/loss of $c$ per unit volume
+\end{itemize}
+Note the minus sign in the flux term. This is since $\hat{\vec n}$ points outward
+
+Using the divergence theorem:
+\[\iint_S \vec u \cdot \hat{\vec n} dS = \iiint_V \nabla \cdot \vec u dV\]
+We get
+\[\dd{}t \iiint_V cdV = - \iiint_V \nabla \cdot \vec J  dV+ \iiint_V f(\vec x,t) dV\]
+Since $V$ was just some arbitrary volume, then this must be true at every point within $\mathcal{D}$, and hence for all point $\vec x$ in $\mathcal{D}$:
+\[\dd ct + \nabla \cdot \vec J = f(\vec x,t)\]
+Which is the mass conservation equation.
+The tricky usage of this is using the right form of $\vec J$ and $f$ - using physical intuition and modelling skills
+
+\subsection{Physical processes of advection and diffusion}
+\subsubsection{Diffusion}
+Where something naturally moves through a volume solely based on a concentration gradient. Random motion at a molecular level (Brownian motion). It tends to even out concentration gradients (differences). 
+Diffusion is temperature dependent - faster at higher temperatures, since the amount of energy is increased, the number of interactions increases.
+The simplest assumption you could make for diffusion is that the flux is proportional to the concentration gradient, i.e.
+\[\vec J = -D \nabla c\]
+Where $D$ is the diffusion coefficient (based on temperature but usually we hold temperature constant). This is called \textbf{Fick's Law}. `Law' is used loosely once again - it is a simple model. It tends to be extremely accurate with most experimental observations however.
+A regular diffusion model would be (if we assumed $f = 0$, and $J = -D \nabla C$).
+\[\dd ct = \nabla \cdot (D \nabla c)\]
+If $D$ is a constant then we get
+\[\dd ct = D \nabla^2 c\]
+
+\subsubsection{Advection}
+Advection is the movement of something due to a flow, and hence it will occur in the direction of flow.
+If a chemical is only transported by advection through a fluid (and there is no diffusion)
+\[\vec J = c\vec v\]
+Where $\vec v$ is the fluid velocity
+
+In reality - chemicals can (and will) diffuse through flowing fluids - hence we look into advection-diffusion effects, i.e.
+\[\vec J = c\vec v - D\nabla c\]
+\subsection{Reaction-advection-diffusion equations}
+We will consider advective-diffusive scenarios where chemical reactions are also occurring. 
+So we get the equation
+\[\dd ct + \nabla \cdot(c\vec v) = \nabla \cdot(D \nabla c) + f(c,\vec x,t)\]
+Where
+\begin{itemize}
+	\item $c(\vec x,t)$ is the dependent variable to solve (chemical concentration, cell density, etc.)
+	\item $\vec v$ is the fluid velocity vector (usually given)
+	\item $D(\vec x,t)$ is the diffusion coefficient
+	\item $f(c,\vec x,t)$ is the source/degradation/reaction term.
+\end{itemize}
+
+If we wanted to non-dimensionalise the RAD equation.
+\begin{itemize}
+	\item $L$ - characteristic length-scale of the problem (usually size of the domain, $\mathcal{D}$)
+	\item $c_0$ - characteristic concentration scale
+	\item $U$ - characteristic fluid velocity scale
+\end{itemize}
+So we get
+\[\vec x = L \tilde{x}, \quad c = c_0 \tilde{c}, \quad \vec v = U \tilde{\vec v}\]
+But for $t, f$, if we have a constant $D$:
+\[t =\frac{L^2}{D} \tilde{t}, \quad f = \frac{Dc_0}{L^2} \tilde{f}\]
+Then, dropping tildes, we get
+\[\frac{c_0 D}{L^2} \dd ct + \frac{Uc_0}{L} \nabla \cdot (c \vec v) = \frac{c_0D}{L^2} \nabla^2 c + \frac{Dc_0}{L^2}f\]
+And hence:
+\[\dd ct + \mathcal{P} \nabla \cdot(c\vec v) = \nabla^2 c + f\]
+Where
+\[\mathcal{P} = UL/D = \frac{T_{diff}}{T_{adv}} \implies \frac{\text{adv importance}}{\text{diff importance}}\]
+Is the P\'eclet number, representing the relative importance of advection compared to diffusion. 
+
+If we assume incompressible flow also (which often holds true)
+\[\nabla \cdot \vec v = 0\]
+Then we get
+\[\dd ct + \mathcal{P}(\vec v\cdot \nabla)c =\nabla^2 c + f\]
+Many models assume only one spatial dimension (and this tends to be a good approximation).
+
+\subsection{Diffusion and Random Motion}
+We have to look at how the diffusion equation actually expresses random motion.
+As a formal formulation
+Considering a collection of particles moving randomly along a line in one dimension. If we divide time into discrete steps $\delta t$ and in that time a particle moves $\delta x$ either right with probability $p_r$ or left with probability $p_l$. Assuming there is no bias ($p_r = p_l = \frac12$). Let $c(x,t) \delta x$ be the number of particles in the segment $[x,x+\delta x]$ at $t$. Then 
+\[c(x,t+\delta t) = c(x,t) + p_r c(x-\delta x, t) - p_r c(x,t) + p_l c(x+ \delta x,t) - p_l c(x,t)\]
+By conservation.
+Taking taylor expansions in space and time give
+\begin{align*}
+	c(x,t+ \delta t) &= c(x,t) + \delta t \dd ct + \frac12 (\delta t)^2 \ddn ct2 + \ldots\\
+	c(x \pm \delta x,t) &= c(x,t) \pm \delta x \dd cx + \frac12 (\delta x)^2 \ddn cx2 + \ldots\\
+\end{align*}
+Substituting this into the conservation equation (and using $p_r = p_l = \frac12$) gives
+\[\delta t \dd ct + \bigo(\delta t^2) = \frac12 (\delta x)^2 \ddn cx2 + \bigo(\delta x)^4\]
+Dividing through by $\delta t$ and take limit as $\delta t \to 0$ and making (the rather bold) assumption:
+\[\lim_{\delta t \to 0} \frac{(\delta x)^2}{2 \delta t} = D\]
+We get (to leading order)
+\[\dd ct = D \ddn cx2\]
+
+We could also consider biased movement, but that's a little messy.
+
+\subsection{Reaction-Advection models}
+Assuming we can ignore diffusion, we have a simpler model.
+\subsubsection{Membrane Oxygenator}
+Consider cardiac surgery where it is necessary to bypass the heart to perform the procedure. Circulation must be maintained artificially, using a heart-long machine, which uses a membrane oxygenator which pumps blood through a membrane to allow oxygenation and carbon dioxide removal before returning blood to the body
+
+An ideal membrane oxygenator is: a thin gas permeable membrane separates blood and gas flows in the circuit, oxygen diffuses from the gas side into the blood and carbon dioxide the other way around for disposal. An important issue is to understand how long it takes for the blood to be reoxygenated. 
+If we consider this in $1D$ where the blood stream has diameter $d$, and velocity $v_b$ and the gas has velocity $v_g$, both in the $x$ direction.
+We assume:
+\begin{itemize}
+	\item blood is incompressible
+	\item gas flows much faster than blood ($v_g \gg v_b$) so that the concentration of oxygen $(C_g)$ in the gas is approximately constant
+	\item The concentration of oxygen in the blood is a function of position $x$ and time $t$ only.
+	\item Advection is the dominant transport process (neglect diffusion)
+	\item Transport of oxygen from gas to blood is proportional to the concentration difference.
+\end{itemize}
+By conservation of mass, the oxygen concentration in the blood $C(x,t)$ is given by
+\[\dd Ct + v_b \dd Cx = h(C_g - C)\]
+Where $h$ is a transfer coefficient. Note that $h$ has units of $[T]^{-1}$ and hence is a timescale for oxygen transfer.
+To comlete the system we require an IC and BC. We will take 
+\[C(x,0) = f(x), \quad C(0,t) = g(t)\]
+And assume blood enters at $x=0$ with constant oxygen concentration $C_0 < C_g$. Similarly at $t=0$ we assume all the blood is at $C_0$.
+
+To solve this we non-dimensionalise based on timescale $T$, so that we get
+\[t = T\tilde t,\quad x = \frac{v_b}{h} \tilde x,\quad C = C_g \tilde C\]
+And the dimensionless equation is then
+\[\tau \dd Ct + \dd Cx = 1-C\]
+Where $\tau = 1/hT$ is the ratio of the timescale of oxygen transfer to the timescale of interest. The B/I Cs become $C(0,t) = C(x,0) = C_i$ where $C_i = C_0/C_g <1$.
+
+We assume $\tau \ll 1$ since we assume this will happen after a short start-up time.
+and find a solution $C$ which is just a function of $x$. We get
+\[\dd Cx = 1 -C ,\quad C(0) = C_i\]
+With solution
+\[C = 1+ (C_i -1)e^{-x}\]
+And as $x\to\infty,$ $C \to 1$, i.e. the oxygen concentration tends to that of the gas.
+
+Lets say we need the concentration to reach some fraction, $C^*$, of the gas (we would be given this value). Then we solve
+\[C^* = 1 + (C_i -1)e^{-L}\]
+And hence
+\[L = \log\left|\frac{1 - C_i}{1-C^*}\right|\]
+And if we redimensionalise we get, for required dimensional length $l$
+\[l = \frac{v_b}{h} \log \left|\frac{C_g - C_0}{C_g (1-C^*)}\right|\]
+
+Since we have made so many assumptions, we need to think about how accurate this answer really is. We have neglected diffusion, and assumed constant velocity. Are they physically sensible?
+
+Real fluids will have varying velocity across the channel, maximised at the centre and zero at the walls (known as Poiseuille flow). Hence blood near the wall requires less distance to reoxygenate than that near the center which is moving faster. Hence this sets up a gradient, and implies diffusion could be significant. This is known as Taylor dispersion.
+
+\subsubsection{Age-structured model for Chemotherapy}
+
+Let $n(a,t)$ be the number of malignant cells with ages (or cell cycle stages) $a$ at time $t$. 
+Total number of cells at time $t$
+\[\int_0^\infty n(a,t) da\]
+
+After a small time $\delta t$, the age or maturity increases by $\delta a = \delta t$.
+
+By conservation
+\[n(a, t+ \delta t) = n(a,t) + n(a- \delta a,t ) - n(a,t) - \mu(a,t) n(a,t) \delta t\]
+Where $\mu(a,t)$ is a death rate for cells.
+
+Some rearranging:
+\begin{align*}
+	n(a, t+ \delta t) = n(a,t) + n(a- \delta a,t ) - n(a,t) - \mu(a,t) n(a,t) \delta t\\
+	\frac{n(a, t+ \delta t) - n(a,t)}{\delta t} = \frac{n(a- \delta a,t ) - n(a,t)}{\delta t} - \mu(a,t) n(a,t)\\
+	\frac{n(a, t+ \delta t) - n(a,t)}{\delta t} = \frac{n(a- \delta a,t ) - n(a,t)}{\delta a}\frac{\delta a}{\delta t} - \mu(a,t) n(a,t)\\
+	\frac{n(a, t+ \delta t) - n(a,t)}{\delta t} = \frac{n(a- \delta a,t ) - n(a,t)}{\delta a} - \mu(a,t) n(a,t)\\
+	\lim_{\delta t \to 0} \frac{n(a, t+ \delta t) - n(a,t)}{\delta t} =\lim_{\delta a \to 0} \frac{n(a- \delta a,t ) - n(a,t)}{\delta a} - \mu(a,t) n(a,t) \\
+	\dd nt = - \dd n a - \mu(a,t) n\\
+	\dd nt + \dd na = -\mu(a,t) n
+\end{align*}
+Which is a reaction-advection equation known as Von Foerster's equation.
+Its like for the reaction term, instead of spatial variable $x$, we have $a$, and the velocity is the constant, $1$.
+
+To solve the PDE we need a BC and an IC
+\[n(a,0) = f(a), \quad n(0,t) = \int_0^\infty b(a) n(a,t) da\]
+Where $f(a)$ is the initial age distribution, and $b(a)$ is the birth rate of cells for cells at age $a$. Of course we expect $b(a) = 0$ for $a < a_1$ and $a> a_2$.
+
+For the this example, assume that when cell reaches maturity, $a = 1$, the cell divides to produce two new cells at age $a=0$ (so the original cell dies).
+This means
+\[n(0,t) = 2 n(1,t)\]
+I.e. we've picked $b(a) = 2 \delta(a-1)$ where $\delta(x)$ is the delta function, $0$ everywhere except $x=0$ where it is unity.
+
+\[n(a,0) = N_0 \gamma(a)\]
+Where $N_0$ is the initial number of cells, and $\gamma(a)$ is the age distribution s.t
+\[\int_0^1 \gamma(a) da = 1\]
+
+Now to finally consider the chemo part. We would want $\mu$ to target an age bracket to kill cells (a cell cycle specificity). In this case, we will instead consider $\mu(a,t) = \mu(t)$, i.e. the drug that kills cells based on time rather than age.
+
+This allows us to look for separable solutions (as not all $\mu$'s would)
+\[n(a,t) = f(t) w(a)\]
+Sustitution into the PDE gives
+\begin{align*}
+	f'w = -fw' - \mu(t) fw\\
+	\frac{f'}{f} + \mu(t) = -\frac{w'}{w} =\lambda 
+\end{align*}
+Where $\lambda$ is a constant.
+
+And hence solutions for $f$
+\[f' = (\lambda - \mu) f \implies f = Ae^{\lambda t} e^{-M(t)}\]
+Where $M(t) = \int_0^t \mu(\tau) d \tau$ and $A$ is an arbitrary constant.
+$w$ gives
+
+\[w' = -\lambda w \implies w = Be^{-\lambda a}\]
+And After some tidying
+\[n(a,t) = Ce^{\lambda t - M(t) - \lambda a}\]
+Where $C,\lambda$ are constants to be determined.
+
+Use the BC/IC to get them
+\begin{align*}
+	n(a,0) = N_0 \gamma(a) &= Ce^{-\lambda a}\\
+	\int_0^1 N_0 \gamma(a) da&=\int_0^1 Ce^{-\lambda a} da\\
+	N_0 &= -\frac{C}{\lambda} e^{-\lambda a}\pipe_{a=0}^{a=1}\\ 
+	&= -\frac{C}{\lambda} e^{-\lambda -1 }\\ 
+	C = \frac{\lambda N_0}{1 - e^{-\lambda}}
+\end{align*}
+And the BC
+\begin{align*}
+	n(0,t) &= 2 n(1,t)\\
+	Ce^{\lambda t - M(t)} &= 2e^{-\lambda} Ce^{\lambda t - M(t)} \\
+	1 &= 2e^{-\lambda}
+\end{align*}
+And so $\lambda = \log 2$
+
+And hence 
+\[n(a,t) = 2\log 2 N_0 e^{\log 2 (t-a) - M(t)}\]
+
+If we take
+\[N(t) = \int_0^1 n(a,t) da\]
+Will then find
+\[\frac{n(0,t)}{N(t)} = const\]
+
+\subsection{Reaction Diffusion Models}
+We see a lot more of these than reaction-advection models.
+
+A simple model for embryo culture in vitro (Yvonne Stokes was working on this!)
+
+We put cells in an open tube (to allow oxygen in) within a medium of some sort (some fluid/gas) which is not moving and hence any movement through the medium to the cells will be via diffusion
+
+Consider only one dimension ($x$ up the tube), and the oxygen concentration. The oxygen concentration in the tube is $c(x,t)$, we will have a constant partial pressure of oxygen outside of the tube $P_a$ (partial pressure is based on the total pressure and the concentration of the thing [oxygen]). I.e. if the pressure was $P$ and there was a concentration $Y\%$ of oxygen, then the partial pressure would be $PY$. Cells are well mixed through the tube.
+
+Want to know how high the partial pressure $P_a$ has to be to sustain the cells.
+
+The flux $J$ will be given by Fick's Law, i.e.
+\[J(x,t) = -D(x,t) \dd Cx\]
+And we have a rate of oxygen consumption $Q(x,t)$ 
+And hence we get
+\[\dd Ct = \dd{}x\left(D \dd Cx\right) - Q\]
+We assume $D$ is a constant:
+\[\dd Ct = D\ddn Cx2 - Q\]
+
+We need an IC, $C(x,0) = C_0 = constant$ and we wneed two boundary conditions.
+We will need no oxygen flux at $x=0$ and continuity for the partial pressure at $x=h$ where $h$ is the top of the medium, so we get
+\[\dd Ct(0,t) = 0, \quad \gamma C(h,t) = P_a\]
+Henry's law relates concentration and partial pressure as we have used above: where $P = \gamma C$, $P$ is the partial pressure, $C$ is the concentration and $\gamma$ is Henry's law constant which is medium dependent (partial pressure in air $P_a$ is assumed to be constant)
+
+Since we are looking over a long timespan (days, weeks, etc.) look for steady state solutions, i.e. solutions to
+\[D \ddn Cx2 - Q(x,t) = 0\]
+
+$Q$ constant is easy to solve, but not very good since it isn't very informative and you could get negative solutions. So we could try using $Q = kC$ for some constant $k$ since it makes sense that the consumption relates to concentration. If $C_0$ is big a better choice is the Michaelis-Menten function.
+\[Q = \frac{Q_{max} C}{K_m +C}\] 
+
+We won't solve this here now though
+
+
+\section{Travelling Waves}
+We motivate this with the wound healing assay.
+
+We grow cells in a dish so that they cover the whole dish (confluent), and then we generate a wound by scraping a section of cells away. The cells then migrate and proliferate forming a moving front to `invade' the wounded, unoccupied region to close the wound.
+Let the direction of movement (normal to the scrape) be $x$ and look at cell density. You basically get a constant density to the left of the scrape and a zero density to the right, and then (against time) a travelling wave will form to fill in the gap in the plot.
+
+The model is generated with Fisher's equation (reaction-diffusion)
+\[\dd nt = D\nabla^2 n + \mu n(1- \frac{n}{K})\]
+Where $n(\vec x,t)$ is the number of cells at $\vec x$, at time $t$.
+So $D\nabla^2 n$ is diffusion - random movement of cells. $\mu n(1- \frac{n}{K})$ proliferation of cells (birth rate), where $K$ is a carrying capacity and $\mu$ is the max proliferation rate (max birth rate).
+
+Take $\vec x$ as $x$ (1D case)
+We want to non-dimensionalise, so take
+\[t = \frac{\tilde{t}}{\mu}, \quad x = \sqrt{\frac{D}{\mu}}\tilde x,\quad n= K\tilde{n}\]
+And, dropping tildes gives
+\[\dd nt = \ddn nx2 + n(1-n)\]
+letting $x=0$ be the boundary of the wound, the conditions are
+\[x\to-\infty, \ n(x,t) \to 1, \quad x\to\infty,\ n(x,t)= 0\]
+
+We know that it will grow in waves, i.e. the shape of the solution remains the same, but in time it will `move' along. So we look for travelling wave solutions.
+
+Take the travelling wave ansatz
+\[n(x,t) = \phi(x-ct) = \phi(z)\]
+Where $c$ is the (constant) wave speed
+
+The boundary conditions for $\phi$
+\[\phi(-\infty) = 1, \quad \phi(\infty) = 0\]
+
+Sub $\phi$ into fishers equation
+
+\begin{align*}
+	\odd nt = \ddn nx2 + n(1-n)\\
+	-c \odd \phi z = \oddn \phi z2 + \phi(1- \phi)\\ 
+\end{align*}
+
+Write as two first order ODEs
+\begin{align*}
+	\phi' &= \psi\\
+	\psi' &= \phi^{(2)} = -c \psi - \phi(1-\phi) = g(\phi,\psi)
+\end{align*}
+
+Look for fixed points:
+\[\phi' = 0, \quad \psi' = 0 = f(\phi,\psi)\]
+Clearly $\psi = 0 $ is the $\phi$ nullcline, and $\phi = 0, \phi =1$ are the intersecting psi nullclines
+Hence two fixed points
+\[(\phi,\psi) = (0,0), \quad (1,0)\]
+
+Stability:
+Get the Jacobian
+\[J = \begin{pmatrix}
+	f_\phi & f_\psi\\ 
+	g_\phi & g_\psi
+\end{pmatrix}=\begin{pmatrix}
+	0&1\\
+	 2\phi -1&-c
+\end{pmatrix}\]
+
+Eigenvalues satisfy
+\begin{align*}
+	\det (J-\lambda I) = 0\\
+	\lambda^2 - tr(J) \lambda + \det J = 0\\
+	\lambda = \frac{tr(J) \pm \sqrt{tr(J)^2 - 4\det J}}{2}
+\end{align*}
+At $(0,0)$
+\[
+	J = \begin{pmatrix}
+		0&1\\-1&-c
+	\end{pmatrix}	
+\] 
+$tr(J) = -c$ and $\det(J) = 1$. Since trace is the sum and det the product of the eigenvalues, we have two with negative real parts. Which is a stable fixed point.
+\[\lambda = \frac{c \pm \sqrt{c^2 - 4}}{2}\]
+Note that $c^2 \geq 0$ for $c \geq 2$. We know $c\geq 0$ due to the boundary condition. So there is a bifurcation at $c = 2$.
+If we have $c < 2$ then we have complex eigenvalues, and hence this is a stable spiral.
+If $c > 2$ we have real eigenvalues, and we have a stable node.
+
+At $(1,0)$,
+\[J = \begin{pmatrix}
+	0&1\\1&-c
+\end{pmatrix}\]
+ $tr(J) = -c$ and $\det(J) = -1$. Since $\det < 0$ we have one negative and one positive, and hence it is a saddle point.
+ \[\lambda = \frac{c\pm \sqrt{c^2 + 4}}{2}\]
+
+
+Note that $\phi = 1$ is for $z = -\infty$ and $\phi = 0$ is for $z=\infty$, so we wanted trajectories that go from $\phi=0$ to $\phi=1$.
+
+The saddle point will have a stable direction and an unstable direction.
+
+For the $(0,0)$ fixed point we have the two outcomes, stable node and stable spiral.
+For the stable node $(c \geq 2)$, the trajectories will connect from the unstable direction of the saddle, straight to the node (along an arc). This is a realistic result.
+
+For the stable spiral $(c < 2)$, the trajectories are more interesting, since the signs of $\phi,\psi$ will change when $\phi$ gets close to $0$. So plotting $\phi$ against $z$ will have some oscillation towards $\phi \to 0$. This is a physically unrealistic result, since cell density must be $> 0$.
+
+So for physically relevant solutions, we must have $c\geq 2$.
+
+I.e. there is a minimum wavespeed, $c^*$, which is exactly the value where $(0,0)$ changes from spiral to a node; $c^* = 2$.
+
+The travelling wave (TW) solution close to $(0,0)$ can be described by the linearisation from the Jacobian.
+\[\lambda_{1,2} = -\frac{c}{2} \pm \frac{c}{2} \sqrt{1 - \frac{4}{c^2}}\]
+So for $c = c^* = 2$ we get
+\[\lambda_1 = \lambda_2 =-1\]
+With mult. 2
+
+The eigenvector for the linearised problem around $(0,0)$ with $c = c^*$
+
+\[\begin{pmatrix}
+	\phi\\
+	\psi
+\end{pmatrix} = e^{-z} (c_1 + c_2 z) \begin{pmatrix}
+	1\\-1
+\end{pmatrix}\]
+Near $(0,0)$ the solution decays like $e^{-z}$, i.e. like $e^{-x+ct}$, which will behave like $e^{-x}$ as $x\to\infty$. Note this is the non-dimensional $x$ (without the tilde because we've been lazy)
+We had 
+\[x = \sqrt{\frac{D}{\mu}} \tilde{x}, \quad c = \sqrt{\frac{D}{\mu}}\mu \tilde{c} = \sqrt{D\mu} \tilde{c}\]
+
+So redimensionalising:
+\[e^{-\tilde x} = e^{-\sqrt{\frac{\mu}{D}} x}, \quad c^* = 2 \sqrt{D\mu}\]
+Where $\sqrt{\frac{\mu}{D}}$ is the decay rate of the solution for dimensional $x \to \infty$.
+\[\sqrt{\frac{\mu}{D}} = \frac{c^*}{2D} \]
+This is all assuming $c = c^*$ for this solution.
+
+
+\section{Keller-Segel Model}
+\subsection{Motivation}
+Slime moulds - potentially a bridge between primitive unicellular life forms and multicellular organisms. One of the best studied is \textit{Dictyostelium discodeum} which lives as hundreds of thousands of single amoeboid cells in the soil. When food runs low a series of events occurs:
+\begin{enumerate}
+	\item They form aggregation sites - cells move toward focal points in pulsing, wave-like manners
+	\item These sites form multicellular `blobs' known as slugs.
+	\item The slug moves as a single body despite all cells being independent
+	\item Cells near the front become \textbf{prestalk} cells, while those near the end become \textbf{prespores}.
+	\item The slug finds a suitable environment 
+	\item It changes shape - it acts as a `reverse fountain', the prestalk cells move around the outside and down through the centre of the cell mass giving a slender stalk, supporting a spore-filled capsule
+	\item The stalk cells harden and die, but allow the spore cells to be carried on air currents to favourable environments to propagate the species.
+	\item This is a form of self-sacrifice.
+\end{enumerate}
+
+The starving slime mould cells secrete a chemical called cyclic AMP (cAMP) which is attractive to other cells. Free cAMP in the extra-cellular environment promotes cAMP secretion by other cells. The cells also secrete an enzyme \textit{phosphodisterase} which degrades cAMP. 
+\subsection{Assumptions}
+\begin{itemize}
+	\item In the absence of chemical signals the \textit{dictyostelium} cells move around at random
+	\item Cells are attracted to cAMP, so they tend to move from places with low cAMP concentration to ones with high.
+	\item During the aggregation process, proliferation \& death are negligible.
+	\item Each cell produces cAMP (we will assume at a constant rate)
+	\item cAMP is degraded in the environment (assume at a rate proportional to its concentration)
+\end{itemize}
+Consider 1D with $0\leq x \leq L$ 
+Let $a(x,t)$ be the cell density and $c(x,t)$ be the cAMP concentration.
+
+Since cells move at random, for a random movement coefficient (random motility) $\mu$, and then move against the cAMP gradient (towards higher cAMP) we get:
+\[\dd at = \mu \ddn ax2 - \odd{}x J_{adv}\]
+
+We have assumed the advection is proportional to the cAMP concentration, in multidimension we would have
+\[J_{adv} = a\chi \delta c\]
+And so for us we get
+\[J_{adv} = \chi a \dd cx\]
+Where $\chi$ is a (constant) measure of strength of attraction to cAMP
+$J_{adv}$ is called a \textbf{chemotaxis} term (chemical movement $\rightarrow$ movement up a chemical gradient). And $\chi$ is called the \textbf{chemotactic coefficient}.
+
+
+So we get
+\[\dd at = \mu \ddn ax2 - \chi \odd{}x \left[a \dd cx\right]\]
+But what about $c$?
+We know that $c$ is secreted by cells and diffuses freely in the environment
+\[\dd ct = D \ddn cx2 + pa - kc\]
+Where $p$ is the production rate and $k$ is the degradation rate (since degradation is proportional to its concentration)
+
+So we have the system
+\begin{align*}
+	\dd at &= \mu \ddn ax2 - \chi \dd{}x\left(a \dd cx\right) \\
+	\dd ct &= D \ddn cx2 +pa - kc
+\end{align*}
+
+And introduce the boundary conditions
+\[\dd ax = \dd cx = 0\]
+At $x=0, L$. I.e. there is no flux of cells or chemical at the boundaries of the confined region.
+
+In terms of initial conditions, its a bit harder to say (and so we didn't say anything)
+
+This is the Keller-Segel model of chemotaxis.
+
+
+To non-dimensionalise the model, take
+\[x = L\tilde{x}, \quad t = T\tilde{t},\quad a = a_i \tilde{a}, \quad c= c^*\tilde{c}\]
+Where $a_i$ is the initial cell density and $T, c^*$ are yet to be determined.
+
+Plugging these in, dropping tildes, and rearranging gives
+\[\dd at = \frac{\mu T}{L^2} \ddn ax2 - \frac{\chi Tc^*}{L^2} \dd{}x \left(a \dd cx\right)\]
+\[\frac{L^2}{TD} \dd ct = \ddn cx2 + \frac{pa_iL^2}{Dc^*} a - \frac{kL^2}{D} c\]
+
+So take $T = L^2/\mu$ to get
+\begin{align*}
+	\dd at &= \ddn ax2 - \chi \dd{}x \left(a \dd cx\right)\\
+	\delta \dd ct &= \ddn cx2 + a - kc
+\end{align*}
+
+Where
+\begin{itemize}
+	\item  $\chi = \frac{pa_i \chi_{dimensional} L^2}{D\mu}$
+	\item $k = \frac{k_{dimensional} L^2}{D}$
+	\item $\delta = \frac{\mu}{D} (\ll 1)$ - since chemicals move more easily than cells.
+	\item $c^* = \frac{pa_iL^2}{D}$ 
+\end{itemize}
+
+$\delta$ is a small parameter, and so we will look at \textbf{leading order solutions}, i.e. set $\delta = 0$.
+
+
+With the BCs
+\[\dd ax = \dd cx = 0, \quad x=0,1\]
+
+
+\subsection{Linear stability analysis}
+We want to know when and/or what conditions make the initially uniformly spread-out cells form aggregate.
+
+Start with a \textbf{spatially uniform} / \textbf{spatially homogeneous steady state} of the model, i.e. a solution that is constant in space and time.
+\[a(x,t) = \bar{a}, \quad c(x,t) = \bar{c}\] 
+We need to see if the equations allow this.
+
+The first equation is trivially satisfies for constant $\bar{a},\bar{c}$. The second equation gives
+\[\bar{a} - k\bar{c} = 0 , \quad \implies \quad \bar{c} = \frac{\bar{a}}{k}\]
+This means that for a spatially homogeneous steady state to exist, the rate of chemical degradation must be exactly balanced by its rate of secretion by the cells.
+
+See if the solution is stable or not - i.e. if a nearly uniform distribution of cells will stay that way, or if it is unstable, and we expect non-uniformities to grow in time.
+
+Take a perturbation series
+\[a = \bar{a} + \epsilon a_1(x,t) + \bigo(\epsilon^2), \quad c = \bar{c} + \epsilon c_1(x,t) + \bigo(\epsilon^2)\]
+With $\epsilon \ll 1$.
+
+Subbing into the equations gives:
+
+\begin{align*}
+	\bigo(\epsilon) : \quad &\dd{a_1}{t} = \ddn{a_1} x2 - \chi \bar{a}\left(\ddn{c_1}x2\right)\\
+	&\ddn{c_1}x2 + a_1 - kc_1 =0
+\end{align*}
+
+Use the ansatz $a_1, c_1 \propto e^{\lambda t} \cos qx$ where $\lambda, q$ are tbd., but we know $q$ is constrained by
+\[\dd ax = \dd cx = 0, \quad x=0, x=1\]
+This is why we ignored the $\sin$ term, but it also means that $q = n\pi$ for some integer $n$.
+
+$\lambda$ is the growth rate of the perturbation. Hence if $\lambda > 0$, the perturbation grows, and our spatially uniform solution is (linearly) unstable, if its negative then the spatially uniform solution is (linearly) stable.   
+
+So we have
+\begin{align*}
+	a_1 &= Ae^{\lambda t} \cos qx\\
+	c_1 &= Ce^{\lambda t} \cos qx
+\end{align*}
+
+Plug into the equations (and simplify a little)
+\begin{align*}
+	A\lambda = - q^2A + q^2 C\chi \bar{a}\\
+	-q^2C + A - kC = 0
+\end{align*}
+Which gives
+\[\lambda = q^2 \left(\frac{\chi \bar{a}}{k+q^2} - 1\right)\]
+Noting that everything is real.
+
+So if 
+\[\left|\frac{\chi \bar{a}}{k + q^2}\right| -1 >0\]
+Then the solution is stable.
+
+Recap:
+Necessary and sufficient conditions for instability
+
+If we have
+\[\text{Condition } X \text{ Holds}  \ldots \text{Instability occurs}\]
+\begin{itemize}
+	\item Necessary - gives the arrow pointing left (i.e. if instability occurs, then condition $X$ holds) Instability is a subset of things where condition $X$ holds. So
+	\[\text{Condition } X \text{ Holds}  \Leftarrow \text{Instability occurs}\]
+
+	\item Sufficient - gives the arrow pointing right (i.e. if $X$ holds, instability occurs)
+	Condition $X$ is a subset of instability.
+	\[\text{Condition } X \text{ Holds}  \Rightarrow \text{Instability occurs}\]
+
+	\item Necessary and sufficient, double arrow, they are equal sets.
+	\[\text{Condition } X \text{ Holds}  \Leftrightarrow \text{Instability occurs}\]
+
+\end{itemize}
+
+So a necessary condition for $\lambda > 0$ here is
+\[\left|\frac{\chi \bar{a}}{k + q^2}\right| -1 >0\]
+Then the solution is stable.
+
+We know $q^2 = n^2\pi^2 \geq \pi^2, \quad n \geq 1$
+For this to be positive for any $q$, we need
+\[\frac{\chi \bar{a}}{k + \pi^2} >1\]
+(Apparently $\chi$, $k$ and $\bar{a}$ are positive)
+
+What does this statement mean biologically?
+So we need $\chi, \bar{a}$ large and $k$ small
+
+Meaning we need:
+\begin{itemize}
+ 	\item  $\chi$ large - a strong chemotaxis effect relative to random motion of cells 
+	\item  $\bar{a}$ large - high cell density
+	\item $k$ small - the chemical cannot decay too quickly
+ \end{itemize}
+
+
+
+Example: Travelling waves of haptotactic bacteria
+
+Considering a colony of bacteria attracted to a nutrient they consume. If we have cell density $b$, and nutrient concentration $c$. The simple model in one dimension is
+\begin{align*}
+	\dd bt &= D \ddn bx2 - \dd{}x \left(\chi \frac{b}{c} \dd cx\right)\\
+	\dd ct &= - kb
+\end{align*}
+
+Where $D$ is the random diffusion coefficient of the bacteria, and $k$ is the rate of nutrient consumption
+The $\frac{\chi}{c}$ term is effectively the strength of attraction to nutrient.
+
+
+Look for travelling wave solutions.
+\[b(x,t) = B(z), \quad c(x,t) = C(z), \quad z = x - v t\]
+Introduce boundary conditions
+\[B\to 0, \quad |z| \to \infty\]
+\[C\to 0 \quad as \quad z \to - \infty, \quad C\to 1 \quad as \quad z\to \infty\]
+Substituting into the system gives:
+\begin{align*}
+	-v \odd Bz &= D \oddn Bz2 - \chi \odd{}z \left(\frac{B}{C} \odd Cz\right)\\
+	-v \odd Cz &= - kB
+\end{align*}
+
+Integrate the first equation once
+\begin{align*}
+	-v B &= D \odd Bz - \chi \frac{B}{C} \odd Cz + k_1\\
+\end{align*}
+Using the BCs, $k_1 =0$
+\[-v B = D \odd Bz - \chi \frac{B}{C} \odd Cz\]
+Using both equations we get
+\begin{align*}
+ 	\frac{B'}{B} &= \frac{1}{D} \left(\chi \frac{C'}{C} - v\right)\\
+ 	C' &= \frac{kB}{v}
+ \end{align*} 
+Integrating both sides of the first gives
+\[ \log B = \frac{\chi}{D} \log C - \frac{v}{D} z + k_2 \]
+
+Special case, $\chi = 2D$ is analytic (skipping the steps) gives
+\[B = \frac{K v^2}{Dk} \left(\frac{e^{-vz/D}}{(1+Ke^{-vz/D})^2}\right) \]
+\[C = \frac{1}{1 + Ke^{-vz/D}}\]
+Where $K$ is a constant.
+
+
+For diffusion (spreading)we have
+\[\dd nt = D \ddn nx2 \]
+If we wanted reverse diffusion (aggregating), could we just write 
+\[\dd nt = -D \ddn nx2 ?\]
+We can't for a `mathematically technical' reason.
+
+The equation is the `backwards heat equation', which we can't properly solve since we lose uniqueness of solutions.
+Plus, numerical error propagates when solving this.
+
+
+A Hopf bifurcation occurs when the eigenvalues cross the imaginary axis. I.e. when the sign of the real part changes. You move from a stable steady state to an unstable steady state.
+
+If you have $\lambda = \alpha \pm i \beta$
+
+Then (if the equation has exponential solutions):
+\[e^{\lambda t} = e^{at} (e^{i \beta t} + e^{-i \beta t})\]
+And we can see $\alpha$ changing sign swaps from growth to decay (or vice-versa) with oscillatory behaviour.
+
+
+The paper on swarms
+\[\dd nt  + \dd{}x \left(vn\right) = D \ddn nx2 + B(n)\]
+Where $B(n)$ is some birth/death rate, but we will set it to zero for simplicity.
+
+
+Most of the analysis comes from what the velocity, $v$ looks like.
+
+We want/expect to see `clumping' of the individuals, kind of the opposite of diffusion/random motion.
+
+These things will behave like boids. They want to clump together towards the centre of mass, but try not to get too close to each other... ideally.
+
+As Ed put it, there are some pairwise attraction and repulsion effects between the individuals and their neighbours. 
+Essentially there will be a force acting on individual $A$ in the direction of $B$, and so on for all of the individuals. And so the movement of $A$ will be the sum of these forces.
+
+So if we were just looking at individuals in a discrete sense, we could just do this. But since we are using DEs, it must be continuous.
+
+In continuous systems, a sum becomes an integral.
+\[V(x) = \int_{D} K(x-y) n(y) dy\] 
+I.e. the convolution integral of $K$ and the density function $n$ over all $y$.
+$K$ will be a function which describes the interaction between the point $x$ and $y$. We will probably make it so that forces are positive (repulsive) for $|x-y| < d$ and then negative (attractive) past the distance $d$, up to some other distance $d_{max}$ where it would go back to $0$. $K$ is called the kernel function.
+Note these variable names were made up by me so they will probably change.
+
+We want $K(x)$ to be an odd function of $x$ to account for directionality, so that individuals on opposite sides of an individual push/pull in opposite directions.
+
+
+
+
+
+
+A different discussion:
+If we look at the KS model
+\[\dd nt =  D \ddn nx2 - \chi \dd{}x \left[n \dd cx\right]\]
+\[\dd ct = D_c \ddn cx2 + pn - kc\]
+An asymptotic approximation (after non-dimensionalisation) allows us to drop the $\dd ct$ term, giving (for the second equation)
+\[ \ddn cx2  -c = -n\]
+Solve using Greens functions
+\[\ddn cx2 - c = \delta(x- \zeta)\]
+Where $\delta$ is a delta function
+
+We would eventually get (for an infinite domain)
+\[c(x,t) = \frac12 \int_{-\infty}^{\infty} n(y,t) e^{- |x-y|} dy\]
+
+\[c_x(x,t) = -\frac12 \int_{-\infty}^{\infty}\textrm{sign}(x-y)  n(y,t) e^{- |x-y|} dy\]
+
+Which looks very similar to the $V(x)$ we had before.
+With kernel function
+\[K(x-y) = -\frac12 \textrm{sign}(x-y) e^{-|x-y|} \]
+
+
+This all relies on the infinite domain.
+
+
+
+For locusts we have solitary and gregarious and we find that solitary ones can turn gregarious after enough interaction, and gregarious to solitary with enough alone time.
+\[\dd st + \dd{}x (v_s s) = - f_2(\rho) s + f_1(\rho)g\]
+\[\dd gt + \dd{}x (v_g g) = f_2(\rho) s - f_1(\rho) g\]
+We will let $v_s = k_s *\rho$, $v_g = k_g * \rho$ where $*$ means convolution integral. And where $\rho = s+g$ (total density).
+$k_g$ will have attraction and repulsion, while $k_s$ only has repulsion.
+$f_2$ is the rate of movement from solitary to gregarious, and $f_1$ is the rate of movement from gregarious to solitary.
+The locusts can't tell if other locusts are gregarious or solitary.
+Look at a linear stability analysis.
+
+
+
+\section{Turing Patterns}
+Morphogenesis - the creation of patterns in biology
+
+Say you have a patch of tissue with some chemicals (we will say two chemicals) which diffuse and react.
+
+The patch of cells will do something in response to the concentration of the chemicals
+
+If the chemicals are $A$ and $B$
+\begin{align*}
+	\dd At = D_A \nabla^2 A + F(A,B)\\
+	\dd Bt = D_B \nabla^2 A + G(A,B)
+\end{align*}
+We \textit{need} $F,G$ to be nonlinear for any interesting dynamics.
+
+Boundary conditions, no flux at edges of the tissue
+\[\hat{n}\cdot \nabla A = \hat{n}\cdot \nabla B = 0,  \text{ on the boundary}\]
+Of course we will also need an initial condition for $A,B$.
+
+$A,B$ are morphogens - they cause the morphogenesis
+
+Because we hate numbers greater than 1, we will assume $1D$.
+
+Non-dimensionalisation gives:
+\begin{align*}
+	\dd at = \ddn at2 + \gamma f(a,b)\\
+	\dd bt = d\ddn bt2 + \gamma g(a,b)
+\end{align*}
+Where $\gamma$ is related to the domain length, $d$ is the ratio $D_B/D_A$
+
+Solve on the domain $0 \leq x \leq L$. 
+
+Look at the spatially uniform steady state, and then perturb
+
+Assume that state exists for
+\[(a,b) = (a_0,b_0) > 0\]
+(they have to be zeroes of $f,g$)
+
+
+
+
+In the absence of diffusion
+\begin{align*}
+	\dd at = \gamma f(a,b)\\
+	\dd bt = \gamma g(a,b)
+\end{align*}
+Small perturbations to the spatially uniform steady state
+\begin{align*}
+	a = a_0 + \epsilon a_1 + \bigo(\epsilon^2)\\
+	b = b_0 + \epsilon b_1 + \bigo(\epsilon^2)
+\end{align*}
+Where $\epsilon \ll 1$.
+
+
+Can write the system (at first order) as
+\[\dd{}t \begin{pmatrix}
+	a\\b
+\end{pmatrix} = \gamma \begin{pmatrix}
+	f_a & f_b\\g_a & g_b
+\end{pmatrix} \begin{pmatrix}
+	a_1\\b_1
+\end{pmatrix}\]
+Where $f_a,f_b,g_a,g_b$ are partial derivatives, evaluated at $a_0,b_0$.
+Can rewrite as
+\[\dd{\vec w}t = \gamma M \vec w\]
+Where $w = (a_1,b_1)^T$ and $M$ was the matrix from before.
+
+For the fixed point/steady state $a_0,b_0$ to be stable, require eigenvalue of $M$ to give stability. So we require
+\[tr(M) = f_a + g_b < 0 \]
+\[det(M) = f_ag_b - f_bg_a >0\]
+Now assuming those equations hold, it is stable. But if we include the diffusion terms it gets more interesting. We can write it as
+\[\dd {\vec w}{t} = D \ddn{\vec w} x2 + \gamma M \vec w\]
+Where
+\[D = \begin{pmatrix}
+	1&0\\0&d
+\end{pmatrix}\]
+
+From earlier solutions, we expect 
+\[\vec w \propto e^{\lambda t} \cos(q x)\]
+And since we want no flux on $x=L$ we have $q = \frac{n\pi}{L}$
+
+We just need to find an unstable $\vec w$. Substitute into $\vec w$:
+\begin{align*}
+	\lambda \vec w = - q^2 D \vec w + \gamma M \vec w
+\end{align*}
+
+For non-trivial solutions,
+\[\det \left[\lambda I + q^2 D - \gamma M\right] = 0 \]
+
+Which ends up giving 
+\begin{align*}
+	\lambda^2 + \lambda [q^2(1+d) - \gamma (f_a + g_b)] + h(q^2) = 0
+\end{align*}
+Where 
+\[h(q^2) = dq^4 - \gamma (df_a + g_b)q^2 + \gamma^2 \det(M)\]
+
+The steady state $(a_0,b_0)$ will be linearly stable if both roots have $Re(\lambda) < 0 $. From before we found that for $q=0$, then it holds.
+
+Want to show that there is a $q \neq 0$ which gives $Re(\lambda) > 0$. 
+From the quadratic formula we get
+\begin{align*}
+	ax^2 + bx + c =0\\
+	(x_0+x_1) = -b\\
+	x_0x_1 = c
+\end{align*}
+Where $x_0, x_1$ are the roots.
+
+So for our quadratic we will have at least one root with $Re(\lambda) > 0$ if either:
+\begin{align*}
+	h(q^2) < 0\\
+	q^2(1+d) - \gamma (f_a + g_b) < 0 
+\end{align*}
+The second 
+\begin{align*}
+	q^2(1+d) - \gamma (f_a + g_b) < 0 \\
+\end{align*}
+We know the first term is positive since $q^2 > 0$ and $d > 0$ (no negative diffusion).
+For the second term however, we assumed $tr(M) <0$, and $\gamma > 0$ since it relates to domain length. So this inequality does not hold.
+
+The other equation
+\begin{align*}
+	h(q^2) < 0\\
+	dq^4 - \gamma(d f_a+ g_b) q^2 + \gamma^2 \det M < 0
+\end{align*}
+The first term is always positive, the last term is positive by our earlier assumption.
+So a necessary condition is $df_a + g_b > 0$ (it is most certainly not sufficient).
+And so we need $f_a,g_b$ to have opposite signs, and $d \neq 1$.
+
+
+For $h(q^2)$ to be negative, for some $q\neq 0$, then obviously its minimum value must be negative. Let $q_c$ be the value of $q$ that obtains the minimum, i.e. $h(q_c^2) = h_{min}$.
+
+At the min $\odd h{q^2} = 0$
+\begin{align*}
+	2d q^{2} - \gamma(df_a + g_b) = 0\\
+	q^2 = \frac{\gamma(df_a +gb)}{2d}
+\end{align*}
+And so
+\[h_{min} = \gamma^2\left(\det M -  \frac{(df_a +gb)^2}{4d}\right)\]
+For instability, this has to be negative, and hence
+\begin{align*}
+	\det M -  \frac{(df_a +gb)^2}{4d} < 0\\
+	\det M <  \frac{(df_a +gb)^2}{4d}\\
+\end{align*}
+
+So there is a bifurcation from stable to unstable when $h_{min} =0 $. Which defines a critical diffusion ratio, $d_c$ (assuming $f,g$ are given). It satisfies
+\[d_c^2 f_a^2 + 2(2f_bg_a - f_ag_b)d_c + g_b^2 = 0\]
+
+For $d < d_c$, there are no unstable wavenumbers. For $d > d_c$ then we expect at least one unstable wavenumber.
+
+For $d > d_c$, look at $h$:
+\begin{align*}
+	h(q^2) = dq^4 - \gamma(df_a + g_b) q^2 + \gamma^2 \det M\\
+\end{align*}
+As $q^2 \to \infty$, $h(q^2) \to dq^4$, so large wavenumbers are stable, we already know $q=0$ is stable. So instability occurs for some range of $0<q_1 < q < q_2$. Note that $q_1,q_2$ will be roots of $h$, i.e. $h(q_1^2) = h(q_2^2) = 0$.
+
+To satisfy all the boundary conditions, we require $q = n\pi/L$.
+
+
+So the perturbed solutions will have form
+\[(a_1,b_1) = \sum_{q_n} (\alpha_n,\beta_n) e^{\lambda_n(q_n^2) t} \cos q_nx \]
+For the values of $q$ which give negative $\lambda_n$, those terms decay quickly. The unstable ones will grow and will dominate. We expect that those $q_n$ which give the largest $\lambda_n$ will dominate the others, and will be the fastest growing node(s), the dominating pattern.
+
+Note that when these have grown large enough, the perturbation ansatz falls apart and a full analysis must be done.
+
+
+Note that we never obtained sufficient conditions, but the list of necessary conditions for the diffusion-driven instability is:
+\begin{align}
+	f_a + g_b < 0\\
+	f_ag_b - f_bg_a > 0\\
+	df_a + g_b > 0\\
+	(df_a+g_b)^2 - 4d(f_ag_b - f_bg_a) > 0
+\end{align}
+Where all $f_a,g_b$ are evaluated at $a_0,b_0$.
+
+
+What is the physical explanation/interpretation of this?
+\begin{itemize}
+	\item $(1):$ at least one of $f_a,g_b$ is negative. Lets assume its $g_b$. Then $b$ inhibits its own rate of formation (it is an \textbf{inhibitor}).
+	\item $(3):$ if $g_b < 0$, then $f_a > 0$. So $a$ promotes its own rate of formation (it is an \textbf{activator})
+	\item Hence we have $f_ag_b < 0$, and so $(2)$ requires $f_bg_a <0$. This means that either $f_b <0$ or $g_a < 0$, and the other is positive. The signs of the values in the matrix make the difference:
+	\[M = \begin{pmatrix}
+		f_a & f_b\\
+		g_a & g_b
+	\end{pmatrix}\]
+	Then there are two possibilities:
+	\begin{itemize}
+		\item Activator-inhibitor
+		\[f_b < 0, \quad g_a > 0, \quad M =\begin{pmatrix}
+		+ &-\\
+		+& -
+	\end{pmatrix}\]
+	\item Positive-feedback
+		\[f_b < 0, \quad g_a > 0, \quad M =\begin{pmatrix}
+		+ &+\\
+		-& -
+	\end{pmatrix}\]
+	\end{itemize}
+
+	\item Looking at $(1),(3)$, we require $d\neq 1$. We require $d > 1$ to satisfy $(3)$ (since we have chosen $f_a > 0, g_b < 0$.
+	\item Inhibitor diffuses faster than the activator since $d = \frac{D_B}{D_A}$.
+\end{itemize}
+
+If we specifically look at the Activator-inhibitor case, i.e. where $a$ is the activator, $b$ the inhibitor.
+
+If we plot $a,b$ against space $x$, and we perturb from the steady state solution $(a_0,b_0)$. A build up of $a$ will cause a build up of $b$. $b$ inhibits $a$, and then both would then decrease. Since the diffusion is present, we find $b$ diffuses more through space. Hence you don't build up enough $b$ in one place to control the amount of $a$, so $a$ continues to grow at the peak. Essentially there will only be the one peak of $a$, with quite high concentration. The `shoulders' of the peak are controlled nicely by $b$, so we only see the highest wavenumber peak(s). 
+
+
+
+
+
+
+Reminder of the system
+\begin{align*}
+	\dd at = \ddn ax2 + f(a,b)\\
+	\dd bt = d \ddn bx2 + g(a,b)
+\end{align*}
+Need to assume a steady state, $(a_0,b_0)$.
+
+
+
+
+
+A random question given
+\[\dd Ut = rU(1- \frac UK) - EU + D \ddn Ux2\]
+Change wrt time is the logistic reproduction the consumption and the diffusion.
+\[U=0, x=0, \quad \dd Ux = 0, \quad x=0\]
+
+Spatially uniform ss means $\dd Ux = 0$ and $\dd Ut = 0$
+\begin{align*}
+	0= r U (1-\frac UK) - EU \\
+	r(1-\frac UK) - E = 0\\
+	\frac Er = 1 - \frac UK\\
+	U = K(1 - \frac Er), \quad 0
+\end{align*}
+
+Linear stability,
+
+We will have
+\[U = \epsilon \cos (qx) e^{\lambda t}\]
+
+Sub in
+\begin{align*}
+	\dd Ut = rU(1- \frac UK) - EU + D \ddn Ux2\\
+	\lambda \epsilon \cos (qx) e^{\lambda t} = r(\epsilon \cos (qx) e^{\lambda t}) \left(1 - \frac{\epsilon \cos (qx) e^{\lambda t}}{K}\right) - E\left(\epsilon \cos (qx) e^{\lambda t}\right) - D q^2\epsilon \cos (qx) e^{\lambda t}\\
+\end{align*}
+Like powers of $\epsilon$
+\[
+	\lambda= r - E - Dq^2\\
+\]
+This is the dispersion relation. I.e. the sign of the real part of $\lambda$.
+
+using the BCs
+\[q = \frac{(2n + 1)\pi}{H}\]
+\[\lambda= r - E - D\left(\frac{(2n + 1)\pi}{H}\right)^2\]
+Assuming $\lambda \in \mathbb{R}$
+
+Unstable if $\lambda > 0 $.
+
+\[\lambda > 0 \implies r - E - Dq^2 > 0\]
+
+\[q^2 = \left(\frac{(2n + 1)\pi}{H}\right)^2 < \frac{r -E}{D} \]
+
+We can take the minimum $n$ for this 
+\begin{align*}
+	\left(\frac{\pi}{2H}\right)^2 < \frac{r-E}{D}\\
+	H > \frac{\pi}{2} \left(\frac{D}{r-E}\right)^{1/2}
+\end{align*}
+
+So that the fishing population doesn't collapse i.e. we don't hit the trivial steady state, we require these unstable states! So if the domain $H$ is larger than this threshold, the fish are given the chance to reproduce, and the population is kept up.
+
+
+\begin{align*}
+	\dd ut &= a -u + u^2v + \ddn ux2\\
+	\dd vt &= 3a - u^2v + d \ddn vx2
+\end{align*}
+$d,a > 0$ are constants and $0\leq x \leq L$.
+\[\dd ux = \dd vx = 0, \quad x=0, L\]
+
+Steady state:
+\begin{align*}
+	0&= a - u + u^2v + \ddn ux2\\
+	0&= 3a - u^2 v + d \ddn vx2
+\end{align*}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,279 @@
+\documentclass{X:/Documents/Coding/Latex/myassignment}
+%%Document info
+\title{OFN Assignment 1}
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}
+	\item Maximise the volume of a rectangular prism with total surface area of $2 m^2$ and total edge length of $12 m$
+	%Need to give the lengths of each side and the volume obtained
+	Let $x,y,z$ denote the sides of the prism. This gives the problem
+	\begin{align*}
+		\max f &= xyz\\
+		s.t. \quad 2xy + 2xz + 2yz &= 2\\
+		4x+4y+4z &= 12\\
+		x,y,z > 0
+	\end{align*}
+	Using Lagrange multipliers the problem is:
+	\[\max \ h(x,y,z) = xyz + \lambda_1 (xy+xz+yz-1) + \lambda_2(x+y+z-3)\]
+	Hence solve $\nabla h = \vec 0$.
+	\begin{align}
+		\dd hx &= yz + \lambda_1(y + z) + \lambda_2 = 0\\
+		\dd hy &= xz + \lambda_1(x + z) + \lambda_2 = 0\\
+		\dd hz &= xy + \lambda_1(x + y) + \lambda_2 = 0\\
+		\dd h{\lambda_1} &= xy + xz + yz -1 = 0\\
+		\dd h{\lambda_2} &= x +y + z -3 = 0 %maybe 4x+4y+4z = 12
+	\end{align}
+	% $(5)$ gives
+	% \[z = 3-x-y\]
+	% $(4)$ gives
+	% \[y = \frac{1 - xz}{x+z}\] 
+	% $(1)$ gives
+	% \[\lambda_1 = \frac{-yz-\lambda_2}{y+z}\]
+	% $(2)$ gives
+	% \[\lambda_2 = -xz - \lambda_1(x+z)\]
+	$(1)+(2)+(3)-(4)$:
+	\begin{align*}
+		\lambda_1(2y+2x+2z) &+ 3\lambda_2 -1 = 0\\
+		\implies 6\lambda_1	&=1-3\lambda_2,\quad   (\text{using } x+y+z =3)\\
+		\implies \lambda_2 &= \frac{1-6\lambda_1}{3}
+	\end{align*}
+	So the system becomes:
+	\begin{align*}
+	yz + \lambda_1(y + z - 2) + \frac13 = 0\\
+	xz + \lambda_1(x + z - 2) + \frac13 = 0\\
+	xy + \lambda_1(x + y - 2) + \frac13 = 0\\
+	xy + xz + yz - 1 = 0\\
+	% x+y+z -3 = 0
+	\end{align*}
+	Rearrange $3$ to get
+	\[\lambda_1 = \frac{-\frac13 - xy}{x+y-2} \quad (3)\]
+	And hence the free equations are (the modified versions of) $(1),(2),(4)$
+	\begin{align*}
+		yz + \frac{-\frac13 - xy}{x+y-2} y + \frac{-\frac13 - xy}{x+y-2} z - 2 \frac{-\frac13 - xy}{x+y-2} + \frac13 = 0\\
+		xz + \frac{-\frac13 - xy}{x+y-2} x + \frac{-\frac13 - xy}{x+y-2} z - 2\frac{-\frac13 - xy}{x+y-2} +\frac13 = 0\\
+		xy + xz + yz - 1= 0 
+	\end{align*}
+
+	Expand $(1)$:
+	\begin{align*}
+		yz(x+y-2) - \frac13 y - xy^2 - \frac13 z - xyz + \frac23 + 2xy + \frac13(x+y-2) = 0\\
+		xyz + y^2z - 2yz - \frac13 y - xy^2 - \frac13 z - xyz + \frac23 + 2xy + \frac13 x+\frac13 y-\frac23 = 0\\
+		xyz + y^2z - 2yz  - xy^2 - \frac13 z - xyz  + 2xy + \frac13 x = 0\\
+	\end{align*}
+	And similarly, $(2)$ gives
+	\begin{align*}
+	xz(x+y-2) - \frac13x - x^2y - \frac13z - xyz +\frac23 + 2xy + \frac13(x+y-2) = 0\\
+		x^2z + xyz - 2xz  - x^2 y - \frac13 z - xyz + 2xy +\frac13 y =0\\
+	\end{align*}
+
+	Using $(3)$:
+	\[z = \frac{1- xy}{x+y}\]
+
+	Giving for $(1)$:
+	\begin{align*}		
+		xy\frac{1- xy}{x+y} + y^2\frac{1- xy}{x+y} - 2y\frac{1- xy}{x+y}  - xy^2 - \frac13 \frac{1- xy}{x+y} - xy\frac{1- xy}{x+y}  + 2xy + \frac13 x = 0\\
+		xy - x^2y^2 + y^2 - xy^3 - 2y + 2xy^2 - xy^2 - \frac13 + \frac13 xy - xy + x^2y^2 + 2xy + \frac13 x =0\\
+		y^2 - xy^3 - 2y + xy^2 - \frac13 + \frac13 xy  + 2xy + \frac13 x =0\\
+	\end{align*}
+	And for $(2)$
+	\begin{align*}
+		x^2\frac{1- xy}{x+y} + xy\frac{1- xy}{x+y} - 2x\frac{1- xy}{x+y} - x^2 y - \frac13 \frac{1- xy}{x+y} - xy\frac{1- xy}{x+y} + 2xy +\frac13 y =0\\
+		x^2 - x^3y + xy - x^2y^2 -2x + 2x^2y - x^2y - \frac13 + \frac13 xy - xy + x^2y^2 + 2xy + \frac13 y =0\\
+		x^2 - x^3y - 2x + x^2y - \frac13 + \frac13 xy + 2xy + \frac13 y = 0
+	\end{align*}
+	Noting that these are equivocal with $x$ and $y$ swapped. Hence
+	\[x = y\]
+
+	Now using
+	\begin{align*}
+		x = y, \quad z=\frac{1-xy}{x+y}\\
+		 x + y + z - 3 = 0\\
+		 2x + \frac{1-x^2}{2x} -3 =0\\
+		 3x^2 - 6x - 1 = 0\\
+		 \implies x &= \frac{6 \pm \sqrt{36 - 12}}{6}\\
+		 x&= \frac{3 - \sqrt{6}}{3}
+	\end{align*}
+	And hence
+	\begin{align*}
+		x = \frac{3-\sqrt{6}}{3}\\
+		y = \frac{3-\sqrt{6}}{3}\\
+		z = \frac{3 + 2\sqrt{6}}{3}
+	\end{align*}
+	Or any permutation of this.
+	As a sanity check:
+	\begin{align*}
+		xy + xz + yz -1 &= x^2 + xz + xz - 1\\
+		&= x^2 + 2xz -1\\
+		&=\left(\frac{3-\sqrt{6}}{3}\right)^2 + 2\left(\frac{3-\sqrt{6}}{3}\right)\left(\frac{3 +2\sqrt{6}}{3}\right) -1 \\
+		&=\frac{9 - 6\sqrt{6} + 6 + 18 -6\sqrt{6} + 12\sqrt{6} - 24 -9}{9}\\
+		&=\frac{18+6-24}{9} = 0
+	\end{align*}
+	Great!
+
+	We also get
+	\begin{align*}
+		\lambda_1 &= \frac{-\frac13 - xy}{x+y-2} \\
+		&= \frac{-\frac13 - x^2}{2x-2}\\
+		&= \frac{\sqrt{6} -3  }{3}
+	\end{align*}
+	And
+	\[\lambda_2 = \frac{1-6\lambda_1}{3} = \frac{5 - 2\sqrt{6}}{3}\]
+
+	This is also checked using symbolic \verb|Matlab|:
+	\begin{lstlisting}
+syms x y z l1 l2 real
+assume(x>0)
+assume(y>0)
+assume(z>0)
+eqn1 = y*z + l1*(y+z) + l2 ==0;
+eqn2 = x*z + l1*(x+z) + l2 ==0;
+eqn3 = x*y + l1*(x+y) + l2 ==0;
+eqn4 = x*y + x*z + y*z -1  ==0;
+eqn5 = x + y + z -3        ==0;
+sols = solve(eqn1,eqn2,eqn3,eqn4,eqn5)
+sols.x(3)
+sols.y(3)
+sols.z(3)
+	\end{lstlisting}
+
+	Now to confirm this is a maximum.
+	The hessian of $h$ being positive definite is sufficient for it to be a maximum
+
+	\[H(h) = \begin{pmatrix}
+		\ddn {h}{x}2 & \pdd{h}xy & \pdd{h}xz & \pdd hx{\lambda_1} & \pdd hx{\lambda_2}\\
+		\pdd hyx & \ddn {h}{y}2 & \pdd hyz & \pdd hy{\lambda_1} & \pdd hy{\lambda_2}\\  
+		\pdd hzx & \pdd hzy &\ddn {h}{z}2 & \pdd hz{\lambda_1} & \pdd hz{\lambda_2}\\  
+		\pdd h{\lambda_1}x & \pdd h{\lambda_1}y&\pdd h{\lambda_1}z &\ddn {h}{\lambda_1}2 & \pdd h{\lambda_1}{\lambda_2}\\
+		\pdd h{\lambda_2}x & \pdd h{\lambda_2}y&\pdd h{\lambda_2}z &\pdd h{\lambda_2}{\lambda_1} &\ddn {h}{\lambda_2}2
+	\end{pmatrix}\]
+	\[H(h) = \begin{pmatrix}
+		0 & z + \lambda_1 & y + \lambda_1 & y + z & 1\\
+		z + \lambda_1 & 0 &x + \lambda_1 & x+z &1\\
+		y + \lambda_1 & x + \lambda_1 & 0 & x+y & 1\\ 
+		y + z & x + z & x + y & 0 & 0 \\
+		1 & 1 & 1 &0 & 0 
+	\end{pmatrix}\]
+And using \verb|Matlab| to obtain the eigenvalues
+\begin{lstlisting}
+>> eig(H)
+ 
+ans(x, y, z, l1, l2) =
+ 
+ -0.77249408774975732627028770768242
+  0.83919728731250742923420535039793
+  -2.4494897427831780981972840747059
+  -3.2729188222113425599830987927475
+   5.6557053654317705552164652247378
+\end{lstlisting}
+And clearly some of these are non-positive so it is not a positive definite matrix, but is a saddle point - a maximum.
+
+
+
+
+
+
+	\item 
+	\[F\{y\} = \int_0^1 xy^2 y'^3 dx\]
+	\begin{enumerate}
+		\item Letting $y(x) = x^\epsilon$, and $\epsilon > 1/5$, what $\epsilon$ gives an extremum for $F$?
+		This gives
+		\begin{align*}
+			F\{x\} &= \int_0^1 x \left(x^{\epsilon}\right)^2\left(\epsilon x^{\epsilon-1}\right)^3 dx\\
+			&=\epsilon^3 \int_0^1 x^{5 \epsilon - 2} dx\\
+			&= \epsilon^3 \frac{x^{5 \epsilon - 1}}{5 \epsilon -1}\pipe_{x=0}^{x=1}\\
+			&= \frac{\epsilon^3}{5 \epsilon -1}
+		\end{align*}
+		Extremum for
+		\begin{align*}
+			\dd{F}\epsilon &= 0\\
+			\dd{F}\epsilon &= \frac{3 \epsilon^2 (5 \epsilon -1) - 5\epsilon^3 }{(5 \epsilon -1)^2}\\
+			%3 \epsilon^2 \frac{1}{5 \epsilon -1 } + 5(2)\frac{\epsilon^3}{(5 \epsilon -1)^2}\\
+			&= \frac{\epsilon^2(10 \epsilon - 3)}{(5 \epsilon -1 )^2}
+		\end{align*}
+		And set to $0$
+		\begin{align*}
+			\frac{\epsilon^2(10 \epsilon -3)}{(5 \epsilon -1)^2} &=0\\
+			\epsilon^2(10 \epsilon -3) &= 0\\
+			10 \epsilon -3 &= 0\\
+			\epsilon &= \frac{3}{10}
+		\end{align*}
+		Ignoring the $\epsilon =0 $ solution as we have assumed $\epsilon > 1/5$.
+		Hence there is an extremum at $\epsilon = \frac{3}{10}$
+
+		\item What is the value of $F$ for the extremum
+		\begin{align*}
+			F &= \epsilon^3\int_0^1 x^{5 \epsilon -2} dx\\
+			&= \epsilon^3 \frac{1}{5 \epsilon -1}\\
+			&= \frac{27}{1000} \frac{1}{5 \frac{3}{10} - 1}\\
+			&= 2\frac{27}{1000} =\frac{54}{1000}
+		\end{align*}
+		\item Is it a maximum or a minimum?
+		Look at 
+		\begin{align*}
+		\ddn F \epsilon 2 &= \dd{}\epsilon \left(\frac{\epsilon^2(10 \epsilon - 3)}{(5 \epsilon -1 )^2}\right)\\
+		&= \frac{(30 \epsilon^2 -6 \epsilon)(5 \epsilon -1)^2 - \epsilon^2(10 \epsilon - 3)10(5 \epsilon - 1)}{(5 \epsilon -1)^4}\\
+		&= \frac{(30 \epsilon^2 -6 \epsilon)(5 \epsilon -1) - 10\epsilon^2(10 \epsilon - 3)}{(5 \epsilon -1)^3}\\
+		&= \frac{(150 \epsilon^3 - 30 \epsilon^2 -30 \epsilon^2 + 6 \epsilon) -(100 \epsilon^3 - 30 \epsilon^2)}{(5 \epsilon -1)^3}\\
+		&= \frac{50 \epsilon^3 - 30 \epsilon^2 + 6 \epsilon}{(5 \epsilon-1)^3}\\
+		&=\frac{2 \epsilon (25 \epsilon^2-15 \epsilon+3)}{(5 \epsilon-1)^3}
+		\end{align*}
+		\begin{align*}
+			\left(\ddn F \epsilon 2\pipe_{\epsilon = 3/10}\right) &= \left(\frac{2 \frac{3}{10} (25 \frac{9}{100}-15 \frac{3}{10} +3)}{(5 \frac{3}{10}-1)^3}\right)\\
+			&\approx 3.6
+		\end{align*}
+		Since $\ddn F \epsilon 2  > 0$ everywhere for $\epsilon > 0$ - this must be a local (and possibly global) minimum.
+
+
+	\end{enumerate}
+	\item 
+	\[f(x_1,x_2,x_3) = \cosh(x_1) \cos(x_2) e^{x_2x_3}\]
+	\begin{enumerate}
+		\item Taylor expansion around $\vec x = \vec 0$
+		In $n$D
+		\[f(\vec x + \delta \vec x) = f(\vec x) + \delta \vec x^T\nabla f(\vec x) + \frac12 \delta \vec x^T H(\vec x) \delta \vec x + \bigo(\delta \vec x^3)\]
+		Obtain the Jacobian and Hessian
+		\[\nabla f(\vec x) = \begin{pmatrix}
+			\sinh(x_1)\cos(x_2)e^{x_2x_3}\\
+			-\cosh(x_1)\sin(x_2)e^{x_2x_3} + \cosh(x_1)\cos(x_2)e^{x_2x_3}x_3\\
+			\cosh(x_1)\cos(x_2)e^{x_2x_3}x_2
+		\end{pmatrix}\]
+		\begin{align*}
+			H_{11} &=\cosh(x_1)\cos(x_2)e^{x_2x_3}\\
+			H_{12} = H_{21} &=-\sinh(x_1)\sin(x_2)e^{x_2x_3} + \sinh(x_1)\cos(x_2)e^{x_2x_3}x_3 \\
+			H_{13} = H_{31} &= \sinh(x_1)\cos(x_2)e^{x_2x_3}x_2\\
+			H_{22} &= -\cosh(x_1)\cos(x_2)e^{x_2x_3} - 2\cosh(x_1)\sin(x_2)e^{x_2x_3}x_3 + \cosh(x_1)\cos(x_2) e^{x_2x_3}x_3^2\\
+			H_{23} = H_{32} &= -\cosh(x_1)\sin(x_2)e^{x_2x_3}x_2 + \cosh(x_1)\cos(x_2)e^{x_2x_3} + \cosh(x_1)\cos(x_2)e^{x_2x_3}x_2x_3 \\
+			H_{33} &= \cosh(x_1)\cos(x_2)e^{x_2x_3}x_2^2
+		\end{align*}
+		At $\vec x = \vec 0 $:
+		\[f(\vec 0) = 1 \]
+		\[\nabla f(\vec x)|_{\vec x=\vec 0} = \begin{pmatrix} 0\\0\\0\end{pmatrix}\]
+		\[H(\vec x)|_{\vec x=0} = \begin{pmatrix}
+			1 &0 &0\\
+			0 &-1 &1\\
+			0 &1 & 0			
+		\end{pmatrix}\]
+		Hence the expansion around $\vec x = \vec 0$ will be:
+		\begin{align*}
+			f(\vec 0 + \delta \vec x) &= f(\vec 0) + \delta \vec x^T \nabla f(\vec 0) + \frac12 \delta \vec x^T H(\vec 0) \delta \vec x + \bigo(3)\\
+			&= 1 + \delta \vec x ^T \begin{pmatrix} 0\\0\\0\end{pmatrix} + \delta \vec x^T \begin{pmatrix}
+			1 &0 &0\\
+			0 &-1 &1\\
+			0 &1 & 0			
+		\end{pmatrix} \delta x + \bigo(\vec x^3)\\
+		&= 1 + x_1^2/2 - x_2^2/2 + x_2x_3 + 1 + \bigo(\vec x^3)
+		\end{align*}
+		Where $\delta x = (x_1,x_2,x_3)'$
+		\item Would there be any terms of order $3$ if we were to continue expanding?
+		No there wouldn't. Odd derivatives of $\cosh x, \cos x$ will give $\sinh x , \sin x$ terms respectively -  Both of which give $0$ at $x=0$. As for derivatives of $e^{x_2x_3}$ this will always be zero for $x_2=x_3=0$.
+
+		So a more precise form of the expansion would be  
+		\[f(\vec x) = 1 + x_1^2/2 - x_2^2/2 + x_2x_3 + 1 + \bigo(\vec x^4)\]
+		Around $\vec x = 0$.
+
+	\end{enumerate}
+\end{enumerate}
+
+\end{document}

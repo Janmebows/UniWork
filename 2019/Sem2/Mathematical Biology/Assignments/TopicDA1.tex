@@ -1,0 +1,476 @@
+\documentclass{X:/Documents/Coding/Latex/myassignment}
+\title{Mathematical Biology Assignment 1}
+
+\begin{document}
+\maketitle
+
+\begin{enumerate}
+
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%%%%%%%%%%%%%%%Q1%%%%%%%%%%%%%%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\item A boat carries $N$ similar rowers each of whom puts in the same $P$ power to propelling the boat
+	\begin{enumerate}
+		\item Assuming each rower occupies the same $V$ volume of the boat, show the wetted area of the boat is $A \propto(NV)^{2/3}$
+		$A$ has units $[L]^2$, $NV$ has units  $[L]^3$ since $NV$ is the volume occupied by $N$ rowers
+
+		Want to find non-dimensional groupings which work, since the system will have form
+		\[f\left(\lambda_1,\lambda_2,\ldots \right) =0 \]
+		Where $\lambda_i$ are non-dimensional groupings of terms.
+		In this case we can generate the non-dimensional grouping
+		\[\frac{A^{3}}{(NV)^{2}}\]
+		And hence
+		\[A^3 \propto (NV)^2 \implies A \propto (NV)^{2/3}\]
+		\item Assuming that $F_{drag}$ depends on the wetted area of the boat, $A$, its speed, $U$, and the density of the water, $\rho$, show that $F_{drag}$ is proportional to $\rho U^2 A$ and that the rate of energy dissipation due to drag must be proportional to $\rho U^3 A$.
+
+		Force has units $[M][L][T]^{-2}$, density $[M][L]^{-3}$, speed $[L][T]^{-1}$, area $[L]^2$
+		If the LHS is the quantity, and the RHS is the units (I will write $F$ instead of $F_{drag}$)
+		\begin{align*}
+			F &= \frac{[M][L]}{[T]^2}\\
+			\frac{F}{\rho} &= \frac{[M][L][L]^3}{[M][T]^2}\\
+			\frac{F}{\rho} &= \frac{[L]^4}{[T]^2}\\
+			\frac{F}{\rho U^2} &= \frac{[L]^4[T]^2}{[L]^2[T]^2}\\
+			\frac{F}{\rho U^2} &= [L^2]\\
+			\frac{F}{\rho U^2A} &= \frac{[L^2]}{[L]^2} = [1]\\
+		\end{align*}
+		Hence
+		\[f\left(\frac{F}{\rho U^2A}\right) = const \implies F \propto \rho U^2A\]
+		And the rate of energy dissipation, has same units as power: $dE$ has units $[M][L]^2[T]^{-3}$ (energy/time)
+		\begin{align*}
+			dE &= [M][L]^2[T]^{-3}\\
+			\frac{dE}{\rho U^2A} &= \frac{[L]}{[T]}\\
+			\frac{dE}{\rho U^3A} &= [1]\\
+		\end{align*}
+		And as before we get
+		\[f\left(\frac{dE}{\rho U^3A}\right) = const \implies dE \propto \rho U^3A\]
+
+
+		\item Hence show $U \propto N^{1/9} P^{1/3} \rho^{-1/3} V^{-2/9}$
+
+		From part $(a)$, $A \propto (NV)^{2/3}$ and the power provided, $NP$ with units $[M][L]^2[T]^{-3}$%that could be -2 not -3 
+		\begin{align*}
+			dE \propto \rho U^3 A\\
+			U \propto \left(\frac{dE}{\rho A}\right)^{1/3}\\
+			U \propto dE^{1/3} \rho^{-1/3} (NV)^{-2/9}\\
+		\end{align*}
+		But $dE \propto NP$
+		\begin{align*}
+			U \propto dE^{1/3} \rho^{-1/3} (NV)^{-2/9}\\
+			U \propto (NP)^{1/3} \rho^{-1/3} (NV)^{-2/9}\\
+			U \propto N^{1/9} P^{1/3} \rho^{-1/3} V^{-2/9}\\
+		\end{align*}
+		\item If we assume $P,V$ are both propto body mass, is size an advantage to a rower?
+		A rower will ideally generate the most speed, so it is an advantage if $U$ is bigger.
+
+		If $P\propto V \propto M$ then we can sub it into the $U$ equation
+		\begin{align*}
+			U \propto N^{1/9} P^{1/3} \rho^{-1/3} V^{-2/9}\\
+			U \propto N^{1/9} M^{1/3} \rho^{-1/3} M^{-2/9}\\
+			U \propto N^{1/9} M^{1/9} \rho^{-1/3} \\
+		\end{align*}
+		Since the power of $M$ is positive, yes it would be an advantage.
+
+	\end{enumerate}
+
+
+
+
+
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%%%%%%%%%%%%%%%Q2%%%%%%%%%%%%%%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	\item Investigate the Coriolis effect 
+
+	Navier-Stokes gives
+	\[\rho \left(\dd{\vec u}{t} +  2\vec \Omega \times \vec u + \vec u \cdot \nabla \vec u\right) = - \nabla p + \mu \nabla^2 \vec u + \rho(\vec g - \vec \Omega \times (\vec\Omega \times \vec x))\] 
+	Assuming the origin of the coordinate system is the centre of the Earth. $\Omega$ is $2\pi$ per $24$ hours (or $7.3 \times 10^{-5} s^{-1}$) in the direction of the Earth's axis of rotation.
+	The radius of the earth is $\approx 6,400 km$.
+	Assume the water body is a bathtub with lengthscale $\sim 1m$ and water flows $\sim 1ms^{-1}$. Take density $= 1000kg\ m^{-3}$ and viscosity $8.9\times 10^{-4} Pa\ s$.
+	Non dimensionalise and determine if the LHS (Coriolis acceleration) is significant (and hence if swirl direction will change depending on which hemisphere you are in)
+	
+	Where $2\Omega \times \vec u$ is the Coriolis gravity term.
+
+	Let $x = L\tilde{x}$, $u = U\tilde{u}$, $t = \frac{L}{U}\tilde{t}$, $p = P\tilde{p}$ and
+	$\vec \Omega = \frac{U}{L} \tilde{\Omega}$
+
+
+	\begin{align*}	
+		\rho \left(\dd{\vec u}{t} +  2\vec \Omega \times \vec u + \vec u \cdot \nabla \vec u\right) = - \nabla p + \mu \nabla^2 \vec u + \rho(\vec g - \vec \Omega \times (\vec\Omega \times \vec x))\\
+		\rho \left(\frac{U^2}{L}\dd{\vec{\tilde{u}}}{\tilde{t}} + \frac{U^2}{L} 2\vec{\tilde{\Omega}} \times \vec{\tilde{u}} + \frac{U^2}{L}\vec{\tilde{u}} \cdot \nabla \vec{\tilde{u}}\right) = -\frac{P}{L} \nabla \tilde{p} + \mu \frac{U}{L^2} \nabla^2 \vec{\tilde{u}} + \rho(\frac{U^2}{L}\vec{\tilde{g}} - \frac{U^2}{L^2} L\vec{\tilde{\Omega}} \times (\vec{\tilde{\Omega}} \times \vec{\tilde{x}}))\\
+		\dd{\vec{\tilde{u}}}{\tilde{t}} +2\vec{\tilde{\Omega}} \times \vec{\tilde{u}} + \vec{\tilde{u}} \cdot \nabla \vec{\tilde{u}} = -\frac{P}{U^2 \rho} \nabla \tilde{p} + \frac{\mu}{U\rho L}  \nabla^2 \vec{\tilde{u}} + \vec{\tilde{g}} - \vec{\tilde{\Omega}} \times (\vec{\tilde{\Omega}} \times \vec{\tilde{x}})\\
+	\end{align*}
+	\begin{align*}		
+		\dd{\vec{\tilde{u}}}{\tilde{t}} +2\vec{\tilde{\Omega}} \times \vec{\tilde{u}} + \vec{\tilde{u}} \cdot \nabla \vec{\tilde{u}} = -\frac{P}{U^2 \rho} \nabla \tilde{p} + \frac{1}{Re}  \nabla^2 \vec{\tilde{u}} + \vec{\tilde{g}} - \vec{\tilde{\Omega}} \times (\vec{\tilde{\Omega}} \times \vec{\tilde{x}})\\\\
+		Re(\dd{\vec{\tilde{u}}}{\tilde{t}} +2\vec{\tilde{\Omega}} \times \vec{\tilde{u}} + \vec{\tilde{u}} \cdot \nabla \vec{\tilde{u}}) = -\frac{P\mu L}{U } \nabla \tilde{p} +  \nabla^2 \vec{\tilde{u}} + Re(\vec{\tilde{g}} - \vec{\tilde{\Omega}} \times (\vec{\tilde{\Omega}} \times \vec{\tilde{x}}))\\\\
+	\end{align*}
+	Where $Re = \frac{U\rho L}{\mu}$
+	If $Re \to 0$ Then the Coriolis effect is negligible, i.e. we get (letting $P = U^2\rho$)
+	\[-\nabla \tilde{p} +  \nabla^2 \vec{\tilde{u}} = 0\]
+	With no curl terms.
+	If $Re \to \infty$, then the Coriolis effect is not negligible:
+	\[\dd{\vec{\tilde{u}}}{\tilde{t}} +2\vec{\tilde{\Omega}} \times \vec{\tilde{u}} + \vec{\tilde{u}} \cdot \nabla \vec{\tilde{u}} = -\nabla \tilde{p} + \vec{\tilde{g}} - \vec{\tilde{\Omega}} \times (\vec{\tilde{\Omega}} \times \vec{\tilde{x}})\]
+	Where $P = \frac{U}{\mu L}$
+
+	Using the given numbers: $U \sim 1$ and $L \sim 1$, $\rho \sim 1000$ and $\mu \sim 8.9\times 10^{-4}$.
+	\[Re = \frac{1000}{8.9\times 10^{-4}} = 8.9\times 10^7\]
+	Which is quite large. Hence the Coriolis effect is not negligible.
+
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%%%%%%%%%%%%%%%Q3%%%%%%%%%%%%%%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	\item Consider the chemical equation
+	\[mA + nB \xleftrightharpoons[k_{-1}]{k_{1}} C \]
+	\begin{enumerate}
+		\item Given that the concentration $c$ of $C$ is
+		\[\odd ct = k_1 a^m b^n - k_{-1} c\]
+		Write the equations for $a,b$ (the concentrations of $A,B$)
+		The DEs for $a,b$ are:
+		\begin{align*}
+			\odd{a}{t} &= -k_1a^mb^n + k_{-1}c\\
+			\odd{b}{t} &= -k_1a^mb^n + k_{-1}c\\
+		\end{align*}
+		Subject to initial conditions with form $a(0) = a_i$, $b(0) = b_i$ for some $a_i,b_i$.
+		\item Using conservation, eliminate $a$, and $b$ from the equation for $c$
+		\[\odd{(a+c)}{t} = 0 \implies a + c = const = a_i\]
+		\[\odd{(b+c)}{t} = 0 \implies b + c = const = b_i\]
+		\begin{align*}
+			\odd ct &=  k_1 a^m b^n - k_{-1} c\\
+			&=  k_1 \left(c-a_i\right)^m \left(c-b_i\right)^n - k_{-1} c\\
+		\end{align*}
+	\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%%%%%%%%%%%%%%%Q4%%%%%%%%%%%%%%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	\item Consider Michaelis-Menten, but relax irreversibility, i.e.
+	\[E + S \xleftrightharpoons[k_{-1}]{k_1} C \xleftrightharpoons[k_{-2}]{k_2} E + P\]
+	\begin{enumerate}
+		\item Write the set of equations for concentrations $s,e,c,$ and $p$. With ICs
+		\[s(0) = s_i >0 ,\quad e(0) = e_i = \epsilon s_i > 0, \quad c(0) = p(0) = 0\]
+
+		\begin{align*}
+			\odd{e}{t} &= -k_1es + k_{-1}c +k_2ep - k_{-2}ep\\
+			\odd{s}{t} &= -k_1 es + k_{-1}c\\
+			\odd{c}{t} &= k_1 es - k_{-1} es - k_2 c + k_{-2}ep\\
+			\odd{p}{t} &= k_2 c - k_{-2} ep
+		\end{align*}
+		With
+		\[s(0) = s_i >0 ,\quad e(0) = e_i = \epsilon s_i > 0, \quad c(0) = p(0) = 0\]
+
+
+		\item Obtain a conservation law and eliminate $e$ from the system
+		\[\odd{(e+c)}t = 0 \implies e(t) + c(t) = const = e_i = \epsilon s_i\]
+		\[\implies e = \epsilon s_i - c\]
+
+		Hence the system of equations reduces to 
+		\begin{align*}
+			\odd{s}{t} &= -k_1 (\epsilon s_i - c)s + k_{-1}c\\
+			\odd{c}{t} &= k_1 (\epsilon s_i - c)s - k_{-1} (\epsilon s_i - c)s - k_2 c + k_{-2} (\epsilon s_i - c)p\\
+			\odd{p}{t} &= k_2 c - k_{-2} (\epsilon s_i - c)p
+		\end{align*}
+
+		\item Nondimensionalise as in lectures with $\epsilon = e_i/s_i \ll 1$. Show the scaled system has 3 dimensionless parameters (give in terms of the original parameters)
+
+		Let
+		\[s = s_i \tilde{s}, \quad c = c_*\tilde{c}, \quad p = p_*\tilde{p},\quad  t = t_*\tilde{t}\]
+		(Assuming $s_i$ for $s$ is sensible as it is given as the IC)
+		$s$ equation:
+		\begin{align*}
+			\frac{s_i}{t_*}\odd{\tilde s}{\tilde t} &= -k_1 (\epsilon s_i - c_*\tilde{c})s_i\tilde{s} + k_{-1}c_*\tilde{c}\\
+			\odd{\tilde s}{\tilde t} &= -t_*k_1 (\epsilon s_i - c_*\tilde{c})\tilde{s} + \frac{k_{-1}t_*c_*}{s_i}\tilde{c}\\
+		\end{align*}
+
+		$c$ equation
+		\begin{align*}
+			\frac{c_*}{t_*} \odd{\tilde c}{\tilde t} &= k_1 s_i (\epsilon s_i - c_*\tilde{c})\tilde{s} - k_{-1} s_i (\epsilon s_i - c_*\tilde{c})\tilde{s} - k_2 c_*\tilde{c} + k_{-2} (\epsilon s_i - c_*\tilde{c})p_*\tilde{p}\\
+			\odd{\tilde c}{\tilde t} &= k_1 t_*s_i(\frac{\epsilon s_i}{c_*} - \tilde{c})\tilde{s} - k_{-1}t_* (\frac{\epsilon s_i}{c_*} - \tilde{c})\tilde{s} - k_2 t_*\tilde{c} + k_{-2}t_*p_* (\frac{\epsilon s_i}{c_*} - \tilde{c})\tilde{p}\\
+		\end{align*}
+
+		$p$ equation
+		\begin{align*}
+			\frac{p_*}{t_*}\odd{\tilde p}{\tilde t} &= k_2 c_*\tilde{c} - k_{-2} (\epsilon s_i - c_*\tilde{c})p_*\tilde{p}\\
+			\odd{\tilde p}{\tilde t} &= k_2 \frac{t_*c_*}{p_*}\tilde{c} - k_{-2} (\epsilon s_i - c_*\tilde{c})t_*\tilde{p}\\
+		\end{align*}
+		Let $c_* = \epsilon s_i$. The system becomes:
+		\begin{align*}
+			\odd{\tilde s}{\tilde t} &= -t_*k_1\epsilon s_i (1- \tilde{c})\tilde{s} + k_{-1}t_* \epsilon\tilde{c}\\
+			\odd{\tilde c}{\tilde t} &= k_1 t_*s_i(1 - \tilde{c})\tilde{s} - k_{-1}t_* (1 - \tilde{c})\tilde{s} - k_2 t_*\tilde{c} + k_{-2}t_*p_* (1 - \tilde{c})\tilde{p}\\
+			\odd{\tilde p}{\tilde t} &= k_2 \frac{t_*c_*}{p_*}\tilde{c} - k_{-2}\epsilon s_i t_*(1 - \tilde{c})\tilde{p}\\
+		\end{align*}
+		
+		Incomplete
+
+		\item Neglect $\bigo(\epsilon)$ and smaller terms, find the leading order expression for the dimensionless complex concentration, and show that the dimensionless reaction velocity takes form
+		\[\odd{\tilde{p}}{\tilde{t}} = \frac{A_3 \tilde{s} - A_1A_2 \tilde{p}}{\tilde{s} + A_2 \tilde{p} + A_1 + A_3}\]
+		We have the conservation
+		\[\odd{(p+s+c)}{t} = 0 \]
+		Where $A_i$ are constants
+
+		Incomplete
+
+		\item Show that to leading order, the steady state of product and substrate concentrations (known as the Haldane relationship) is 
+		\[\frac{\tilde{p}}{\tilde s} = \frac{k_1k_2}{k_{-1}k_{-2}}\]
+		
+		Incomplete
+	\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%%%%%%%%%%%%%%%Q5%%%%%%%%%%%%%%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\item Consider
+	\begin{align*}
+		E_1 + S \xleftrightharpoons[k_{-1}]{k_1} C_1 \xrightarrow{k_3} E_1 + P\\
+		E_2 + S \xleftrightharpoons[k_{-2}]{k_2} C_2 \xrightarrow{k_4} E_2 + P
+	\end{align*}
+	\begin{enumerate}
+		\item Write down the equations for the concentrations of $S,E_1,E_2,C_1,C_2,P$. Show that there are two conserved quantities and hence reduce the system to 3 equations only containing $S,C_1,C_2$.
+
+		\begin{align*}
+			\odd{e_1}{t} &=- k_1e_1s  + (k_{-1}+k_3)c_1\\
+			\odd{e_2}{t} &=- k_2e_2s  + (k_{-2}+k_4)c_2\\
+			\odd{c_1}{t} &= k_1e_1s -  (k_{-1}+k_3)c_1\\
+			\odd{c_2}{t} &=k_2e_2s  - (k_{-2}+k_4)c_2\\
+			\odd{s}{t} &= -k_1e_1s -k_2e_2 s + k_{-1}c_1 + k_{-2} c_2\\
+			\odd{p}{t} &= k_3c_1 + k_4 c_2
+		\end{align*}
+
+		Clearly, by adding the equations,
+		\[\odd{(e_1 + c_1)}{t} = 0\]
+		\[\odd{(e_2 + c_2)}{t} = 0\]
+		And the $p$ equation is redundant since
+		\[\odd{(c_1+c_2+s+p)}{t} = 0\]
+		And hence the system can reduce to 
+		\begin{align*}
+			\odd{c_1}{t} &= k_1e_1s -  (k_{-1}+k_3)c_1\\
+			\odd{c_2}{t} &=k_2e_2s  - (k_{-2}+k_4)c_2\\
+			\odd{s}{t} &= -k_1e_1s -k_2e_2 s + k_{-1}c_1 + k_{-2} c_2\\
+		\end{align*}
+		\item Assume
+		\[s(0) = s_i > 0,\quad e_1(0) = e_2(0) = e_i = \epsilon s_i > 0\]
+		Non-dimensionalise to get a system of form
+		\begin{align*}
+			\odd st &= -s (1+\alpha) + c_1 (\mu_1 + s) + \alpha c_2 ( \mu_2 + s)\\
+			\epsilon \odd{c_1}t &= s(1-c_1) - \lambda_1 c_1\\
+			\epsilon \odd{c_2}t &= \alpha \left[ s (1- c_2) - \lambda_2 c_2\right]
+		\end{align*}
+		Defining the parameters in terms of the original dimensionless parameters
+
+
+
+		By using $e_1 = e_i - c_1$ and $e_2 = e_i - c_2$
+		Let
+		\[s = s_*\tilde{s} , \quad c_1 = c_1^* \tilde{c}_1 , \quad c_2 = c_2^*\tilde{c}_2, \quad t = t^*\tilde{t}\]
+		\begin{align*}
+			\odd st &=-k_1e_1s -k_2e_2 s + k_{-1}c_1 + k_{-2} c_2\\			
+			&=-k_1(e_i - c_1)s -k_2 (e_i - c_2) s + k_{-1}c_1 + k_{-2} c_2\\
+			&=-k_1e_i s + k_1c_1s -k_2 e_is +k_2 c_2 s + k_{-1}c_1 + k_{-2} c_2\\
+			&=-s(e_ik_1 +e_ik_2) + c_1(k_{-1} + k_1 s) + c_2(k_{-2} + k_2 s)\\
+			&=-se_ik_1(1 +\frac{k_2}{k_1}) + k_1c_1(\frac{k_{-1}}{k_1} + s) + k_2c_2(\frac{k_{-2}}{k_2} + s)\\
+			\frac{s_*}{t^*} \odd{\tilde s}{\tilde t} &=-s_*\tilde{s}e_ik_1(1 +\frac{k_2}{k_1}) + k_1c_1^* \tilde{c}_1 (\frac{k_{-1}}{k_1} + s_*\tilde{s}) + k_2c_2^*\tilde{c}_2(\frac{k_{-2}}{k_2} + s_*\tilde{s})\\
+			\odd{\tilde s}{\tilde t} &=-t^*\tilde{s}e_ik_1(1 +\frac{k_2}{k_1}) + t^*k_1c_1^* \tilde{c}_1 (\frac{k_{-1}}{k_1 s_*} + \tilde{s}) + t^*k_2c_2^*\tilde{c}_2(\frac{k_{-2}}{k_2s_*} + \tilde{s})\\
+		\end{align*}
+		Letting $t^* = \frac{1}{e_ik_1}$ gives
+		\begin{align*}
+			\odd{\tilde s}{\tilde t} &=-\tilde{s}(1 +\frac{k_2}{k_1}) + \frac{1}{e_i}c_1^* \tilde{c}_1 (\frac{k_{-1}}{k_1 s_*} + \tilde{s}) + \frac{1}{e_ik_1}k_2c_2^*\tilde{c}_2(\frac{k_{-2}}{k_2s_*} + \tilde{s})\\
+		\end{align*}
+		Letting $c_1^* = e_i$, and $\frac{k_2}{k_1} =: \alpha$
+		\begin{align*}
+			\odd{\tilde s}{\tilde t} &=-\tilde{s}(1 +\alpha) + \tilde{c}_1 (\frac{k_{-1}}{k_1 s_*} + \tilde{s}) + \frac{1}{e_i}\alpha c_2^*\tilde{c}_2(\frac{k_{-2}}{k_2s_*} + \tilde{s})\\
+		\end{align*}
+		Letting $c_2^* = e_i$ gives
+		\begin{align*}
+			\odd{\tilde s}{\tilde t} &=-\tilde{s}(1 +\alpha) + \tilde{c}_1 (\frac{k_{-1}}{k_1 s_*} + \tilde{s}) + \alpha \tilde{c}_2(\frac{k_{-2}}{k_2s_*} + \tilde{s})\\
+		\end{align*}
+		
+		Considering the $c$ equations:
+		\begin{align*}
+			\odd{c_1}{t} &= k_1e_1s -  (k_{-1}+k_3)c_1\\
+			&= k_1(e_i - c_1)s -  (k_{-1}+k_3)c_1\\
+			e_i^2 k_1 \odd{\tilde{c}_1}{\tilde{t}} &= k_1(e_i - e_i\tilde{c}_1)s_*\tilde{s} -  (k_{-1}+k_3)e_i \tilde{c}_1\\
+			e_i \odd{\tilde{c}_1}{\tilde{t}} &= (1 - \tilde{c}_1)s_*\tilde{s} -  \frac{(k_{-1}+k_3)}{k_1} \tilde{c}_1\\
+			\frac{e_i}{s_*} \odd{\tilde{c}_1}{\tilde{t}} &= \tilde{s}(1 - \tilde{c}_1) -  \frac{(k_{-1}+k_3)}{k_1s_*} \tilde{c}_1\\
+		\end{align*}
+		The $c_2$ equation
+		\begin{align*}
+			\odd{c_2}{t} &=k_2e_2s  - (k_{-2}+k_4)c_2\\
+			&= k_2(e_i - c_2)s -  (k_{-2}+k_4)c_2\\
+			e_i^2k_1\odd{\tilde{c}_2}{\tilde{t}} &= k_2(e_i - e_i\tilde{c}_2)s_*\tilde{s} -  (k_{-2}+k_4)e_i\tilde{c_2}\\
+			e_i\odd{\tilde{c}_2}{\tilde{t}} &= \frac{k_2}{k_1}(1 - \tilde{c}_2)s_*\tilde{s} -  \frac{(k_{-2}+k_4)}{k_1}\tilde{c_2}\\
+			\frac{e_i}{s_*}\odd{\tilde{c}_2}{\tilde{t}} &= \alpha\left((1 - \tilde{c}_2)\tilde{s} -  \frac{(k_{-2}+k_4)}{k_2s_*}\tilde{c_2}\right)\\
+		\end{align*}
+		Using $s_* = s_i$ and $e_i = \epsilon s_i$ gives, for the $c$ equations:
+		\begin{align*}	
+			\epsilon \odd{\tilde{c}_1}{\tilde{t}} &= \tilde{s}(1 - \tilde{c}_1) -  \frac{(k_{-1}+k_3)}{k_1s_i} \tilde{c}_1\\
+			\epsilon\odd{\tilde{c}_2}{\tilde{t}} &= \alpha\left((1 - \tilde{c}_2)\tilde{s} - \frac{(k_{-2}+k_4)}{k_2s_i}\tilde{c_2}\right)\\
+		\end{align*}
+		And letting 
+		\[\lambda_1 = \frac{k_{-1} + k_3}{k_1s_i}, \quad \lambda_2 = \frac{k_{-2} + k_4}{k_2 s_i}\]
+		Finally gives (dropping tildes)
+		\begin{align*}
+			\epsilon \odd{c_1}t &= s(1-c_1) - \lambda_1 c_1\\
+			\epsilon \odd{c_2}t &= \alpha \left[ s (1- c_2) - \lambda_2 c_2\right]
+		\end{align*}
+
+		Returning to the $s$ equation
+		\begin{align*}
+			\odd{\tilde s}{\tilde t} &=-\tilde{s}(1 +\alpha) + \tilde{c}_1 (\frac{k_{-1}}{k_1 s_i} + \tilde{s}) + \alpha \tilde{c}_2(\frac{k_{-2}}{k_2s_i} + \tilde{s})\\
+		\end{align*}
+		And letting
+		\[\mu_1 = \frac{k_{-1}}{k_1 s_i}, \quad \mu_2 = \frac{k_{-2}}{k_2 s_i}\]
+		Gives (dropping the tildes)
+		\begin{align*}
+			\odd st &= -s (1+\alpha) + c_1 (\mu_1 + s) + \alpha c_2 ( \mu_2 + s)\\
+		\end{align*}
+		I.e. we have the system
+		%SOLUTIONS
+		\begin{align*}
+			\odd st &= -s (1+\alpha) + c_1 (\mu_1 + s) + \alpha c_2 ( \mu_2 + s)\\
+			\epsilon \odd{c_1}t &= s(1-c_1) - \lambda_1 c_1\\
+			\epsilon \odd{c_2}t &= \alpha \left[ s (1- c_2) - \lambda_2 c_2\right]
+		\end{align*}
+		Where
+		\[\alpha = \frac{k_2}{k_1}, \quad 
+		\mu_1 = \frac{k_{-1}}{k_1 s_i},\quad 
+		\mu_2 = \frac{k_{-2}}{k_2 s_i},\quad 
+		\lambda_1 = \frac{k_{-1} + k_3}{k_1s_i},\quad 
+		\lambda_2 = \frac{k_{-2} + k_4}{k_2 s_i}\]
+		
+		%SOLUTIONS
+		
+
+
+
+
+		\item Find leading order solutions for $c_1,c_2$ and hence $s$ (technology is allowed)
+
+		To leading order, take perturbation series:
+		\[c_1 = c_{10} + c_{11}\epsilon + \ldots\]
+		\[c_2 = c_{20} + c_{21}\epsilon + \ldots\]
+		\[s = s_{0} + s_{1}\epsilon + \ldots\]
+		Where $\epsilon \ll 1$.
+		The leading order system is:
+		\begin{align*}
+			\odd{s_0}t &= -s_0 (1+\alpha) + c_{10} (\mu_1 + s_0) + \alpha c_{20} ( \mu_2 + s_0)\\
+			0 &= s_0(1-c_{10}) - \lambda_1 c_{10}\\
+			0 &= \alpha \left[ s_0 (1- c_{20}) - \lambda_2 c_{20}\right]
+		\end{align*}
+
+		Solve the last two:
+		\begin{align*}
+			0 &= s_0(1-c_{10}) - \lambda_1 c_{10}\\
+			s_0c_{10} + \lambda_1 c_{10} &= s_0\\
+			c_{10} &= \frac{s_0}{s_0+\lambda_1}
+		\end{align*}
+		\begin{align*}
+			0 &=  s_0 (1- c_{20}) - \lambda_2 c_{20}\\
+			c_{20} &= \frac{s_0}{s_0+\lambda_2}
+		\end{align*}
+
+		And use in the first equation:
+		\begin{align*}
+			\odd{s_0}t &= -s_0 (1+\alpha) + c_{10} (\mu_1 + s_0) + \alpha c_{20} ( \mu_2 + s_0)\\
+			&= -s_0 (1+\alpha) + \frac{s_0}{s_0+\lambda_1} (\mu_1 + s_0) + \alpha \frac{s_0}{s_0+\lambda_2} ( \mu_2 + s_0)\\
+		\end{align*}
+		\begin{align*}
+			\int s_0 (1+\alpha) - \frac{s_0}{s_0+\lambda_1} (\mu_1 + s_0) - \alpha \frac{s_0}{s_0+\lambda_2} ( \mu_2 + s_0) \ ds &= \int dt\\
+		\end{align*}
+		\begin{align*}
+			\frac{1}{2}s_0^2 (1+\alpha) + s_0(\lambda_1 - \mu_1) + s_0\alpha (\lambda_2 - \mu_2) - \alpha \lambda_2\log(\lambda_2 + s_0)(\lambda_2 - \mu_2) \\- \frac12\alpha s_0^2 + \lambda_1\log(\lambda_1 + s_0)(- \lambda_1 + \mu_1) - \frac12 s_0^2 = k\\\\
+			s_0(\lambda_1 - \mu_1) + s_0\alpha (\lambda_2 - \mu_2) - \alpha \lambda_2\log(\lambda_2 + s_0)(\lambda_2 - \mu_2) \\+ \lambda_1\log(\lambda_1 + s_0)(- \lambda_1 + \mu_1)  = k\\\\
+		\end{align*}
+		Where $k$ would be obtained using $s(0) = s_i$.
+		This is an implicit solution in $s_0$.
+
+		Solved the integrals using \verb|MATLAB|
+		\begin{lstlisting}
+syms s lambda1 lambda2 mu1 mu2 a
+p1 = int(s*(1+a),s)
+p2 =int(s*(mu1+s)/(s+lambda1),s)
+p3 =int(a*s*(mu2+s)/(s+lambda2),s)
+		\end{lstlisting}
+		\item Rescale time and find the inner solutions for $s,c_1,c_2$
+		Rescale time so that $T = \frac{t}{\epsilon}$
+		\[\odd{}t = \dd Tt \dd{}T = \frac1 \epsilon \dd{}T\]
+		Giving (to leading order) for the inner solutions:
+		\begin{align*}
+			\frac{1}{\epsilon}\odd{s_0}T &= -s_0 (1+\alpha) + c_{10} (\mu_1 + s_0) + \alpha c_{20} ( \mu_2 + s_0)\\
+			\dd{c_1}T &= s_0(1-c_{10}) - \lambda_1 c_{10}\\
+			\dd{c_2}T &= \alpha \left[ s_0 (1- c_{20}) - \lambda_2 c_{20}\right]
+		\end{align*}
+		And hence
+		\begin{align*}
+			\odd{s_0}T &= 0\\
+			\dd{c_1}T &= s_0(1-c_{10}) - \lambda_1 c_{10}\\
+			\dd{c_2}T &= \alpha \left[ s_0 (1- c_{20}) - \lambda_2 c_{20}\right]
+		\end{align*}
+		Trivially $s_0(T) = s_i$
+
+		\begin{align*}
+			\dd{c_1}T &= s_0(1-c_{10}) - \lambda_1 c_{10}\\
+			\dd{c_1}{T} &= s_i (1-c_{10}) - \lambda_1 c_{10}\\
+			\frac{1}{s_i (1-c_{10}) - \lambda_1 c_{10}} dc_1 &= \int dT\\
+		\end{align*}
+		Let $u = s_i (1-c_{10}) - \lambda_1 c_{10}$, $du = -\lambda_1 - s_i dc_1$
+		\begin{align*}
+			\frac{1}{s_i (1-c_{10}) - \lambda_1 c_{10}} dc_1 = \int dT\\
+			-\frac{1}{s_i + \lambda_1} \int \frac{1}{u} du = T + a\\
+			-\frac{1}{s_i + \lambda_1} \log(u) = T+a\\
+			-\frac{1}{s_i + \lambda_1} \log(s_i (1-c_{10}) - \lambda_1 c_{10}) = T+a
+			\log(s_i (1-c_{10}) - \lambda_1 c_{10})=-T(s_i + \lambda_1) + b\\
+			s_i (1-c_{10}) - \lambda_1 c_{10} = e^{-T(s_i + \lambda_1) + b}
+			c_{10} = k_1e^{-T(s_i + \lambda_1)} + \frac{s_i}{s_i + \lambda_1}
+		\end{align*}
+
+		For the inner $c_2$ equation, the outcome is very similar:
+		\begin{align*}
+			\dd{c_2}T = \alpha \left[ s_i (1- c_{20}) - \lambda_2 c_{20}\right]
+			\log(s_i(1-c_{20}) - \lambda_2 c_{20}) = -Tc(s_i + \lambda_2)+ a\\
+			c_{20} = k_2e^{-Tc(s_0 +\lambda_2)} + \frac{s_i}{s_i + \lambda_2}
+		\end{align*}
+
+
+
+
+
+
+
+		The full solution could be obtained using a matching condition, but this would be difficult since the outer solution for $s$ is implicit.
+
+
+	\end{enumerate}
+
+\end{enumerate}
+
+	
+
+\end{document}

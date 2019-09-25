@@ -1,0 +1,294 @@
+\documentclass{X:/Documents/Coding/Latex/myassignment}
+%%Document info
+\title{Optimal Functions and Nanomechanics (OFN) TUTES}
+\begin{document}
+
+\section{Tute 1}
+\begin{enumerate}
+\item Revision
+	\begin{enumerate}
+			\item Degenerate cases when 
+		\[y=x^n\]
+		\item Geometrically it is the point between $\vec x$ and $\vec y$
+		\item Partial derivative
+		\[\dd f{x_i} = \lim_{h\to 0 } \frac{f(\vec x + \vec e_i h) - f(\vec x)}{h}\]
+		\begin{align*}
+			\dd{f(x,y)}{x} = 2x - 12x^3\\
+			\dd{f(x,y)}{x} = \sin(2x+yz) + 2x\cos(2x+yz)\\
+			\dd{f(x,y)}{x} = \ldots
+		\end{align*}
+		\item Gradients:
+		\begin{align*}
+			\Delta f(x,y) = \left(2x-12x^3y, 4y^3 - 3x^4\right)\\
+			\ldots
+		\end{align*}
+		\item Taylor expansions
+	\end{enumerate}
+	\item Chain rule for $\odd zt$
+	\begin{align*}
+		\odd zt &= \dd zx \dd xt + \dd zy \dd yt
+	\end{align*}
+	\item Taylor's Theorem for a polynomial approximation for 
+	\[f(x,y) = \sin(x+y^2)\]
+	\[f(x+\delta x, y+ \delta y) = f(x,y) + \delta \vec x \Delta f(x,y) + \frac12 \delta \vec x^T H(x,y) \delta \vec x + \bigo(\delta \vec x ^3)\]
+	\[\sin(x+\delta x+(y+\delta y)^2) = \sin(x+y^2) + \delta \vec x \begin{pmatrix}
+		\cos(x+y^2)\\
+		2y\sin(x+y^2)
+	\end{pmatrix} + \frac12 \delta \vec x^T H(x,y) \delta \vec x + \bigo(\delta \vec x ^3)\]
+	\item Cylinder of largest volume inside a unit sphere
+	Volume of a cylinder 
+	\[V = \pi r^2 * h\]
+	Where $r$ is the radius of the cylinder
+	\begin{align*}
+		r^2 + \left(\frac{h}{2}\right)^2 \leq 1
+	\end{align*}
+	And $h,r > 0$.
+	So we have
+	\begin{align*}
+		max \ V = \pi r^2h\\
+		r^2 + \left(\frac{h}{2}\right)^2 -1 =0
+	\end{align*}
+	So we want
+	\[H(r,h,\lambda) = \pi r^2 h + \lambda \left(r^2 + \left(\frac{h}{2}\right)^2 -1\right)\]
+	Solve:
+	\begin{align*}
+	 \dd H r = 0 \\
+	 \dd H h = 0\\
+	 \dd H \lambda = 0	
+	 \end{align*} ...
+
+	 
+
+	 \item 
+\end{enumerate}
+\section{Tute 2}
+\begin{enumerate}
+	\item 
+	\begin{enumerate}
+		\item 
+		\begin{align*}
+			F\{y\} &= \int_0^{\pi/2} (y^2 + y'^2 - 2y\sin x) dx 
+		\end{align*}
+		
+		\begin{align*}
+			\odd{}x\left(\dd f{y'}\right) - \dd f{y} =0\\
+			\odd{}x(2y') - 2y + 2\sin x = 0\\
+			2y'' - 2y + 2\sin x = 0\\
+			y'' - y + \sin x = 0\\
+		\end{align*}
+		Homo:
+		$y'' - y = 0$:
+		\[y_h = a\sin x + b\cos x \]
+
+		\item
+		\[F\{y\} = \int_1^2 \frac{y'^2}{x^3} dx\] 
+		No y dependence
+		\begin{align*}
+			\dd f{y'} = c_1^*\\
+			\frac{2y'}{x^3} =c_1^*\\
+			y' = c_1^+ x^3\\
+			y = x^4 c_1 + c_2
+		\end{align*}
+		Use $y(1) = 0$ and $y(2) = 15$ but cbf
+		\item
+		\[F\{y\} = \int_0^2 (xy' + y'^2) dx \]
+		No explicit y dependence vol 2
+		\[\dd fy = 0\]
+		\[\odd{}x \left(\dd f{y'}\right) + \dd fy = 0\]
+		So
+		\[\dd f{y'} =const \]
+		\begin{align*}
+			\dd f{y'} &= x + 2y' = const\\
+			2y'&=c_1 -x\\
+			y' &= \frac{c_1}2 -\frac{x}{2}\\
+			y &= \frac{c_1 x}{2} - \frac{x^2}{4} + c_2
+		\end{align*}
+		$y(0) = 1 \implies c_2 =1$
+		$y(2) = 0$
+		\begin{align*}
+			\frac{c_1 2}{2} - \frac{4}{4} +1 = 0\\
+			c_1 = 0
+		\end{align*}
+	\end{enumerate}
+	\item If you layer the shit out of glass then i guess so
+	\item 
+	Use conic coords
+	\begin{align*}
+		x = r\cos \theta \sin \alpha\\
+		y = r\sin \theta \sin \alpha\\
+		z = r\cos \alpha\\
+	\end{align*}
+	Short path
+	\begin{align*}
+	 	dx = \cos\theta \sin \alpha dr - r\sin\theta \sin \alpha d\theta\\
+	 	dy = \sin\theta \sin \alpha dr + r\cos\theta \sin \alpha d\theta\\
+	 	dz = \cos\alpha dr
+	\end{align*} 
+	\begin{align*}
+		ds^2 &= dx^2 + dy^2 + dz^2\\
+		&= \left(\cos\theta \sin \alpha dr - r\sin\theta \sin \alpha d\theta\right)^2 + \left(\sin\theta \sin \alpha dr + r\cos\theta \sin \alpha d\theta\right)^2 + \cos^2\alpha dr^2\\
+		&= \cos^2 \theta \sin^2 \alpha dr^2 - 2r\sin\theta\cos\theta \sin^2 \alpha d\theta + r^2 \sin^2\theta \sin^2 \alpha d\theta^2 + \sin^2\theta \sin^2\alpha dr^2 \\&+ 2r \sin\theta\cos\theta\sin^2 \alpha d\theta + r^2\cos^2\theta \sin^2 \alpha d\theta^2 + \cos^2 \alpha dr^2\\
+		&= \sin^2\alpha dr^2 + r^2 \sin^2\alpha d\theta^2 + \cos^2 \alpha dr^2\\
+		&= dr^2 + r^2 \sin^2\alpha d\theta^2
+	\end{align*}
+
+	\begin{align*}
+		F\{y\} &= \int_{P_1}^{P_2} ds\\
+		&= \int_{P_1}^{P_2} \sqrt{dr^2 + r^2 \sin^2\alpha d\theta^2}\\
+		&= \int_{P_1}^{P_2} \sqrt{1 + r^2 \sin^2\alpha \left(\frac{d\theta}{dr}\right)^{2}} dr\\
+	\end{align*}
+	So
+	\[f(r,\theta,\theta') = 1 + r^2 \sin^2 \alpha \theta'^2\]
+	No $\theta$ dependence.
+	\[\dd f{\theta'} =  c_1\]
+	\item 
+	\item 
+\end{enumerate}
+
+\section{Tutorial 3}
+\begin{enumerate}
+	\item 
+	\[F\{y\} = \int f(x,y,y',y'',y''') dx\]
+	Taylor's theorem
+	\begin{align*}
+		&f(x,y+\epsilon \eta, y' + \epsilon'\eta', y'' + \epsilon\eta '', y'''+ \epsilon\eta''')\\
+		&= f(x,y,y',y'',y''') + \epsilon(\eta \dd fy + \eta' \dd f{y'} + \eta'' \dd f{y''} + \eta''' \dd f{y'''}) + \bigo(\epsilon^2)
+	\end{align*}
+	\[F\{y+\epsilon\eta\} = \int_{x_0}^{x_1} f(x,y,y',y'',y''') + \epsilon(\eta \dd fy + \eta' \dd f{y'} + \eta'' \dd f{y''} + \eta''' \dd f{y'''}) + \bigo(\epsilon^2) dx\]
+	\begin{align*}
+		\delta F &= \lim_{\epsilon \to 0} \frac{F\{y + \epsilon \eta\} - F\{y\}}{\epsilon}\\
+		&=\lim_{\epsilon \to 0} \int_{x_0}^{x_1} f(x,y,y',y'',y''')/\epsilon + (\eta \dd fy + \eta' \dd f{y'} + \eta'' \dd f{y''} + \eta''' \dd f{y'''}) + \bigo(\epsilon) - f(x,y,y',y'',y''')/\epsilon\\
+		&=\lim_{\epsilon \to 0} \int_{x_0}^{x_1}  (\eta \dd fy + \eta' \dd f{y'} + \eta'' \dd f{y''} + \eta''' \dd f{y'''}) + \bigo(\epsilon)\\
+	\end{align*}
+	Integrate by parts
+	\item Geodesics in $N$ dim Euclidean space, assume $\mathbb{R}^N$ with $\vec q= (q_1,\ldots,q_n)$ with $||\vec q|| = \left(\sum_{n=1}^N q_n^2\right)^{1/2}$ find the extremal of
+	\[S\{\vec q(t)\} = \int ds\]
+	\item Assuming every atom of a carbon nanotorus with genus $g=1$ is bonded to exactly 3 neighbours, how many pentagonal, hexagonal and heptagonal rings must occur when assuming that
+	\begin{enumerate}
+		\item 
+		\item 
+		\item 
+	\end{enumerate}
+	\item For some $n\in \mathbb{N}$ show
+	\[\Gamma(n+1/2) = \frac{\sqrt{\pi} (2n-1)!!}{2^n}\]
+	Where $!!$ is the double factorial $(n!! = n(n-2)(n-4)\ldots)$
+	\item 
+	\[B(x,y)B(x+y,z) = B(y,z) B(y+z,x) = B(z,x) B(z+x,y)\]
+	$B(x,y) = \frac{\Gamma(x) \Gamma(y)}{\Gamma(x+y)}$
+	\begin{align*}
+		B(x,y)B(x+y,z) &= \frac{\Gamma(x) \Gamma(y)}{\Gamma(x+y)} \frac{\Gamma(x+y) \Gamma(z)}{\Gamma(x+y+z)}\\
+		&= \frac{\Gamma(x) \Gamma(y)\Gamma(z)}{\Gamma(x+y+z)}\\
+		B(y,z) B(y+z,x) &= \frac{\Gamma(x) \Gamma(y)\Gamma(z)}{\Gamma(x+y+z)}\\
+		B(z,x) B(z+x,y) &= \frac{\Gamma(x) \Gamma(y)\Gamma(z)}{\Gamma(x+y+z)}\\
+	\end{align*}
+
+	\item 
+	\[F(a,b;c;z) = \sum_{n=0}^\infty \frac{(a)_n(b)_n}{(c)_n n!} z^n\]
+	\begin{enumerate}
+		\item 
+		\[\odd{}z F(a,b;c;z) = \frac{ab}{c} F(a+1,b+1;c+1;z)\]
+		\begin{align*}
+			\odd{}z F(a,b;c;z) &= \odd{}z\sum_{n=0}^\infty \frac{(a)_n(b)_n}{(c)_n n!} z^n\\
+			&=\sum_{n=0}^\infty \frac{(a)_n(b)_n}{(c)_n n!} nz^{n-1}\\
+			&= \sum_{n=0}^\infty \frac{(a)_{n+1}(b)_{n+1}}{(c)_{n+1} (n+1)!} (n+1)z^{n}\\
+		\end{align*}
+		Note 
+		\[(a)_{n+1} = \frac{\Gamma(a+n+1)}{\Gamma(a)} = \frac{a\Gamma(a+n)}{\Gamma(a)} = a(a)_{n}\]
+		\begin{align*}
+			\odd{}z F(a,b;c;z) &= \sum_{n=0}^\infty \frac{(a)_{n+1}(b)_{n+1}}{(c)_{n+1} (n+1)!} (n+1)z^{n}\\
+			\odd{}z F(a,b;c;z) &= \frac{ab}{c}\sum_{n=0}^\infty \frac{(a)_{n}(b)_{n}}{(c)_{n} (n+1)!} (n+1)z^{n}\\
+			\odd{}z F(a,b;c;z) &= \frac{ab}{c}\sum_{n=0}^\infty \frac{(a)_{n}(b)_{n}}{(c)_{n} n!} z^{n}\\
+			&= \frac{ab}{c} F(a+1,b+1;c+1;z)
+		\end{align*}
+		\item 
+		\[\left[\odd{}z F(a,b;c;z)\right]_{z=0} = \frac{ab}{c}\]
+		The only non-zero term is $z^0 = 0^0 = 0$ and hence you get $\frac{ab}{c}$ 
+		\item 
+		\[\frac{1}{\sqrt{1-z}} = F(1/2,b;b;z)\]
+		\begin{align*}
+			F(1/2,b;b;z) &= \sum_{n=0}^\infty \frac{(1/2)_n(b)_n}{(b)_n n!} z^n\\
+			&= \sum_{n=0}^\infty \frac{(1/2)_n}{n!} z^n\\
+			&= \sum_{n=0}^\infty \frac{\Gamma(1/2 +n)}{\Gamma(1/2) n!} z^n\\
+			&= \sum_{n=0}^\infty \frac{\Gamma(1/2 +n)}{\Gamma(1/2) \Gamma(n+1)} z^n\\
+			&= \sum_{n=0}^\infty \ncr{1/2}{n} z^n\\
+			&= \frac{1}{\sqrt{1-z}}
+		\end{align*}
+		\[\frac{1}{\sqrt{1-z}} = \sum_{n=0}^\infty z^n \ncr{1/2}{n}\]
+		Note
+		\[\ncr{x}{y} =\frac{x!}{y!(x-y)!} = \frac{\Gamma(x+1)}{\Gamma(y+1) \Gamma(x-y+1)}\]
+		Assuming int at first then for all numbers.
+	\end{enumerate}
+\end{enumerate}
+\section{Tute 4}
+\begin{enumerate}
+	\item Assume $\Phi(\rho) = -A \rho^{-6} + B \rho^{-12}$ calculate the interaction of
+	\begin{enumerate}
+		\item A point $P = (0,0,\delta)$ and a line $\ell_1$ collinear with the $x-axis$, $-\infty < x < \infty$, with uniform line density $\eta_1$.
+
+		$\ell_1 = (x,0,0)$
+		The distance from the point to a point on the line is 
+		\[d = \sqrt{x^2 + \delta^2}\]
+
+		\begin{align*}
+			E &= \eta_1\eta_1 \int_{S_2} \int_{S_1} \Phi(\rho) dA_1 dA_2\\
+			&=
+		\end{align*}
+
+		\item $\ell_1$ from $A$ and $\ell_2$ parameterised by $(t\cos\theta, t\sin\theta, \delta)$
+		\item Whats the interaction between $\ell_1$ and $\ell_2$ for $\theta = \pi/2$
+		\item Same as before but $\theta = \pi$.
+	\end{enumerate}
+	\item The surface $\mathcal{T}$:
+	\[\vec r(\theta,\phi) = \left((R + r\cos\theta) \cos\phi, (R+r\cos\theta) \sin\phi,r\sin\theta\right)\]
+	With radius $r$ and $R$ distance from the centre of the torus to the centre of the tube, $-\pi < \theta \leq \pi, \ -\pi < \phi \leq \pi$.
+	\begin{enumerate}
+		\item tangent vector in $\theta$ direction:
+		\[\dd{r}{\theta} = \begin{pmatrix}
+			-r\sin\theta\cos\phi\\-r\sin\theta\sin\phi\\ r\cos\theta
+		\end{pmatrix}\]		
+		\item tangent vector in $\phi$ direction
+		\[\dd{r}{\phi} = \begin{pmatrix}
+			-(R+r\cos\theta)\sin\phi \\ (R+r\cos\theta)\cos\phi\\0
+		\end{pmatrix}\]
+		\item Determine $dA$ for $\mathcal{T}$.
+		\[	dA = \dd r\theta \times \dd r\phi d\theta d\phi\]
+		\[dA = \begin{vmatrix}
+			\vec i & \vec j &\vec k \\
+			-r\sin\theta\cos\phi&-r\sin\theta\sin\phi& r\cos\theta\\
+			-(R+r\cos\theta)\sin\phi & (R+r\cos\theta)\cos\phi&0
+		\end{vmatrix}d\theta d\phi\]
+		\[dA = \begin{pmatrix}
+			0 - r\cos\theta(R+r\cos\theta)\cos\phi\\
+			-r\cos\theta (R+r\cos\theta)\sin\phi\\
+			-r\sin\theta\cos\phi (R+r\cos\theta)\cos\phi - r(R+r\cos\theta)\sin\phi \sin\theta\sin\phi
+		\end{pmatrix}d\theta d\phi\]
+		\[dA = - r(R+r\cos\theta)\begin{pmatrix}
+			\cos\theta\cos\phi\\
+			\cos\theta\sin\phi\\
+			\sin\theta
+		\end{pmatrix}d\theta d\phi\]
+		\item Derive an expression for the SA of $\mathcal{T}$.
+		\begin{align*}
+			SA &= \int_{-\pi}^\pi \int_{-\pi}^\pi dA\\
+		\end{align*}
+	\end{enumerate}
+	\item Explicitly told to avoid this one
+	\item Use Ritz's method to minimise
+	\[J\{y\} = \int_0^{2\pi} (y'^2 + \lambda^2 y^2) dx\]
+	With $y(0) = 1$ and $y(2\pi) = 1$ and $\lambda$ is positive integer. Use
+	\[\phi_0 = 1, \quad \phi_n(x) = \sin[(n-1/2)x]\]
+	And
+	\[y_N = \phi_0 + \sum_{n=1}^N c_n \phi_n(x)\]
+
+	\[y_n' =  c_1(n-1/2)\cos[(n-1/2)x]\]
+	\begin{align*}
+		J_1(c_1) &= \int_0^{2\pi} (y'^2 + \lambda^2 y^2) dx\\
+		&= \int_0^{2\pi} (c_1(n-1/2)\cos[(n-1/2)x])^2 + \lambda^2(c_1\sin[(n-1/2)x])^2 dx\\
+		&= c_1^2\int_0^{2\pi} ((n-1/2)\cos[(n-1/2)x])^2 + \lambda^2(\sin[(n-1/2)x])^2 dx\\
+		&= c_1^2\int_0^{2\pi} ((n-1/2)^2-\lambda^2)\cos^2[(n-1/2)x] + \lambda^2 dx\\
+		&= c_1^2 \left(((n-1/2)^2-\lambda^2)\int_0^{2\pi} \cos^2[(n-1/2)x] dx + \int_0^{2\pi} \lambda^2 dx\right) \\
+		&= c_1^2 \left(\frac{((n-1/2)^2-\lambda^2)(\sin(2 (n-1/2)x) + 2(n-1/2)x)}{4(n-1/2)}\right)_0^{2\pi} + 2\pi\lambda^2 \\
+		&= c_1^2 \pi + 2\pi\lambda^2 \\
+	\end{align*}
+\end{enumerate}
+\end{document}
