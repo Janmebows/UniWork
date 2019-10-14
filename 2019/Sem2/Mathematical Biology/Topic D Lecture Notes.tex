@@ -1770,40 +1770,185 @@ Steady state:
 
 
 
+\section{Growing Tissues}
+\subsection{Modelling Avascular Tumours}
+An avascular tumour is the most simple form of tumour. An avascular tumour does not have its own blood supply (no blood vessels) - it is an early stage tumour. They tend to be quite small since they do not get any supply of oxygen or nutrient via any means other than diffusion. Hence it cannot grow any more until it becomes \textbf{vascularised} (it gains a system of blood vessels). 
+Expect cells in the middle to become necrotic (dead) when they no longer get nutrient. Outside of this we expect quiescent cells - they aren't quite getting enough nutrient to proliferate, but they have enough to be alive. The outermost ring will have the proliferative cells. Often not worth distinguishing the quiescent cells. Just considering alive and dead cells.
+
+For simplicity, consider a spherical tumour with radial coordinate $r$. Let the radius of the necrotic core be $a$ (when it exists) and the radius of the tumour be $R$. $R$ and $a$ are functions of $t$. Assume there is a single nutrient which is vital to the cells' life, with concentration $c$. Live cells will consume the nutrient at constant rate $k$, while necrotic cells will not, so we have different equations in the two regions. Assume that diffusion of the nutrient occurs on a shorter timescale than that of tumour growth, and that nutrient transport is only by diffusion in the tumour. The short timescale means we will take a quasi-steady assumption.
+
+This is a free boundary problem since the domain for $c$ includes $a$ and $R$.
+
+Assuming the nutrient diffuses equally through both regions, the model equations are:
+\begin{align*}
+	\dd ct &= D\nabla^2 c , \quad 0<r<a\\
+	\dd ct &= D\nabla^2 c - k, \quad a<r<R
+\end{align*}
+
+And then using the quasi-steady assumption, and using spherical polar coordinates
+\begin{align*}
+	0 &= D\frac1{r^2} \dd{}r \left(r^2 \dd cr\right),& \quad 0<r<a\\
+	0 &= D\frac1{r^2} \dd{}r \left(r^2 \dd cr\right) - k,& \quad a<r<R
+\end{align*}
+
+Boundary conditions:
+Outside the tumour, assume that nutrient concentration is constant
+\[c = c^*, \quad on\quad r=R\]
+If the nutrient concentration drops below some critical value $c_n$, cells become necrotic
+\[c(a) = c_n\]
+
+
+
+In the early stages of growth, the tumour is too small for necrotic core to develop ($a=0$).
+So in this domain the system reduces to the single equation
+\[0 = D\frac1{r^2} \dd{}r \left(r^2 \dd cr\right) - k, \quad c(R)=c^*\]
+We also require non-singular solutions at the origin $r=0$, which gives us another bc.
+
+Solving this gives
+\[c(r) = \frac{k}{6D} r^2 + \frac{A}{r} + B\]
+Where $A,B$ are constants. Clearly $A=0$ to remove the singularity at $r=0$, 
+Imposing $c(R) = c^*$ gives
+\[c(r) = c^* - \frac{k}{6D}(R^2-r^2)\]
+This is only valid for $c_{min} > c_n$.
+Minimum $c$ occurs at $r=0$. So we require
+\[c(0) = c^* - \frac{kR^2}{6D} > c_n\]
+\[R^2 < R_C^2 = \frac{6D(c^* + c_n)}{k}\]
+So there is a critical value when:
+\[c^* - \frac{kR_c^2}{6D} = c_n\]
+
+
+
+When the tumour has a necrotic core, have to use the full system.
+$R > R_c$
+
+\begin{align*}
+	\dd ct &= D\nabla^2 c , \quad 0<r<a\\
+	\dd ct &= D\nabla^2 c - k, \quad a<r<R
+\end{align*}
+Need to solve the pair of equations such that at the boundary $r=a$ the system is continuous.
+
+I.e. require both $c$ and $-D \dd cr$ are continuous.
+
+In $0<r<a$
+\[c = Ar + B\]
+But for $a\neq 0$ we have $A=0$ (else we would get singularities at $r=0$), and hence we get
+\[c = c_n, \quad 0 < r < a\]
+
+Hence at $r=a $ the nutrient flux is zero.
+
+In $a<r<R$, we have
+\[c = \frac{k}{6D}r^2 + \frac{A}{r} + B\]
+
+We have three unknowns, $A,B,a$
+
+Conditions:
+\begin{align*}
+	c(a) &= c_n\\
+	-D \dd cr\pipe_{r=a} &= 0\\
+	c(R) &= c^*\\
+\end{align*}
+
+\begin{align*}
+	\frac{k}{6D}a^2 + \frac{A}{a} + B = c_n\\
+	\frac{ka}{3D} - \frac{A}{a^2} = 0\\
+	\frac{k R^2}{6D} + \frac{A}{R} + B = c^*
+\end{align*}
+
+Using the second gives us
+\[A = \frac{ka^3}{3D}\]
+
+Subtracting the third from the first gives
+\begin{align*}
+	\frac{k}{6D} \left(a^2 - R^2\right) + A\left(\frac1a + 1R\right) = c^* - c_n\\
+	\frac{k}{6D} \left[R^2 - a^2 - 2a^3 \left(\frac1a - \frac1R\right)\right]\\
+	\frac{kR^2}{6D} \left(1 + \frac{2a}{R}\right)\left(1 - \frac aR\right)^2 = c^* - c_n\\
+	\frac{k}{6D} \left(1 + \frac{2a}{R}\right)\left(R-a\right)^2 = c^* - c_n
+\end{align*}
+
+As $R\to \infty$ the third equation gives us $\frac aR \to 1$. Which means $a \to \infty$
+Let $h=R - a$ (the width of the proliferative part)
+The last equation says that $h^2 \to \frac{2D(c^* - c_n)}{k}$ as $R \to \infty$ 
+
+Of course we don't actually have any information about how the tumour is growing, and how $a,R$ grow with time. Previously we considered $a,R$ as parameters, but now we will consider this as a full model for the evolution of $R(t), a(t)$.
+
+\begin{itemize}
+	\item Let $n$ be the density of tumour cells.
+	\item Let $v$ be the radial velocity of tumour cells
+	\item No proliferation in the necrotic core
+	\item Cells in the necrotic core break down at rate $\beta$
+	\item In the live region, $a<r<R$ the cells are proliferating
+	\item Assume rate of proliferation is constant $\gamma$ when $c>c_n$
+	\item Assume density is a uniform constant, and w.l.o.g. it is $1$.
+\end{itemize}
+
+Conservation should be of form (since we are using spherical coordinates)
+
+\begin{align*}
+\dd nt + \frac1{r^2} \dd{}r (r^2 nv) = - \beta n, \quad 0<r<a\\
+\dd nt + \frac1{r^2} \dd{}r (r^2 nv) = \gamma n, \quad a<r<R	
+\end{align*}
+
+Our assumption of constant $n=1$ reduces the system to
+
+\begin{align*}
+\frac1{r^2} \dd{}r (r^2 v) = - \beta , \quad 0<r<a\\
+\frac1{r^2} \dd{}r (r^2 v) = \gamma , \quad a<r<R	
+\end{align*}
+With a requirement of the continuity of velocity at $r=a$.
+
+Solving the system gives
+\begin{align*}
+	v = -\frac13 \beta r, \quad 0 <r < a(t)\\
+	v = \frac13 \gamma r - \frac13 \left(\beta + \gamma \right) \frac{a^3}{r^2}, \quad a(t) < r < R(t)
+\end{align*}
+
+We wanted an equation for $R$ though, noting that the velocity at $R$ is the cell velocity at $r = R(t)$
+I.e.
+\[\dd Rt = v(R(t),t)\]
+\[\dd Rt = \frac13 \gamma R - \frac13 \left(\beta + \gamma \right) \frac{a^3}{R^2}\]
+\[\dd Rt = \frac13 \gamma R \left[1 - \frac{(\beta + \gamma)}{\gamma} \left(\frac{a^3}{R^3}\right)\right]\]
+
+We already have an equation for $a$ in terms of $R$. The unfortunate thing is the equation is a `nasty mess'.
+
+Often $\beta \ll \gamma$, so let $\epsilon = \frac \beta \gamma \ll 1$, so we expect the tumour to grow large with a large necrotic core. We expect $\frac{h}{R}$ to be small.
+
+A steady state exists for
+\begin{align*}
+	1 - \frac{\beta + \gamma}{\gamma} \left(\frac{a^3}{R^3}\right) &= 0\\
+	(1 + \epsilon)\left(\frac{a^3}{R^3}\right) &= 1\\
+	\frac{1}{1+\epsilon} &= \frac{a^3}{R^3}\\
+	\frac{1}{1+\epsilon} &= \frac{(R-h)^3}{R^3}\\
+	\frac{1}{1+\epsilon} &= (1-\frac{h}{R})^3\\
+	1 - \epsilon + \bigo(\epsilon)^2 &= 1 - 3\frac{h}{R} + \bigo(\frac{h}{R})^2
+\end{align*}
+
+So 
+\[3\frac{h}{R} \simeq \epsilon \implies R \simeq \frac{3h \gamma}{\beta}\]
+
+
+
+End of examinable content
+
+
+In divergence equations e.g.
+\[\nabla \cdot (\vec u) = S\]
+If $\vec u$ is multidimensional (non-symmetric in those dimensions), we need a `Constitutive law'. In this case, Darcy's Law for a porous medium:
+\[\vec u = - \mu \nabla p\]
+($\mu$ is porosity and $p$ is the pressure).
 
 
 
 
 
 
+\begin{align*}
+	\dd at &= \nabla\cdot (const \nabla a) - 
+	\dd bt &= const \nabla a
+	\dd ft &= \lambda_0 - \alpha a g(f) - \beta b h(f) + \dd{}x\left(D \dd fx\right)
+\end{align*}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+$g(f)$ and $h(f)$ have to be linear(ish) initially and plateau later, an example is
+\[\frac{f}{\alpha_1 + f}\]
 
 
 

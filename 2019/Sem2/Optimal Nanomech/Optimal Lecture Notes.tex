@@ -2843,6 +2843,208 @@ This is relatively equivocal to maximisataion of a function where the constraint
 	\item $\lambda = 0$ gives a stationary point for the functional $H$. I.e. a local stationary point corresponding to a `natural' solution (unconstrained).
 \end{itemize}
 
+Want to solve more general case of Dido's problem - a general shape (no coast) so that the perimeter must be parametrically described. Want to maximise the area captured inside $\delta\Omega$.
+
+Find the curve of length $L$ which encloses the largest possible area. Maximise
+\[Area = \int_{\Omega} 1 dA\]
+Subject to
+\[\oint_{\delta\Omega} 1 ds = L\]
+Of course this is not in a convenient form yet - 
+Use Green's theorem
+\[\iint_{\Omega} \left(\dd\phi x + \dd\psi y\right) dx dy = \oint_{\delta\Omega} \phi dy - \psi dx\]
+For $\phi,\psi : \Omega \to \mathbb{R}$ such tha t$\phi,\psi,\phi_x, \psi_y$ are continuous.
+
+
+Choosing $\phi = x/2$ and $\psi = y/2$ we get (using Green's Theorem)
+\[Area = \iint_{\Omega} 1 dxdy = \frac12 \oint_{\delta\Omega} xdy - ydx\]
+
+The previous approach was to use $y = y(x)$. But now we have to write the boundary curve parametrically as $(x(t),y(t))$.
+
+This gives
+\begin{align*}
+	F\{x,y\} = Area &= \iint_{\Omega} dxdy\\
+	&= \frac12 \oint_{\delta\Omega} xdy - ydx\\
+	&= \frac12 \oint_{\delta\Omega} (x\dot y - y \dot x) dt
+\end{align*}
+Since $x\ dy = x\odd yt dt = x\dot y dt$
+Now we have one independent variable and two dependent variables.
+
+We have to write the isoperimetric constraint using
+\[\odd st = \sqrt{\left(\odd xt\right)^2 + \left(\odd yt\right)^2}\]
+To get
+\[G\{x,y\} = \oint 1 ds = \oint \sqrt{\dot x^2 + \dot y ^2} dt = L\]
+
+
+Hence look for extremals of
+\[H\{x,y\} = \oint \left(\frac12 (x\dot y - y\dot x) + \lambda \sqrt{\dot x ^2 + \dot y^2}\right) dt\]
+So $h(t,x,y,\dot x,\dot y) = \frac12 (x\dot y - y\dot x) + \lambda \sqrt{\dot x ^2 + \dot y^2}$. Two dependent variables with derivatives
+\begin{align*}
+	\dd hx = \frac12 \dot y\\
+	\dd hy = -\frac12 \dot x\\
+	\dd h{\dot x} = -\frac12 y + \frac{\lambda \dot x}{\sqrt{\dot x^2 + \dot y^2}}\\
+	\dd h{\dot y} = \frac12 x + \frac{\lambda \dot y}{\sqrt{\dot x^2 + \dot y^2}}
+\end{align*}
+
+So we get two EL equations
+\begin{align*}
+	\odd{}t \left(-\frac12 y + \frac{\lambda \dot x}{\sqrt{\dot x^2 + \dot y^2}}\right) = \frac12 \dot y\\
+	\odd{}t \left(\frac12 x + \frac{\lambda \dot y}{\sqrt{\dot x^2 + \dot y^2}}\right) = -\frac12 \dot x\\
+\end{align*}
+
+Integrating both sides by $t$ gives
+\begin{align*}
+	-\frac12 y + \frac{\lambda \dot x}{\sqrt{\dot x^2 + \dot y^2}} = \frac12 y - A\\
+	\frac12 x + \frac{\lambda \dot y}{\sqrt{\dot x^2 + \dot y^2}} = -\frac12 x + B
+\end{align*}
+
+\begin{align*}
+	\frac{\lambda \dot x}{\sqrt{\dot x^2 + \dot y^2}} = y - A\\
+	\frac{\lambda \dot y}{\sqrt{\dot x^2 + \dot y^2}} = -x + B
+\end{align*}
+
+Squaring both sides of both equations and adding gives
+\begin{align*}
+	\lambda^2\left(\frac{ \dot x^2 + \dot y^2}{\dot x^2 + \dot y^2}\right)
+	\lambda^2 = (y-A)^2 + (x-B)^2
+\end{align*}
+
+Which is the equation of a circle with radius $|\lambda|$ centered at $(A,B)$.
+
+If we had $x(t_0) = x(t_1)$ and $y(t_0) = y(t_1)$ then we get a closed circle. 
+
+\subsection{Lagrange multipliers}
+Why does the Lagrange multiplier approach work here?
+Consider finite differences on a uniform grid to approximate $F$
+\[F\{y\} = \int_a^b f(x,y,y') dx \simeq \sum_{i=1}^{n} f\left(x_i,y_i,\frac{\Delta y_i}{\Delta x}\right) \Delta x = \bar{F}(\vec y)\]
+Where $\Delta x = (b-a)/n$ and $\Delta y_i = y_i - y_{i-1}$. The extremal curve is now that with stationary points of $\bar{F}$.
+
+Similarly we can do this for the constraint.
+\[G\{y\} = \sum_{i=1}^n g\left(x_i,y_i, \frac{\Delta y_i}{\Delta x} \Delta x\right) = \bar{G}(\vec y) = L\]
+
+using a Lagrange multiplier we have
+\[\bar{H} = \bar{F} + \lambda (\bar{G} - L)\]
+Solve this with
+\[\dd{\bar{H}}{y_i} = 0, \quad \dd{\bar{H}}{\lambda} = 0\]
+
+We normally take
+\[H\{y\} = F\{y\} + \lambda G\{y\}\]
+
+But in this case we have
+As $n\to \infty$
+\[\bar{H}(\vec y,\lambda) \to H\{y\} - \lambda L\]
+
+Which has same EL equation as $H\{y\}$, so they have the same extremals.
+
+
+
+\subsection{Multiple constraints}
+We can also handle multiple constraints via multiple Lagrange multipliers. If we have a series of $G_k$
+\[G_k\{y\} = \int_{x_0}^{x_1} g_k(x,y,y') dx = L_k\]
+
+Then we look for extremals of
+\[H\{y\} = \int_{x_0}^{x_1} \left(f(x,y,y') + \sum_{k=1}^m \lambda_k g_k(x,y,y')\right) dx\]
+
+
+\section{Non-fixed end points}
+What happens when we don't fix the end-points of an extremal?
+In this case we have \textbf{natural boundary conditions} which allow us to solve the EL equations.
+
+Some examples where natural BCs help
+\begin{itemize}
+	\item Freely supported beam with fixed end points but not fixed derivatives
+	\item A beam supported at only one end (one end fixed \& derivative, but other end free)
+	\item Shortest path between two curves (ends points life on curves, but they are not fixed)
+	\item Rocket changing between two orbits apparently
+\end{itemize}
+
+Consider fixed $x$ with free $y$ and/or $y'$.
+
+Consider the freely supported beam balanced on the peaks of two pyramids (so that it only touches at one point). With some force $\rho$ applied.
+
+Approach this the same way we approached all other variational problems - perturb the curve and examine the first variation, but allow $y(x_0)$ and $y(x_1)$ to vary as well.
+
+So the space $\mathcal{H}$ of perturbations of $\eta$ contains functions whose values at $x_0,x_1$ is no longer zero.
+
+The same derivation of the first variation
+\[\delta F(\eta,y) = \int_{x_0}^{x_1} \left[\eta \dd fy + \eta' \dd f{y'}\right] dx \]
+And a local extreme is one which $\delta F = 0, \quad \forall \eta \in \mathcal{H}$
+
+Integration by parts gives
+\[\delta F = \left[\eta \dd f{y'}\right]_{x_0}^{x_1} + \int_{x_0}^{x_1} \eta \left[\dd fy - \odd{}x \left(\dd f{y'}\right)\right] dx = 0\]
+
+We require 
+\[\left[\eta \dd f{y'}\right]_{x_0}^{x_1}  =0\]
+And since we can choose curves with $\eta(x_0) \neq 0, \quad \eta(x_1) \neq 0$, we must have
+\[\dd f{y'}\pipe_{x_0} = 0, \quad and \quad \dd f{y'}\pipe_{x_1} = 0\]
+
+
+
+And hence we arrive at the standard EL equation
+\[\odd{}x \left(\dd f{y'}\right) - \dd fy = 0\]
+
+With the natural boundary conditions:
+\[\dd f{y'}\pipe_{x_0} = 0, \quad and \quad \dd f{y'}\pipe_{x_1} = 0\]
+
+Fixing either end point removes the respective condition - they are modular.
+
+
+This extends to higher order EL. Second order gives:
+EL
+\[\dd fy - \odd{}x \dd f{y'} + \oddn{}x2 \dd fy{''} = 0\]
+With natural BCs
+\begin{align*}
+	\left[\dd f{y'} - \odd{}x \dd f{y''}\right]_{x_0} = 0\\
+	\left[\dd f{y'} - \odd{}x \dd f{y''}\right]_{x_1} = 0\\
+	\dd f{y''}\pipe_{x_0} =0\\
+	\dd f{y''}\pipe_{x_1} =0 
+\end{align*}
+
+
+Consider a bent beam, $y : [0,d] \to \mathbb{R}$ be the shape and $\rho = [0,d] \to \mathbb{R}$ be the load on the beam.
+
+For a bent elastic beam, the potential energy from elastic forces is
+\[V_1 = \frac \kappa 2 \int_0^d y''^2 dx\]
+Potential energy is
+\[V_2 = -\int_0^d \rho y dx\]
+
+Hence total potential energy is
+\[V = \int_0^d \left[\frac{\kappa y''^2}{2} - \rho y\right] dx\]
+And the beam will satisfy the extremal of this functional.
+
+Euler Lagrange gives
+\begin{align*}
+	\dd fy - \odd{}x \dd f{y'} + \odd{}x2 \dd f{y''} &=0\\
+	y^{(4)} &= \frac{\rho}{k}
+\end{align*}
+With solution
+\[y(x) + P(x) + c_3 x^3 + c_2x^2 + c_1 x + c_0\]
+Where $c_i$ is a constant of integration and $P(x)$ is the solution to $P^{(4)}(x) = \rho(x)/\kappa$
+
+If we have a freely supported, uniform load, the natural constraints are
+\begin{align*}
+	\dd f{y''}\pipe_{x_0} &= \kappa y''(x_0) = 0\\
+	\dd f{y''}\pipe_{x_1} &= \kappa y''(x_1) = 0\\
+\end{align*}
+For non-trivial solutions, $y''(x_0) = y''(x_1) = 0$.
+So the solution becomes
+\[y(x) = \frac{\rho x \left(d^3 - 2dx^2 + x^3\right)}{24 \kappa}\]
+
+
+If we instead had BCs of one end point clamped and fixed (called a cantilever), the natural constraints are
+\begin{align*}
+	\dd f{y''}\pipe_{x_1} &= \kappa y''(x_1) = 0\\
+	\dd f{y'} - \dd f{y''}\pipe_{x_1} &= - \odd{}x \kappa y'' \pipe_{x_1} = \kappa y'''(x_1) = 0\\
+\end{align*}
+Which gives
+\[y(x) = \frac{\rho x (6 d^2 - 4dx + x^2)}{24 \kappa}\]
+And you find that $y(d) = \frac{\rho d^4}{8 \kappa}$
+
+
+What about a fixed but not clamped end point, and the other end is free. This approach does not actually work, due to a failure of the model, not the method. Since $x_1$ will not be fixed since under any load it becomes a pendulum...
+
+
+
+
 
 
 \section{Formulations, conservation laws and classification}

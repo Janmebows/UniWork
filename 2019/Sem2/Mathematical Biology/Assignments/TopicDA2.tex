@@ -131,7 +131,7 @@ Normally I would paraphrase the  the questions, but instead I have appended the 
 
 	For $I^* = 0$, the fixed point is $w = v = 0$.
 
-	The oscillatory behaviour occurs when the fixed point $v^*$ exists between the two extrema of the $v$ nullcline
+	A necessary condition for the oscillatory behaviour is that the fixed point $v^*$ exists between the two extrema of the $v$ nullcline
 	\begin{align*}
 		\dd wv = A\dd{}v\left(av^2 - v^3 -av + v^2\right) &=0\\
 		A\left(2av - 3v^2 - a + 2v\right) &=0\\
@@ -139,18 +139,31 @@ Normally I would paraphrase the  the questions, but instead I have appended the 
 		3v^2 -2v(1+a) + a &= 0\\
 		v &= \frac{1+a \pm \sqrt{a^2 - a+1}}{3}
 	\end{align*}
-	So for oscillatory behaviour, $v^* \in \left(\frac{1+a - \sqrt{a^2 - a+1}}{3}, \frac{1+a  + \sqrt{a^2 - a+1}}{3}\right)$.
-	If this is satisfied, due to the small parameter $\epsilon$, the system will quickly jump to the $v$ nullcline. If the fixed point exists between a local maximum and a local minimum of the v nullcline,  the system will oscillate between these two extrema.
+	I.e. with, $v^* \in \left(\frac{1+a - \sqrt{a^2 - a+1}}{3}, \frac{1+a  + \sqrt{a^2 - a+1}}{3}\right)$.
+
+	Another requirement is that there is only one fixed point, 
+	I.e. the following must have only one real solution.
+	\begin{align*}
+		b v &= I^* + A v (a- v)(v -1)\\
+	\end{align*}
+
+	If this is satisfied, due to the small parameter $\epsilon$, the system will quickly jump to the $v$ nullcline. If the fixed point exists between a local maximum and a local minimum of the v nullcline,  the system will oscillate between these two extrema of the $v$ nullcline. As shown in Figure~\ref{fig:q2}, the trajectory follows the yellow line, and loops back onto itself, giving the oscillations.
 	
 
 
-	So for any $v^*$ within this range, the requirement for $I^*$ is:
+	So for any $v^*$ within this range, the requirement for oscillatory behaviour is:
 	\begin{align*}
-		bv^* = I^* + A v^* (a- v^*)(v^* -1)\\
-		I^* = bv^* - A v^* (a- v^*)(v^* -1) 
+		I^* &= bv^* - A v^* (a- v^*)(v^* -1), \text{ and}\\
+		b v &= I^* + A v (a- v)(v -1) \text{ has one real solution}\\
 	\end{align*}
 
 	%do we need to mathematically show it???
+	\begin{figure}[tb]
+		\centering
+		\includegraphics[width=0.6\linewidth]{A2Q2.eps}
+		\caption{Example trajectory with $a = 6, b=10, A=1, \epsilon = 0.01$}
+		\label{fig:q2}
+	\end{figure}
 
 	%Q3
 	\item 
@@ -360,7 +373,7 @@ Normally I would paraphrase the  the questions, but instead I have appended the 
 			  - P\left(c + P\right) + N(N - 1) = 0\\
 			 0\left(c + 0\right) +N(N - 1) = 0\\
 			 N - 1 = 0, \quad N = 0\\
-			 N = 1
+			 \implies N = 1, 0 
 		\end{align*}
 
 		Nullclines of the second equation with $N = 0$:
@@ -368,45 +381,86 @@ Normally I would paraphrase the  the questions, but instead I have appended the 
 			- P\left(c + P\right)= 0\\
 			P = 0, \quad P = -c
 		\end{align*}
-		Hence the fixed points are
+		But $(0,0)$ is already a fixed point. Hence the fixed points are
 		\[(N,P) = \begin{cases}
 			(1,0)\\
 			(0,0)\\
 			(0,-c)			
 		\end{cases}\]
-		%Q5c 
-		\item Typo in this question - should be $N(z)$ against $z$.
+
+		Figure~\ref{fig:Q5} shows these points for the non-transformed system. Ignoring the vertical blue line which relates to numerical instability.
+		\begin{figure}[tb]
+			\centering
+			\includegraphics[width =0.6\linewidth]{A2Q5.eps}
+			\caption{Plot of nullclines for $c = 5$}
+			\label{fig:Q5}
+		\end{figure}
+
+		\clearpage
+		%Q5c
+		\item Typo in this question - should be $N(z)$ against $z$. Noting that $N$ is non-negative. Shown in figure~\ref{fig:sketch}. Both trajectories move from the point $(1,0)$ towards the respective other fixed points
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width = 0.7\linewidth]{sketch.jpg}
+			\caption{A pair of possible trajectories allowing for solutions to the system}
+			\label{fig:sketch}
+		\end{figure}
+
 		%Q5d 
 		\item 
 		
+		The algebra should be nicer if I go in terms of $N'$
+		\begin{align*}
+			N''(z) &= \dd{}z c(N(z) - 1) = c N '\\
+			N'(z) &= c(N(z) - 1) \implies N = \frac{N'}{c} + 1
+		\end{align*}
+		\begin{align*}
+			-cN' &= (N')^2 + N N'' + N(1-N)\\
+			-cN' &= (N')^2 + cN'(\frac{N'}{c} + 1) - \frac{N'}{c}(\frac{N'}{c} + 1)\\
+			-cN' &= (N')^2 + (N')^2 + cN' - \frac{(N')^2}{c^2} - \frac{N'}{c}\\
+			-c &= N' + N' + c - \frac{N'}{c^2} - \frac{1}{c}\\
+			0 &= 2N' + 2c - \frac{N'}{c^2} - \frac{1}{c}\\
+			0 &= N'\left(2 - \frac{1}{c^2}\right) + c\left(2 - \frac{1}{c^2}\right)
+		\end{align*}
+		For non-trivial solutions, we require the parts in brackets to be zero.
+		Hence
+		\begin{align*}
+			2 - \frac1{c^2} &= 0 \\
+			c^2 = \frac12\\
+			c = \pm \frac{1}{\sqrt{2}}
+		\end{align*}
+		And since $c > 0$, 
+		\[\boxed{c = \frac{1}{\sqrt{2}}}\]
+		
+		The particular solution to the system:
 		\begin{align*}
 			P(z) =N'(z) &= c(N(z) - 1)\\
-			N(z) &= k e^{cz} + 1\\
-			N'(z) &= kc e^{cz}\\
-			N''(z) &= kc^2 e^{cz} = cN'(z) = c^2(N(z)-1)
+			\implies N(z) &= k e^{cz} + 1\\
 		\end{align*}
-		With BC $N=0$ at $z = z_c$, giving 
+		For a constant $k$.
+
+		To satisfy the condition
 		\begin{align*}
-			N(z_c) = 0 &= k e^{cz_c} + 1\\
-			k &= -e^{-cz_c}
-		\end{align*}
-		\begin{align*}
-		-c N' &= \left(N' \right)^2 + N N'' + N(1-N)\\
-		-c^2 k e^{cx} &= k^2c^2 e^{2cx} + kc^2e^{cx}(ke^{cx} + 1) + (k e^{cx} + 1)(-ke^{cx})\\
-		-c^2  &= kc^2 e^{cx} + c^2(ke^{cx} + 1) -k e^{cx} - 1\\
-		\end{align*}
-		\begin{align*}
-		-c N' &= \left(N' \right)^2 + N N'' + N(1-N)\\
-		-c^2(N(z) - 1) &= \left(c(N(z)-1)\right)^2 + N(z)(c^2(N(z) -1)) + N(z)(1-N(z))\\
-		-c^2 N(z) + c^2 &= c^2N^2(z) - 2c^2N^2(z) + c^2 + c^2N^2(z) - N(z) + N(z) - N^2(z)\\
-		-c^2 N(z) &= c^2N^2(z) - 2c^2N^2(z)+ c^2N^2(z) - N^2(z)\\
+			N(z_c) &= 0 \\
+			k e^{cz_c} + 1 &=0\\
+			k = -e^{-cz_c}
 		\end{align*}
 
-		$z > z_c$ refers to $x - ct > z_c$, i.e. for early time, and position sufficiently towards infinity 
+		Hence
+		\[N = -e^{c(z-z_c)} + 1\]
+
+		$z > z_c$ refers to $x - ct > z_c$, i.e. for early time, and positive position, the density of cells will be zero.
+
+		Of course this solution doesn't account for the limitation that $N$ must be positive. Realistically it is given by:
+		\[N(z) = \max\left\{0,-e^{c(z-z_c)} + 1\right\}\]
+
+		This relates to the combination of the fixed point $(1,0)$ and path prior to this. The fixed point $(0,-c)$ is the only fixed point which allows the exponential decay while obeying the two solutions, given $N$ has to be positive. This means that at the point $N(z) = 0$, the slope is $0$. So $N(z)=0$ for all $z > z_c$. 
 	\end{enumerate}
 \end{enumerate}
 
+\section*{Code}
 
+\lstinputlisting{A2Code.m}
 
 \includepdf[pages=1-]{A2_2019.pdf}
 
