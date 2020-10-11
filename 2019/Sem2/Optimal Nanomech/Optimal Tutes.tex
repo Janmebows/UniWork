@@ -1,4 +1,4 @@
-\documentclass{X:/Documents/Coding/Latex/myassignment}
+\documentclass{E:/Documents/Latex/myassignment}
 %%Document info
 \title{Optimal Functions and Nanomechanics (OFN) TUTES}
 \begin{document}
@@ -291,4 +291,83 @@
 		&= c_1^2 \pi + 2\pi\lambda^2 \\
 	\end{align*}
 \end{enumerate}
+
+
+
+\section{Tute 4}
+\begin{enumerate}
+	\item Consider the cat problem again but with
+	\[W_p\{y\} = g\int_0^1 c_1 + c_2 y dx\]
+	Include the isoperimetric constraint to get
+	\[W_p\{y\} = \int_0^1 my + \lambda \sqrt{1+y'^2}dx\]
+	Solve for the shape of the cable
+	\[\dd fy = my', \quad \dd f{y'} = \frac{\lambda y'}{\sqrt{1+y'^2}}\]
+	\begin{align*}
+	\frac{\lambda y'^2}{\sqrt{1+y'^2}} - (my + \lambda \sqrt{1+y'^2}) = c\\
+	\lambda y'^2 - (my\sqrt{1+y'^2} + \lambda (1+y'^2)^2) = c\sqrt{1+y'^2}\\
+	\lambda y'^2 - (my\sqrt{1+y'^2} + \lambda (1+2y'^2 + y'^4)) = c\sqrt{1+y'^2}\\
+	\lambda = \sqrt{1+y'^2} (c + my)
+	\end{align*}
+
+
+
+
+	\item Two boats one towing the other. Only the first boat has a motor, and the second boat only uses its rudder to maintain a constant horizontal distance $=1$.
+
+	The force on a section of the tow rope is proportional to the length of that section. 
+	\[\]
+
+	\item
+	\item 
+	\[F\{y\} = \int_0^R \frac{x}{1+y'^2} dx\]
+	With $y(0) = L$ and $y(R) = 0$ ($y' \leq 0$ and $y'' \geq 0$)
+	Approximate $1+y'^2 \approx y'^2$
+	\begin{enumerate}
+		\item Solve it given the total surface area
+		\item Find the optimal profile of the nose-cone.
+		
+	\end{enumerate}
+\end{enumerate}
+
+
+\section{Tute 6}
+\begin{enumerate}
+	\item Note the derivative of $\arctan(y)$ is $\frac{1}{1 + y'^2 }$
+	\[f = K(x,y) e^{\arctan y'} \sqrt{1+y'^2}\]
+	\begin{align*}
+		p &= \dd f{y'}\\
+		&= K\left(e^{\arctan y'} \frac{y'}{\sqrt{1 + y'^2}} + \frac{1}{1 + y'^2} e^{\arctan y'} \sqrt{1+ y'^2}\right)\\
+		&= K e^{\arctan y'} \left(\frac{y' + 1}{\sqrt{1 + y'^2}}\right)
+	\end{align*}
+	\begin{align*}
+		H &= y' \dd f{y'} - f\\
+		&=K e^{\arctan y'} \left(\frac{y'^2 + y'}{\sqrt{1 + y'^2}}\right) - K(x,y) e^{\arctan y'} \sqrt{1+y'^2}\\
+		&= \frac{Ke^{\arctan y'} (y' - 1)}{\sqrt{1+y'^2}}
+	\end{align*}
+	Hence the transversality condition is
+	\begin{align*}
+		\left[p \dd{y_{\Gamma}}{\xi} - H \dd{x_\Gamma}{\xi}\right]_{x_1} &= 0
+		\frac{Ke^{\arctan y'}}{\sqrt{1+y'^2}}\left(y ' +1,y' -1\right) \cdot \left(1, \phi'\right) &=0\\
+		\left(y ' +1,y' -1\right) \cdot \left(1, \phi'\right) &=0\\
+		\left(\cos\pi/4 - \sin\pi/4 y', \cos \pi/4 + \sin \pi/4 y'\right) \cdot (1,\phi') &= 0 
+	\end{align*}
+	The last step is cheating.
+
+	I.e. the extremal will approach at angle $\pi/4$.
+
+	\item Distance from the point $(1,1,1)$ to
+	\[x^2 + y^2 + z^2 = 1\]
+	Using CoV
+
+	\[F(y) =  \]
+
+
+	\item Broken extremal
+	\begin{align*}
+		 	
+	\end{align*} 
+	\item 
+\end{enumerate}
+
+
 \end{document}

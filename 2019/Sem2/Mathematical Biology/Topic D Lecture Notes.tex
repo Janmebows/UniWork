@@ -1939,30 +1939,153 @@ If $\vec u$ is multidimensional (non-symmetric in those dimensions), we need a `
 
 
 
-
+Ants, bacteria and food example
 
 \begin{align*}
-	\dd at &= \nabla\cdot (const \nabla a) - 
-	\dd bt &= const \nabla a
-	\dd ft &= \lambda_0 - \alpha a g(f) - \beta b h(f) + \dd{}x\left(D \dd fx\right)
+	\dd at &= \dd{}x (D_a \dd ax) -  \chi \dd{}x \left[ af\dd fx \right] + r_a af\left(1 - \frac{a}{k_a}\right)\\
+	\dd bt &= -\dd{}x \left(b \left(\chi f \dd fx - \frac{D_a}{a} \dd ax\right)\right) + r_b b f \left(1 - \frac{b}{k_b}\right)\\
+	\dd ft &= \lambda_0 - \frac{\alpha_0 a f}{\alpha_1 + f} - \frac{\beta_0 b f}{\beta_1 + f} + \dd{}x\left(D \dd fx\right)
 \end{align*}
 
-$g(f)$ and $h(f)$ have to be linear(ish) initially and plateau later, an example is
-\[\frac{f}{\alpha_1 + f}\]
+The flux of bacteria, $J_b$, relates to $J_a$.
+\begin{align*}
+	J_a &= a v_a = \chi a f \dd fx - D_a \dd ax \implies v_a = \chi f \dd fx - \frac{D_a}{a} \dd ax\\
+	J_b &= bv_b = b v_a =  b \left(\chi f \dd fx - \frac{D_a}{a} \dd ax\right)
+\end{align*}
 
 
 
 
+Equations for rabies through a population of foxes
+\begin{align*}
+	\dd Ht &= -HR + \alpha H(1-H)\\
+	\dd Rt &= HR - \lambda R + \ddn Rx2
+\end{align*}
+
+The terms in this model: $H$ is the concentration of healthy foxes, $R$ is the concentration of rabid foxes.
+The first terms in each ($HR$) represents the transition of  healthy foxes to rabid foxes. $\alpha$ is a birth rate for healthy foxes, $\lambda$ is the death rate of rabid foxes, and the rabid foxes diffuse randomly through space.
 
 
+Spatially uniform Steady states:
+\begin{align*}
+	-HR + \alpha H(1-H) = 0  \implies -R + \alpha(1-H) = 0 \\
+	HR - \lambda R = 0 \implies H - \lambda = 0
+\end{align*}
+$(H,R) = (0,0),\quad  (1,0)$ and the more interesting one $H= \lambda$ and $R = \alpha(1- \lambda)$.
+
+For travelling wave solutions
+\begin{align*}
+	- c\odd hz &= - hr + \alpha h(1-h)\\
+	- c \odd rz &= hr - \lambda r + \oddn rz2
+\end{align*}
+Convert to system of 3 first order ODEs. Let $v = r'$
+\begin{align*}
+	-c h' &= -hr + \alpha h(1-h)\\
+	r' &= v\\
+	v' &= -c v + \lambda r - hr
+\end{align*}
+
+The healthy steady state is $(1,0,0)$. The coexistent is $(\lambda,\alpha(1- \lambda),0)$
+
+Linearise, obtain the jacobian of the rhs.
+
+\[J = \begin{pmatrix}
+	\frac{r - \alpha(1-2h)}{c} & \frac{h}{c} & 0 \\
+	0&0 &1 \\
+	-r&\lambda - h & - c 
+\end{pmatrix}\]
+
+\[J_{(1,0,0)} = \begin{pmatrix}
+	\frac{\alpha}{c} & \frac1c & 0 \\
+	0 & 0 & 1\\
+	0 & \lambda - 1 & -c
+\end{pmatrix}\]
+Eigenvalues obey:
+\[\det(J - \omega I) = 0\]
+\[\begin{vmatrix}
+	\frac{\alpha}{c} - \omega& \frac 1c & 0\\
+	0&-\omega&-1\\
+	0& \lambda -1 &-c- \omega
+\end{vmatrix}\]
+
+\begin{align*}
+\left(\frac{\alpha}{c} - \omega\right)\left((- \omega) (-c- \omega) - (\lambda -1)(-1)\right)
+\omega^2 + c \omega + 1 - \lambda = 0\\
+\omega = \frac12 \left(-c \pm \sqrt{c^2 - 4(1- \lambda)}\right) \quad or \quad \omega = \alpha/c
+\end{align*}
+We can't have oscillatory behaviour because that would give negative values for the number of rabid foxes
+
+So we need the square root term to be real, hence:
+\begin{align*}
+c^2 - 4(1- \lambda) \geq 0\\
+c^2 \geq 4(1- \lambda)\\
+c \geq 2(1- \lambda)
+\end{align*}
+This is a lower bound for the wave speed.
+
+The other fixed point:
+\[J_{(\lambda, \alpha(1- \lambda),0)} = \begin{pmatrix}
+	\frac{\alpha(1- \lambda) - \alpha ( 1 - 2 \lambda)}{c}& \frac{\lambda}{c}&0\\
+	0&0&1\\
+	- \alpha(1- \lambda)& 0& -c 
+\end{pmatrix}\]
+
+For the eigenvalues we get
+\[F(\omega) = \omega^3 + \left(c - \frac{\alpha \lambda}{c}\right)\omega^2 - \alpha \lambda \omega + \frac{\alpha}{c} \lambda (1 - \lambda) = 0\]
+We could have either 1 real root with two complex roots, or three real roots.
+
+We know $F(\omega) \to \pm \infty$ as $\omega \to \pm \infty$.
+\[F(0) = \frac{\alpha \lambda (1 - \lambda)}{c}  > 0\]
+\[F'(0) = -\alpha \lambda < 0 \]
+
+For $\lambda = 0$ we get $\omega^3 + c \omega^2 = 0 \implies w=0,w = -c$. 
 
 
-
-
-
-
-
-
-
-
+\clearpage
+Exam Questions
+\begin{enumerate}
+	\item General Modelling intro
+	\begin{itemize}
+		\item Non-dimensionalisation \& dimensional analysis - either given the scalings, or given the nondimensionalised result.
+	\end{itemize}
+	\item Law of mass action (Michaelis Menten)
+	\begin{itemize}
+		\item Given simple reaction scheme, use conservation and write down ODEs for concentrations.
+		\item Use conserved quantities to reduce system. 
+		\item Multiple-scales (quasi-steady approximations)
+	\end{itemize}
+	\item Excitable systems (Hodgekin-Huxley and Fitzhugh-Nagumo)
+	\begin{itemize}
+		\item Equations for gates/channels (A2 was the absolute hardest example he would possibly give in the exam)
+		\item Write down the equations for proportion of channels with a given state, $S_{ij}$ for two channels with $i$ open $m$ gates, $j$ open $k$ gates.
+		\item Write equations for the proportion of open gates/closed gates of each type. i.e. like $\dd mt = \alpha(1-m) \beta m$.
+		\item Hodgkin Huxkley for action potential. Draw the phase plane and the relationship for voltage vs time.
+	\end{itemize}
+	\item PDEs
+	\begin{itemize}
+		\item Be able to derive mass conservation
+		\[\dd ct + \nabla \cdot J = S\] 
+		\item Fick's Law
+		\[J = -D \nabla c\]
+	\end{itemize}
+	\item Keller-Segel
+	\begin{itemize}
+		\item Cell flux proportional to the gradient of a chemical. $\nabla c$
+		\item Linear stability analysis (spatially uniform steady states)
+	\end{itemize}
+	\item Turing Patterns/Systems
+	\begin{itemize}
+		\item Pair of reaction diffusion equations
+		\item Linear stability analysis (spatially uniform steady states)
+		\begin{itemize}
+			\item Dispersion relation
+			\item Necessary conditions (in)stability
+		\end{itemize}
+	\end{itemize}
+	\item Growing Tissues 
+	\begin{itemize}
+		\item Interpret a described system into a model for cell density and nutrient concentration
+		\item Obtain an equation for the tissue radius $R$ (likely to be what we've already seen)
+	\end{itemize}
+\end{enumerate}
 \end{document}

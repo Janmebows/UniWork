@@ -1,4 +1,4 @@
-\documentclass{X:/Documents/Coding/Latex/myassignment}
+\documentclass{E:/Documents/Latex/myassignment}
 %%Document info
 \title{Optimal Functions and Nanomechanics (OFN)}
 \begin{document}
@@ -85,7 +85,7 @@ Or could treat as a vector notation
 Consider $f(x,y)$ where $x(t),y(t)$ 
 By first principles
 \[\odd ft = \lim_{\epsilon\to 0} \frac{f(x(t+\epsilon),y(t+\epsilon)) - f(x(t),y(t))}{\epsilon}\]
-Using taylor's theorem
+Using Taylor's theorem
 \[x(t+\epsilon) = x + \epsilon x' + \bigo(\epsilon^2)\]
 and similarly for $y$.
 Giving
@@ -187,7 +187,7 @@ Consider the problem $f(\vec x) = x_1x_2$ w $x_1+x_2 = 1$, $x_1,x_2 > 0$, want t
 \end{pmatrix} = \vec 0\]
 And we get $x_1 = -\lambda, x_2 = -\lambda$, $x_1 = x_2 = \frac12$, and $\lambda = -1/2$.
 
-For classification we can consider the hessian (ignoring the $\lambda$ component?)
+For classification we can consider the Hessian (ignoring the $\lambda$ component?)
 \[H(h) = \begin{bmatrix}
 	0&1\\1&0
 \end{bmatrix}\]
@@ -196,7 +196,7 @@ Which is not positive definite. But that is due to the $x_1+x_2 = 1$ and hence t
 Hence for all $\delta x$ $f(\vec x + \delta \vec x ) < f(\vec x)$ and we have a local maximum.
 
 \subsection{Slack Variables}
-Now if we have inequalities rather than equalities, i.e
+Now if we have inequalities rather than equalities, I.e
 \[g_i(\vec x) \geq 0\]
 Then you add slack variables, to make the constraints equalities. 
 In this case we would have a $\vec y < 0$ so that
@@ -211,7 +211,7 @@ So now
 \subsection{Vector Spaces}
 A vector space $S$ is a collection of objects (vectors) defined with two operators (addition + scalar multiplication) which is closed under both operators (addition and scalar multiplication).
 
-The operators have various properties (addition is commutive, associative, identity, inverse, distributive under scalar mult, multiplicative identity, associative scalar mult) 
+The operators have various properties (addition is commutative, associative, identity, inverse, distributive under scalar multiplication, multiplicative identity, associative scalar multiplication) 
 
 Some examples of vector spaces: 
 the set of vectors $\vec x \in \mathbb{R}^{n}$ with vector addition and scalar multiplication
@@ -267,7 +267,7 @@ Norms define distances between elements of space
 Distances defines the $\epsilon$- neighbourhood on $(S,||\cdot||)$
 
 \subsection{Inner Product}
-An inner product $\langle \cdot,\cdot\rangle : S\times S \to \mathbb{R}$ i.e. mapping two elements of a vector space $S$ to a real number, such that for any $f,g,h\in S$ and $\alpha \in \mathbb{R}$
+An inner product $\langle \cdot,\cdot\rangle : S\times S \to \mathbb{R}$ I.e. mapping two elements of a vector space $S$ to a real number, such that for any $f,g,h\in S$ and $\alpha \in \mathbb{R}$
 \begin{align*}
 	\inner{f,f} \geq 0\\
 	\inner{f,f} = 0 \ iff \ f=0\\
@@ -317,7 +317,7 @@ The simplest functional maximisation problem - we will solve by finding the \tex
 Where $f$ is the integrand of the functional.
 If we go back to the Catenary problem - a hanging wire held up by points $y_0,y_1$. The potential energy is
 \[W_p\{y\} = \int_0^L mgy(s) ds\]
-Where $L$ is the length of the cable which is unconstrained (i.e. the cable can slack between the two points).
+Where $L$ is the length of the cable which is unconstrained (I.e. the cable can slack between the two points).
 
 Define the functional $F : C^3[x_0,x_1] \to \mathbb{R}$.
 \[F\{y\} = \int_{x_0}^{x_1} f(x,y,y') dx\]
@@ -534,7 +534,7 @@ Which is separable
 \end{align*}
 $c_1$ and $c_2$ are determined by the end point conditions. Note we have not specified the length of the wire $L$ at all here.
 
-If we set $x_0 = -1$ and $x_1 = 1$ and $y_1=y_2$ (i.e. symmetric around $0$ and same heights) then $c_2 = 0$.
+If we set $x_0 = -1$ and $x_1 = 1$ and $y_1=y_2$ (I.e. symmetric around $0$ and same heights) then $c_2 = 0$.
 \[y(x) = c_1 \cosh (x/c_1)\]
 Which we can then solve numerically using $y(1) = c_1 \cosh(1/c_1) = y_1$.
 
@@ -580,7 +580,7 @@ The tension in the cable must balance the horizontal force $F_H$ and the downwar
 	\tan \theta = \frac{F_V}{F_H}\\
 	\odd yx = \frac{gms}{F_H}
 \end{align*}
-You can do some algebra (take derivatives wrt $x$) giving
+You can do some algebra (take derivatives with respect to $x$) giving
 \[y(x) = \frac{F_H}{mg} \cosh\left(\frac{mg}{F_H}x\right)\]
 
 If you flip a catenary upside down, you get the strongest form of an arch, since the forces at each point are balanced. This assumes that there are no forces otherwise though. So this doesn't really hold true (you actually get a parabola).
@@ -1112,7 +1112,7 @@ Denote the end points
 \[y(x_0) = y_0, \quad y(x_1) = y_1, \quad y'(x_0) = y_0', \quad y'(x_1) = y_1'\]
 This implies 
 \[\eta(x_0) = \eta(x_1) = \eta'(x_0) = \eta'(x_1) = 0\]
-So the square bracket term is $0$, i.e.
+So the square bracket term is $0$, I.e.
 \[\left[\eta \dd f{y'} + \eta' \dd f {y''} - \eta\odd{}x\left(\dd f{y''}\right)\right]_{x_0}^{x_1}  = 0\]
 
 And so for an extremal
@@ -1125,7 +1125,7 @@ Known as the $4^{th}$ order Euler-Lagrange / Euler-Poisson equation.
 
 Let $F : C^2[x_0,x_1] \to \mathbb{R}$ be a functional of form
 \[F\{y\} = \int_{x_0}^{x_1} f(x,y,y',\ldots,y^{(m)}) dx\]
-Where $f$ has continuous partial derivatives of second order wrt $x,y,y',\ldots,y^{(m)}$ and $x_0<x_1$ are both fixed.
+Where $f$ has continuous partial derivatives of second order with respect to $x,y,y',\ldots,y^{(m)}$ and $x_0<x_1$ are both fixed.
 
 \[\sum_{n=0}^{m} (-1)^n\frac{d^n}{dx^n} \left(\dd f{y^{(n)}}\right) = 0\]
 This is sometimes called the Euler-Poisson equation
@@ -1806,7 +1806,7 @@ Where $\sigma$ is the van der Waals distance and $\epsilon$ is the energy well d
 
 The van der Waals force is a short-range force, and so when using the Lennard-Jones potential for interaction between molecular structures, it is only necessary to include the nearest neighbour interactions.
 
-For example, considering a molecule near the open end of a carbon nanotube, we can consider the tube to be semi-infinite in length (i.e. the rest of the tubes effects are negligible)
+For example, considering a molecule near the open end of a carbon nanotube, we can consider the tube to be semi-infinite in length (I.e. the rest of the tubes effects are negligible)
 
 
 The Lennard-Jones potential is applied between non-bonded and non-polar atomic interactions.
@@ -3044,10 +3044,1239 @@ What about a fixed but not clamped end point, and the other end is free. This ap
 
 
 
+\subsection{Line Curvature}
+Consider a line given parametrically by
+\[\vec r(s) = [x(s),y(s),z(s)]\]
+$s$ is the arclength. Then the first derivative wrt $s$ give the tangent vector
+\[\dot{\vec{r}}(s) = [\dot x(s),\dot y(s),\dot z(s)]\]
+
+The `change of direction' is how quickly the tangent changes direction as a function of arclength. I.e. we want the second derivative of $r$ WRT $s$. The magnitude of this is called the \textbf{line curvature} $\kappa(s)$, that is
+\begin{align*}
+	\kappa(s) &= |\ddot{r}(s)|\\
+	&=\sqrt{\ddot x^2 + \ddot y^2 + \ddot z^2}
+\end{align*}
+
+
+As an example, have $y(x)$ in $\mathbb{R}^2$
+
+\[ds^2 = dx^2 + dy^2\]
+\begin{align*}
+	\odd sx &= \sqrt{1+y'^2} \implies \odd xs = \frac{1}{\sqrt{1+y'^2}}\\
+	\odd sy &= \frac{\sqrt{1+y'^2}}{y'} \implies \odd ys = \frac{y'}{\sqrt{1+y'^2}}
+\end{align*}
+
+So
+\begin{align*}
+	\ddot x &= \odd{}s(\dot x) = \odd{}x(\dot x) \odd{x}{s}\\
+	&= \frac{1}{\sqrt{1+y'^2}} \odd{}x \left(\frac{1}{\sqrt{1+y'^2}}\right)\\
+	&= \frac{1}{\sqrt{1+y'^2}} \left(-\frac{y'y''}{(1+y'^2)^{3/2}}\right)\\
+	&= -\frac{y'y''}{(1+y'^2)^{2}}
+\end{align*}
+
+\begin{align*}
+	\ddot y &= \odd{}s(\dot y) = \odd{}x (\dot y) \dot x\\
+	&= \frac{1}{\sqrt{1+y'^2}} \odd{}x \left(\frac{y'}{\sqrt{1+y'^2}}\right)\\
+	&= \frac{1}{\sqrt{1+y'^2}}  \left(\frac{y''\sqrt{1+y'^2} - y'^2 y''/\sqrt{1+y'^2} }{1+y'^2}\right)\\
+	&= \frac{y''}{(1+y'^2)^2}
+\end{align*}
+
+So the (signed) line curvature is
+\[\kappa = \sqrt{\ddot x^2 + \ddot y^2} = \sqrt{\frac{y'^2y''^2 + y''^2}{(1+y'^2)^4}} = \frac{y''}{(1+y'^2)^{3/2}}\]
 
 
 
-\section{Formulations, conservation laws and classification}
+When we looked at bending beams, the curvature of the beam we described as a constant multiple of $y''^2$. This is a first order approximation of the formula we just derived, so it does not work for largely deflected beams.
+
+
+\subsection{The elastica}
+The \textbf{elastica} are a family of curves that a thin strip of elastic material adopts when it is forced to bend. 
+
+Hooke derived Hooke's law
+\[F \propto \Delta \ell\]
+I.e. the force is proportional to the displacement
+
+Newton derived the expression for the curvature. The radius of curvature $\rho = 1/\kappa$ which is the reciprocal of what we derived before.
+Note that $\rho$ has units of length.
+
+Eventually Euler derived the expression for this using variations. The elastica would be an extremal of the functional
+\[F\{y\} = \int_0^L \kappa^2 ds\]
+Usually subject to an arclength constraint.
+
+Consider a simpler elastica example. One with end-point constraints $y(0) = 0, y'(0) = 0, y(1)=1, y'(1) \to \infty$.
+Prescribe no length constraint.
+
+Minimise the elastic energy
+
+So solve 
+\begin{align*}
+	F\{y\} &= \int_0^L \kappa^2 ds\\	
+	&= \int_{x_0}^{x_1} \frac{y''^2}{(1+y'^2)^3} \sqrt{1+y'^2} dx\\
+	&= \int_{x_0}^{x_1} \frac{y''^2}{(1+y'^2)^{5/2}} dx\\
+	&= \int_{0}^{1} \frac{y''^2}{(1+y'^2)^{5/2}} dx\\
+\end{align*}
+
+So $f = \frac{y''^2}{(1+y'^2)^{5/2}}$
+
+Noting that $f$ doesn't depend on $x,y$.
+EL
+\begin{align*}
+	\dd fy - \odd{}x \left(\dd fy'\right) + \oddn{}x2 \left(\dd f{y''}\right) = 0\\
+	- \odd{}x \left(\dd fy'\right) + \oddn{}x2 \left(\dd f{y''}\right) = 0\\
+	\dd fy'  = \alpha + \odd{}x \left(\dd f{y''}\right)\\
+\end{align*}
+Note that for our $f$
+\begin{align*}
+	\odd fx &= \dd fx + \dd fy \odd yx + \dd f{y'} \odd {y'}x + \dd{f}{y''} \odd{y''}{x}\\
+	&= \dd fx + \dd fy y' + \dd f{y'} y'' + \dd{f}{y''} y'''\\
+	&= \dd f{y'} y'' + \dd{f}{y''} y'''\\
+	&= \left[\alpha + \odd{}x \left(\dd f{y''}\right)\right] y'' + \dd f{y''} y'''\\
+	&= \odd{}x \left[\alpha y' + y'' \dd f{y''}\right]\\
+	f &= \alpha y' + y'' \dd f{y''} - \beta\\
+	f - y'' \dd f{y''} &= \alpha y' - \beta
+\end{align*}
+Substitute $f = \frac{y''^2}{(1+y'^2)^{5/2}}$
+
+\begin{align*}
+	\frac{y''^2}{(1+y'^2)^{5/2}} - \frac{2 y''^2}{(1+y'^2)^{5/2}} &= \alpha y' - \beta\\
+	 \frac{y''^2}{(1+y'^2)^{5/2}} &= \beta - \alpha y'\\
+\end{align*}
+$\beta$ and $\alpha$ just changed by a half here...
+\begin{align*}
+	\frac{y''^2}{(1+y'^2)^{3}} &= \frac{\beta - \alpha y'}{(1+y'^2)^{1/2}}\\
+	\kappa &= \left(\frac{\beta - \alpha y'}{\sqrt{1+y'^2}}\right)^{1/2}
+\end{align*}
+
+Now let $y' = \tan\theta$, $y'' = \sec^2\theta \dd \theta x$
+\begin{align*}
+	\kappa &= \frac{y''}{(1+y^2)^{3/2}} = \frac{\sec^2\theta \odd \theta x}{\sec^3\theta}\\
+	&= \cos\theta \dd\theta x\\
+	dd\theta x &= \odd \theta y \odd yx = \tan\theta \odd\theta y
+\end{align*}
+So
+\[\kappa = \cos\theta \dd\theta x = \sin\theta \dd\theta y\]
+And using the solution we obtained before
+\[\kappa = \left(\frac{\beta - \alpha y'}{\sqrt{1+y'^2}}\right)^{1/2} = (\beta \cos\theta - \alpha \sin \theta)^{1/2}\]
+
+Giving
+\begin{align*}
+	\odd x\theta &= \frac{\cos\theta }{\kappa} = \frac{\cos\theta}{(\beta \cos\theta - \alpha \sin \theta)^{1/2}}\\
+	\odd y\theta &= \frac{\sin\theta}{\kappa} = \frac{\sin\theta}{(\beta \cos\theta - \alpha \sin \theta)^{1/2}}
+\end{align*}
+With conditions $x=0 \implies y' = 0$ which then says $\theta_0 = 0$. At $x=1$ $y'\to\infty$ which says $\theta_1 = \pi/2$
+
+Let $A = (\alpha^2 + \beta^2)^{-1/4}$ and $B = \cos^{-1} \left(\frac{\beta}{\sqrt{\alpha^2 + \beta^2}}\right)$
+
+\begin{align*}
+	\odd x\theta &= \frac{A\cos\theta}{\sqrt{\cos(\theta+B)}}\\
+	\odd y\theta &= \frac{A\sin\theta}{\sqrt{\cos(\theta+B)}}
+\end{align*}
+
+Let $\phi = \frac{\theta+B}{2}$
+
+\begin{align*}
+	\odd x\theta &= \frac{2A\cos(2\phi -B)}{\sqrt{\cos 2\phi}}\\
+	\odd y\theta &= \frac{2A\sin(2\phi -B)}{\sqrt{\cos 2\phi}}\\
+\end{align*}
+\begin{align*}
+	\odd x\phi &= c_1 \sqrt{\cos(2\phi)} + c_2 \frac{\sin(2\phi)}{\cos(2\phi)}\\
+	\odd y\phi &= c_1 \frac{\sin(2\phi)}{\cos(2\phi)} + c_2 \sqrt{\cos(2\phi)} \\
+\end{align*}
+
+\begin{align*}
+	x(\phi) = c_3 + c_1 E(\phi,\sqrt{2}) - c_2\sqrt{\cos(2\phi)}\\
+	y(\phi) = c_4 - c_1 \sqrt{\cos(2\phi)} - c_2 E(\phi,\sqrt{2})
+\end{align*}
+Where $E(\cdot,\cdot)$ is the elliptic integral
+
+Find the constants:
+Its not entirely straightforward. $\phi$ is tied with $B$, so even if you know the start and end points we still have transcendental equations to solev numerically. 
+
+We can abuse some things we know:
+\begin{itemize}
+	\item The solution will have reflective symmetry about $y = 1-x$
+	\item $E(\phi,\sqrt{2})$ and $\sqrt{\cos 2\phi}$ are odd and even respectively
+	\item Both are real for $-\pi/4 \leq \phi \leq \pi/4$
+\end{itemize}
+We can expect the solution to have features:
+\begin{itemize}
+	\item Domain of $\phi$ centered on $0$, i.e. $-\phi_0 \leq \phi \leq \phi_0$
+	\item Since $0 \leq \theta \leq \pi/2$ we expect $\phi_0 = \pi/8$
+\end{itemize}
+
+This gives us the conditions
+\[x(-\pi/8) = 0, \quad x(\pi/8) = 1, \quad y(-\pi/8) = 0 ,\quad y(\pi/8) = 1)\]
+Which gives us solutions for $c_1,c_2,c_3,c_4$
+
+The solution is dangerously close to a circle, but the $\kappa^2$ values differ quite a lot. 
+
+Is a circle close enough?
+
+It seems like the difference between the elastica and a quarter circle is not huge. If we changed the boundary conditions slightly we could have generated a semicircle.
+
+
+From that last exercise we derived something useful:
+\[f - y'' \dd f{y''} = \alpha y' - \beta\]
+Which holds for a EL which depends on a second derivative.
+
+
+\subsection{Joining Nanostructures}
+Want to know how a carbon nanotube might join to a graphene sheet. This will help with constructing nano-electro-mechanical systems.
+
+We can model this discretely, the perturbed bonds have energy
+\[E = \frac12 \sum_{i,j} \{k_r (r_{ij} - r_0)^2 + k_\phi (\phi_{ij} - \phi_0)^2 + k_r (1 - \cos(n \tau_{ij} - \tau_0))\}\]
+Where $i,j$ iterates over all the bonded atoms, with $r_{ij}, \phi_{ij}$ and $\tau_{ij}$ are the bond: length, angle and torsion respectively. The $0$ subscript values are the optimal values.
+
+
+So we could brute force this with standard optimisation techniques.
+
+Alternatively if we assume chemical bonds in the joining region behave like an elastic material with different elastic moduli given by $k_r, k_\phi$ and $k_\tau$. In general the moduli are such that
+\[k_r \gg k_\phi \gg k_r\]
+
+For a continuum model, this is sounding a lot like an elastica. Fixing all $r_i$ to $r_0$ is equivalent to an isoperimetric constraint on the join length. The weight of the nano-structure is negligible due to the scale of the problem. 
+
+Propose a model where the shape of the join region will be approximately the shape of an appropriately constrained elastica.
+
+We want to minimise $\kappa^2$. Where the starting point (connection to graphene) is fixed in position and derivative, but the end point (connection to nanotube) only has a fixed derivative.
+
+
+Assume the graphene is a flat plane with a circular hole, the nanotube is a cylinder with perpendicular orientation to the plane, and the join region comprises thin elastic rods, or elastica. 
+
+Nanotube with radius $a$ and defect in the graphene plane - assume circular with radius $R$. Denote the difference $x_1 = R-a$
+
+Elastica with fixed length $L$.
+End point conditions
+\[y(0) = 0 ,\quad y'(0) = 0 ,\quad y'(x_1) \to \infty\]
+The value of $y(x_1) = y_1$ is not specified, and we will use the natural boundary condition fix this at that end point.
+
+
+Since we have a length constraint we have a Lagrange multiplier
+
+\begin{align*}
+	F\{y\} &= \int_0^L \kappa^2 ds + \lambda \int_0^L ds\\
+	&=	\int_0^{x_1} \left[\frac{y''^2}{(1+y'^2)^{5/2}} + \lambda (1+y'^2)^{1/2}\right] dx
+\end{align*}
+We also have the constraint for the length.
+
+The first variation had
+\[\delta F = \left[\eta \left(\dd f{y'} - \odd{}x \dd{f}{y''}\right) + \eta' \dd{f}{y''}\right]_0^{x_1}\]
+
+Since $\eta$ does not necessarily vanish at $x=x_1$ the natural BC requires
+\[\left(\dd f{y'} - \odd{}x \dd{f}{y''}\right)\pipe_{x=x_1} = 0\]
+
+
+
+Since our functional doesn't explicity depend on $y$, integrating once gives
+\[\dd f{y'} - \odd{}x \dd{f}{y''} = \alpha\]
+Which is identical to the $x=x_1$ condition, so $\alpha= 0$.
+
+
+From the previous example we can use
+\[f - y'' \dd{f}{y''} = - \beta\]
+\begin{align*}
+	 \frac{y''^2}{(1+y'^2)^{5/2}} + \lambda\sqrt{1+ y'^2} - y'' \left(\frac{2 y''}{(1+y'^2)^{5/2}}\right) = -\beta\\
+	 -\frac{y''^2}{(1+y'^2)^{5/2}} + \lambda\sqrt{1+ y'^2} = -\beta\\
+	 \kappa^2 = \frac{y''^2}{(1+y'^2)^{5/2}} = \lambda\sqrt{1+ y'^2} = + \frac{\beta}{(1+y'^2)^{1/2}}\\
+\end{align*}
+Assume $\kappa > 0$, let $ y' = \tan \theta$
+\[\kappa = (\lambda + \beta\cos\theta)^{1/2}\]
+\[\odd x\theta = \frac{\cos\theta}{(\lambda + \beta\cos\theta)^{1/2}}, \quad \odd y\theta = \frac{\sin\theta}{(\lambda + \beta \cos\theta)^{1/2}}\]
+Let $k = \left(\frac{\lambda + \beta}{2 \beta}\right)^{1/2}$ and $\gamma = \left(\frac{2}{\beta}\right)^{1/2}$
+
+Define $\phi$ s.t. $k \sin\phi = \sin(\theta/2)$
+
+\begin{align*}
+	\cos\theta = 1-2k^2\sin^2\phi\\ 
+	\sin\theta = 2k \sin\phi (1- 2k^2\sin^2\phi)^{1/2}\\
+	\dd\theta\phi = \frac{2k\cos\phi}{(1-k^2\sin^2\phi)^{1/2}}
+\end{align*}
+
+\begin{align*}
+	\lambda + \beta \cos\theta &= \lambda + \beta(1 - 2k^2 \sin^2\phi)\\
+	&= 2 \beta (\frac{\lambda + \beta}{2 \beta} - k^2 \sin^2\phi)\\
+	&= 4 \frac{k^2}{\gamma^2} (1-\sin^2\phi)\\
+	(\lambda + \beta\cos\theta)^{1/2} &= 2\frac{k}{\gamma} \cos\phi
+\end{align*}
+
+The system of ODEs are
+\begin{align*}
+	\odd x\phi = \odd x\theta \odd \theta\phi &= \left(\frac{1 - 2k^2 \sin^2\phi}{2\frac k \gamma \cos\phi}\right) \frac{2k \cos\phi}{(1- k^2 \sin^2 \phi)^{1/2}}\\
+	&= \gamma (\frac{1 - 2 k^2 \sin^2\phi }{(1 - k^2 \sin^2\phi)^{1/2} })\\
+	&= \gamma \left[2 (1 - k^2 \sin^2\phi)^{1/2} - \frac{1}{(1 - k^2 \sin^2\phi )^{1/2}}\right]
+\end{align*}
+
+\begin{align*}
+	\odd y\phi = \odd y\theta \odd \theta\phi &= \ldots\\
+	&= 2 \gamma k \sin \phi
+\end{align*}
+Both of which we can integrate.
+
+\begin{align*}
+	x(\phi) = \gamma\left[2 E(\phi,k) - F(\phi,k)\right]\\
+	y(\phi) = 2 \gamma k (1- \cos\phi)
+\end{align*}
+Noting we have used $x(0) = 0$
+
+To determine $x_1$ we use $\phi_1$
+\[x(\phi_1) = x_1 = \gamma[2 E(\phi_1,k) - F(\phi_1,k)]\]
+And use our length constraint (converted to use $\phi$)
+\[\gamma\int_0^{\phi_1} \frac{d\phi}{(1 - k^2 \sin^2\phi )^{1/2}} = L\]
+And hence
+\[L = \gamma F(\phi_1,k)\]
+
+
+Use the non-dimensional quantity $\mu = \frac{x_1}{L} = 2 \frac{E(\phi_1,k)}{F(\phi_1,k)} -1$.
+
+And then use this to get $k$ and then obtain $\gamma$ to then get $y_1$.
+
+We actually find $\mu < 0.5$ stop being valid. We also find $\mu = 2/\pi$ is a perfect circle.
+
+$\mu < 0.5$ we actually get negative curvature and so one of our assumptions breaks. We will ignore this for now.
+
+
+Are $\gamma,k,\phi_1 \in \mathbb{R}?$ not always. 
+
+
+
+
+\section{Free End-points}
+Most real problems have a situation where an end point is non-fixed.
+
+Consider the shortest path between two curves. The two end-points of the path are unknown.
+
+
+For the first variation we have to expand $x$ as well: 
+Define $\tilde{x}_i = \min(x_i,\hat{x}_i)$
+
+Expand $y$ onto the interval $[\tilde{x}_0, \tilde{x}_1]$
+
+\[y(x) = \begin{cases}
+	y(x_0) + (x_0-x)y'(x_0) + \frac{(x_0-x)^2}{2} y''(x_0) + \ldots, & x = [\tilde{x}_0, x_0)\\
+	y(x)\\
+	y(x_1) + (x_1-x)y'(x_1) + \frac{(x_1-x)^2}{2} y''(x_1) + \ldots, & x = (\tilde{x}_1, x_1]\\
+\end{cases}\]
+
+If $\hat{x}_0 < x_0$ we get
+\[y(\hat{x}_0) = y(x_0) - \epsilon X_0 y'(x_0) + \bigo(\epsilon^2)\]
+Where $\epsilon X_0 = x_0 - \hat{x}$
+We can likewise extend the perturbed curve $\hat{y}$
+
+Previously we defined distance as
+\[d(y,\hat{y}) = ||y - \hat{y}|| = \int_{x_0}^{x_1} |y(x) - \hat{y}(x)| dx\]
+
+Since $x_0,x_1$ can vary now, the range of the integral is not well defined. We can't just extend $y$ to the new interval since we have to account for distortion from the difference in $x$ end-points.
+
+Define a new distance metric
+\begin{align*}
+	d(y,\hat{y}) &= ||y-\hat{y}|| + |\vec p_0 - \hat{\vec p}_0| + |\vec p_1 - \hat{\vec p_1}|\\
+	|\vec p_k - \hat{\vec p}_k| &= \sqrt{(x_k - \hat{x}_k)^2 + (y_k - \hat{y}_k)^2}
+\end{align*}
+
+We want perturbations to be close to $y$ (as per the above metric) But require end-points be $\bigo(\epsilon)$ apart. Hence
+\[\hat{x}_k = x_k + \epsilon X_k, \quad \hat{y}_k = y_k + \epsilon Y_k\]
+Such that
+\[|\vec p_k - \hat{\vec p}_k| = \epsilon \sqrt{X_k^2 + Y_k^2}, \quad k =0,1\]
+
+
+
+Finally the first variation:
+\begin{align*}
+	F\{\hat y\} - F\{y\} &= \int_{\hat x_0}^{\hat x_1} f(x,\hat{y},\hat{y}') dx - \int_{x_0}^{x_1} f(x,y,y') dx\\
+	&= \int_{x_0 + \epsilon X_0}^{x_1 + \epsilon X_1} f(x,\hat{y},\hat{y}') dx - \int_{x_0}^{x_1} f(x,y,y') dx\\
+	&= \int_{x_0 x_1} \left[f(x,\hat{y},\hat{y}') - f(x,y,y')\right] dx + \int_{x_1}^{x_1+ \epsilon X_1} f(x,\hat{y},\hat{y}') dx - \int_{x_0}^{x_0 + \epsilon X_0} f(x,\hat{y},\hat{y}') dx\\
+\end{align*}
+
+From earlier:
+\[\int_{x_0 x_1} \left[f(x,\hat{y},\hat{y}') - f(x,y,y')\right] dx = \epsilon \left\{\left[\eta \dd f{y'}\right]_{x_0}^{x_1} + \int_{x_0}^{x_1} \eta\left(\dd fy - \odd{}x \dd f{y'}\right) dx\right\} + \bigo(\epsilon^2)\]
+
+\begin{align*}
+	\int_{x_1}^{x_1+ \epsilon X_1} f(x,\hat{y},\hat{y}') dx  &= \epsilon X_1 f(x,y,y')|_{x_1} + \bigo(\epsilon^2)\\
+	\int_{x_0}^{x_0 + \epsilon X_0} f(x,\hat{y},\hat{y}') dx &= \epsilon X_0 f(x,y,y') |_{x_0} + \bigo(\epsilon^2)
+\end{align*}
+Hence the first variation is
+
+\begin{align*}
+	\delta F(\eta,y) &= \lim_{\epsilon \to 0} \frac{F\{\hat{y}\} - F\{y\}}{\epsilon}\\
+	&= \left[\eta \dd {f}{y'}\right]_{x_0}^{x_1} + \int_{x_0}^{x_1} \eta \left(\dd fy - \odd{}x \dd {f}{y'}\right) dx + X_1 f(x,y,y')|_{x_1} - X_0 f(x,y,y')|_{x_0}
+\end{align*}
+
+Noting that the first term is hard to calculate since $x_0$ and $x_1$ are not fixed.
+\begin{itemize}
+	\item How do we find $x_0,x_1$.
+	\item We need a new natural boundary condition to give us this
+\end{itemize}
+$\eta$ has to satisfy certain conditions to be compatible with the problem.
+
+At the end points we have
+\[\hat{y}_0 = \hat{y}(\hat{x}_0) = \hat{y}(x_0+\epsilon X_0) = y(x_0+ \epsilon X_0) + \epsilon \eta (x_0+ \epsilon X_0)\]
+For small $\epsilon$
+\begin{align*}
+	y(x_0 + \epsilon X_0) = y_0 + \epsilon X_0 y'(x_0) + \bigo(\epsilon^2)\\
+	\epsilon \eta (x_0 + \epsilon X_0) = \epsilon \eta (x_0) + \bigo(\epsilon^2)
+\end{align*}
+Same happens for $x_1,y_1,etc.$
+The first variation gives
+\begin{align*}
+	\delta F(\eta,y) &= \int_{x_0}^{x_1} \eta \left(\dd fy - \odd{}x \dd {f}{y'}\right)dx + Y_1 \dd{f}{y'}\pipe_{x_1} - Y_0 \dd{f}{y'}\pipe_{x_0}\\
+	& + X_1 \left(f - y' \dd{f}{y'}\right)\pipe_{x_1} - X_0 \left(f - y' \dd f{y'}\right)\pipe_{x_0}
+\end{align*}
+The end-points are free, but this includes cases where they sit on the extremal.
+I.e. if we had $X_0,X_1,Y_0,Y_1 = 0$ then the first variation collapses to the Euler-Lagrange one:
+\[\delta F(\eta,y) = \int_{x_0}^{x_1} \eta \left(\dd fy - \odd{}x \dd f{y'}\right) dx\]
+
+If we have that but $X_0 \neq 0$ we get a natural boundary condition
+\[X_0 \left(f - y' \dd f{y'}\right)\pipe_{x_0} = 0\]
+
+Notation:
+\begin{itemize}
+	\item Hamiltonian
+	\[H = y' \dd f{y'} - f\]
+	\item $p$ (normally the momentum of a particle but different here):
+	\[p = \dd f{y'}\]
+	\item Replace the notation $X_k,Y_k$ with
+	\[\delta x(x_k) = X_k, \quad \delta y(y_k) = Y_k\]
+\end{itemize}
+
+
+If we set $X_k=Y_k = 0$ for $k=0,1$ then EL holds
+\[\dd fy - \odd{}x \dd{f}{y'} = 0\]
+With the additional constraints:
+\[\left[p \delta y - H \delta x\right]_{x_0}^{x_1} = 0\]
+
+Typically the end points satisfy some constraints (most generally in form) $g(x_0,y_0,x_1,y_1) = 0$. But usually these reduce to a singular end-point $g_k(x_j,y_j) = 0$
+
+Where end-point constraints are not linked to each other, we can separate the conditions as
+\[\left[p \delta y - H \delta x\right]_{x_0} = 0\]
+\[\left[p \delta y - H \delta x\right]_{x_1} = 0\]
+
+For $\delta x = 0$ with $\delta y \neq 0$, the conditions reduce to
+\[p(x_i) = \dd{f}{y'} \pipe_{x_i} = 0\]
+Which are the natural boundary conditions 
+
+If we go the other way around, i.e. $\delta y = 0$ with $\delta x \neq 0$, the conditions reduce to
+\[H(x_i) = 0\]
+
+
+Example, minimise
+\[F\{y\} = \int_{0}^{x_1} (1+ y'^2) dx\]
+Subject to $y(0) = 1, \quad y(x_1) = L > 1$ with $x_1$ unspecified.
+
+We have no $x$ dependence so
+\[H = const\]
+The free end point at $x_1$ means that $H(x_1) = 0$ and hence $H = 0$ everywhere.
+
+Hence
+\[H =y' \dd f{y'} - f = 2y'^2 - y'^2 - 1 = y'^2 -1 = 0\]
+And hence $y' = \pm 1$. The BCs then give (for the positive case) $y = x+1$.
+
+
+\subsection{Several Dependant variables}
+For an extremum the EL equations are given by
+\[\odd{}t \dd L{\dot{q}_k} - \dd L{q_k} = 0\]
+And at the end points $t_0,t_1$
+\[\sum_{k=1}^n p_k \delta q_k - H \delta t = 0\]
+Where
+\[p_k = \dd L{\dot{q}_k}, \quad H = \sum_{k=1}^n \dot q_k p_k - L\]
+
+Example:
+\[F\{\vec q\} = \int_0^1 \left[\dot q_1^2 + (\dot q_2 - 1)^2 + q_1^2 + q_1q_2\right] dt\]
+For $\vec q(0) = \vec q_0$ and $\vec q(1)$ free.
+The EL equations are
+\begin{align*}
+	2 \ddot q_1 - 2 q_1 - q_2 = 0\\
+	2\ddot q_2 - q_1 = 0
+\end{align*}
+We get
+\[4 q_2^{(4)} - 4\ddot q_2 - q_2 = 0\]
+Which gives solutions
+\[q_2(t) = c_1 \cosh(At) + c_2 \sinh (At) + c_3 \cos(Bt) + c_4 \sin (Bt)\]
+Where
+\[A = \left(\frac{\sqrt{2} + 1}{2}\right)^{1/2}, \quad B = \left(\frac{\sqrt{2} - 1}{2}\right)^{1/2}\]
+Determining $c_i$ is done using the natural boundary conditions
+\[\left[\sum_{k=1}^n p_k \delta q_k - H \delta t\right]_{t=1} = 0\]
+Since $t=1$ is fixed at the RHS, $\delta t = 0$, we can vary $q_k$ independently. So any combination of $\delta q_k = 0$ and hence all the $p_k = 0$ i.e.
+\[p_k(1) = \dd L{\dot q_k} \pipe_{t=1} = 0\]
+
+Hence
+\begin{align*}
+	p_1(1) = 2 \dot q_1 (1) = 0\\
+	qp_2(1) = 2(\dot q_2 (1) - 1) = 0
+\end{align*}
+Reducing to give
+\[\dot q(1) = 0, \quad \dot q_2(1) = 1, \quad or \quad \dot{\vec q}(1) = \begin{pmatrix}
+	0\\1
+\end{pmatrix}\]
+
+
+
+\section{Traversals}
+When we consider extremals joining a curve to a point (or two curves) we call it a transversal. The free-end-point condition simplifies in many such cases. We often end up with right angles 
+
+
+Specify the curve $\Gamma$ parametrically as $(x_\Gamma(\xi), y_{\Gamma}(\xi))$ then the end-points much lie on this line, so 
+\[\delta x = \delta \xi \odd {x_\Gamma}{\xi}, \quad \delta y = \delta \xi \odd{y_\Gamma}{\xi}\]
+And then the natural conditions are
+\begin{align*}
+	\left[p \delta y - H \delta x\right]_{x_1} = 0\\
+	\left[p  \odd{y_\Gamma}{\xi} - H  \odd {x_\Gamma}{\xi}\right]_{x_1} = 0\\
+\end{align*}
+Note that $\left(\odd {x_\Gamma}{\xi} ,\odd{y_\Gamma}{\xi}\right)$ is a tangent to $\Gamma$. 
+The traversality condition is that the vector $\vec v = (-H,p)$ is orthogonal to the tangent vector. That is
+\[\left(\odd {x_\Gamma}{\xi} ,\odd{y_\Gamma}{\xi}\right) \cdot (-H,p) =p  \odd{y_\Gamma}{\xi} - H  \odd {x_\Gamma}{\xi} = 0 \]
+
+
+Shortest path between two curves $\Gamma_0, \Gamma_1$ would require 
+\begin{align*}
+	\left[p \odd {y_{\Gamma_0}}{\xi} - H \odd{x_{\Gamma_0}}{\xi}\right]_{x_0} = 0
+	\left[p \odd {y_{\Gamma_1}}{\xi} - H \odd{x_{\Gamma_1}}{\xi}\right]_{x_1} = 0
+\end{align*}
+
+
+Consider the shortest path from the origin to a curve parameterised as $\vec r_{\Gamma} = (x_\Gamma(\xi), y_{\Gamma}(\xi))$.
+The path length is given by
+\[F\{y\} = \int_0^{x_1} \sqrt{1 + y'^2} dx\]
+Then
+\begin{align*}
+	p &= \dd f{y'} = \frac{y'}{\sqrt{1+y'^2}}\\
+	H &= y' \dd f{y'} - f = \frac{y'^2}{\sqrt{1+y'^2}} - \sqrt{1 + y'^2} = \frac{-1}{\sqrt{1+y'^2}}
+\end{align*}
+
+
+And hence the transversality condition becomes:
+\begin{align*}
+	\left[p \odd {y_{\Gamma}}{\xi} - H \odd{x_{\Gamma}}{\xi}\right]_{x_1} = 0\\
+	\left[\frac{y'}{\sqrt{1+y'^2}} \odd {y_{\Gamma}}{\xi} + \frac{1}{\sqrt{1+y'^2}} \odd{x_{\Gamma}}{\xi}\right]_{x_1} = 0\\
+	\left[y'\odd {y_{\Gamma}}{\xi} + \odd{x_{\Gamma}}{\xi}\right]_{x_1} = 0\\
+\end{align*}
+Alternatively,
+\[\left(\odd{x_\Gamma}{\xi} , \odd{y_{\Gamma}}{\xi}\right) \cdot (1,y') = 0\]
+Which geometrically shows that the tangent to the extremal must be orthogonal to the tangent to $\Gamma$ where they connect. 
+EL still implies that $y(x)$ will be a straight line (which makes sense).
+
+Of course there could be multiple solutions to this depending on the shape of the curve $\Gamma$.
+
+
+In general these functionals will have form
+\[F\{y\} = \int_0^{x_1} K(x,y) \sqrt{1+y'^2} dx\]
+
+Try to find stationary paths between two curves, $\vec r_{\Gamma_0}$ and $\vec r_{\Gamma_1}$
+\begin{align*}
+	p &= \dd f{y'} = \frac{y' K(x,y)}{\sqrt{1+y'^2}}\\
+	H &= y' \dd f{y'} - f = \frac{y'^2 K(x,y)}{\sqrt{1+y'^2}} - K(x,y) \sqrt{1+y'^2} = \frac{-K(x,y)}{\sqrt{1+y'^2}}
+\end{align*}
+
+The beauty of this form is the curve joining the two curves is not necessarily a straight line. 
+E.g. a chain hanging between two curves.
+
+
+\section{Broken Extremals}
+
+Extremals don't actually have to have two well-defined derivatives, despite what we've required so far (e.g. Snell's law).
+
+Broken extremals are continuous extremals where the gradient has a discontinuity at one or more points.
+
+Since some problems won't permit smooth extremals there are other things to consider.
+
+E.g. $y(x)$ that minimises 
+\[F\{y\} = \int_{-1}^{1} y^2 (1-y')^2 dx\]
+With $y(-1) = 0$ and $y(1) = 1$
+
+Since there is no $x$ dependence we use the hamiltonian
+\begin{align*}
+	H = y' \dd f{y'} - f = const\\
+	y'y^2(-1)(1-y') - y^2(1-y')^2 = -c_1\\
+	y^2(1-y'^2) = c_1
+\end{align*}
+If $c_1 = 0$ we get solutions which don't satisfy the end points.
+For $c_1 \neq 0$ we get a rectangular hyperbola
+\[(x-c_2)^2 = y^2 - c_1\]
+\[y^2 = (x+1/4)^2 - 9/16\]
+
+Note that the two end-points are on opposite branches of the hyperbola. There is no smooth extremal curve that connects $(-1,0)$ and $(1,1)$
+
+So we must seek a broken extremal. 
+
+
+
+\textbf{Theorem:} if the smooth curve $y(x)$ gives an extremal of a functional $F\{y\}$ over the class of all admissible curves in some $\epsilon$ neighbourhood of $y$, then $y(x)$ also gives an extremal of a functional $F\{y\}$ over the class of all \textbf{piecewise smooth curves} in the same neighbourhood.
+
+I.e. we can extend our results so far to piecewise smooth curves - not just curves with two continuous derivatives.
+
+
+The theorem is essentially proven by taking a piecewise smooth function $\tilde{y}$ and approximating it with a smooth curve $\hat{y}_\delta$ by rounding off the edges of the discontinuity.
+Given we can get arbitrarily close to the true optimal with this approximation, then no alternative extremal can exist.
+
+
+So we do this by splitting the functional into two parts around these discontinuities.
+\[F\{y\} = F_1\{y\} + F_2\{y\} = \int_{x_0}^{x_*} f(x,y_1,y_1')dx  + \int_{x_*}^{x_1} f(x,y_2,y_2') dx\]
+
+Where $y$ has to have continuous derivatives everywhere except at $x_*$, and requires $y_1(x_*) = y_2(x_*)$
+
+The issue is that the location of the ``corner'' $x_*$ can be perturbed.
+
+
+From the first variation, we end up with the additional term
+\[\left[p_1 \delta y - H_1 \delta x\right]_{x_*}\]
+Where
+\begin{align*}
+	\delta x(x^*) = X_*, \quad \delta y(y_1^*) = Y_*\\
+	H_1 = y_1' \dd f{y_1'} - f, \quad p_1 = \dd{f}{y_1'}
+\end{align*}
+
+We also get the term
+\[\left[-p_2 \delta y + H_2 \delta x\right]_{x_*}\]
+From the other side.
+
+
+Rearranging the first variation gives the conditions
+\begin{align*}
+	\left[p_1 - p_2\right]_{x_*} = 0\\
+	\left[H_1 - H_2\right]_{x_*} = 0
+\end{align*}
+
+This is called the Weierstrass-Erdman Corner Conditions.
+
+Noting that these correspond to continuity around $x_*$ for $p$ and $H$.
+
+
+
+Sometimes we have constraints on where the corner can appear. Sometimes the discontinuities arise from the problem itself (e.g. a discontinuous boundary such as in refraction).
+
+In these cases we need to look back at the condition
+\[\left[(p_1 - p_2) \delta y - (H_1 - H_2) \delta x\right]_{x_*} = 0\]
+And look at whether $\delta x$ or $\delta y$ are forced to be zero, or if there is some relationship between them which can be used to form a constraint, such as in transversals.
+
+
+
+So the broken extremal solution must satisfy
+\begin{itemize}
+	\item The EL equations
+	\item Find solutions for each end condition
+	\item and at every `corner' the following must hold:
+	\[y_1(x_*) = y_2(x_*)\]
+	\[p|_{x_*^-} = p|_{x_*^+}, \quad H|_{x_*^-} = H|_{x_*^+}\]
+	\item In theory, multiple corners is allowed but this would be painful.
+\end{itemize}
+
+
+
+
+
+
+\section{Hamiltonian}
+We've already looked at it quite a bit but man is this boy powerful
+
+\subsection{Legendre transformation}
+A contact transformation which depends on the derivatives of a variable. Things like defining $p$ as
+\[p(x) = y'(x)\]
+Provided $y''(x) \neq 0$, we can define $x$ in terms of $p$, by introducing the hamiltonian:
+\[H(p) = px - y(x)\]
+
+Assuming wlog $y$ is convex
+\begin{align*}
+	\odd Hp &= \odd{}p(xp) - \odd yp\\
+	&= p \odd xp + x - \odd yp\\
+	&= \left(p - \odd yx\right) \odd xp + x\\
+	&= x
+\end{align*}
+
+And also noting $px - H = y$, so with $(p,H)$ we recover $(x,y)$ via a Legendre transform.
+
+
+
+\subsection{Hamilton's Formulation}
+Consider problems with more than one dependent variable, or where $f$ has no dependence on $x$.
+
+Define \textbf{generalised coordinates} $\vec q : [t_0, t_1] \to \mathbb{R}^n$
+\begin{itemize}
+	\item Take a set of $n$ functions $q_k(t)$ with two continuous derivaties with respect to $t$, and put them into a vector $\vec q(t)$.
+	\item Dot notation
+	\[\dot q_k = \odd {q_k}{t}, \quad \ddot q_k = \oddn{q_k}{t}2, \quad \vec{\dot q} = \left(\odd{q_1}{t}, \odd{q_2}{t}, \hdots, \odd{q_n}{t}\right)\]
+	\item Lagrangian $L(t,\vec q, \dot{\vec q})$
+\end{itemize}
+
+The extremals of the functional
+\[F\{\vec q\} = \int_{t_0}^{t_1} L(t,\vec q,\dot{\vec q}) dt\]
+Satisfy the EL equations
+\[\odd{}t \dd L{\dot q_k} - \dd L{q_k} = 0\]
+For all $k$.
+
+
+
+Legendre transform introduces the \textbf{conjugate} variables
+\[p_i = \dd L{\dot q_i}\]
+Suppose these equations can be solved to write $\dot q_i$ as a function of $(t,q_i,p_i)$, then the \textbf{Hamiltonian} is
+\[H(t,q_1,\ldots,q_n,p_1,\ldots,p_n) = \sum_{i=1}^n p_i \dot q_i - L(t,\vec q,\dot{\vec q})\]
+We've seen $p_i$ and $H$ before (e.g. in transversality conditions)
+
+The $p_i$ are called \textbf{generalised momenta}. 
+
+
+So
+\begin{align*}
+	\dd H{p_i} &= \dot q_i\\
+	\dd H{q_i} &= - \dd L{q_i}
+\end{align*}
+Given the EL equations, the second of these gives
+\[\dd H{q_i} = - \odd{}t \dd L{\dot q_i} = - \odd{p_i}{t}\]
+
+
+
+This gives us \textbf{Hamilton's Equations}, or the \textbf{Canonical} Euler-Lagrange equations
+\[\dd H{p_i} = \odd{q_i}{t}, \quad \dd H{q_i} = - \odd{p_i}{t}\]
+
+The $n$ EL DEs converted into $2n$ first order DEs.
+
+This is also great since the derivatives are now uncoupled, and it may be easier to solve.
+
+
+Consider a simple pendulum
+\[F\{\phi\} = \int_{t_0}^{t_1} \left(\frac12 m l^2 \dot \phi^2 - m g l ( 1 - \cos\phi )\right) dt\]
+The EL equations gives
+
+\[\ddot \phi + \frac{g}{l}\sin\phi = 0\]
+
+The generalised momentum (in this case it is angular momentum)
+\[p = \dd L{\dot\phi} = m l^2 \dot \phi \implies \dot\phi = \frac{p}{ml^2}\]
+Hamiltonian is
+\[H(\phi,p) = p\dot\phi - L = \frac{p^2}{2m l ^2} + mgl (1 - \cos\phi)\]
+Hamilton's Equations are
+\begin{align*}
+	\dd Hp = \odd \phi t \implies \dot\phi = \frac{p}{ml^2}\\
+	\dd H\phi = - \odd pt \implies \dot p = - mgl\sin\phi 
+\end{align*}
+
+Differentiating the first yields
+\[\ddot \phi = \frac{\dot p}{ml^2}\]
+And subbing in the second equation gives
+\[\ddot \phi + \frac{g}{l} \sin\phi = 0\]
+Which is precisely the EL equation.
+
+We can get the canonical EL equations from finding extremals of the functional of $2n$ variables 
+\[\tilde F \{q_1,\ldots,q_n,p_1,\ldots,p_n\} = \int_a^b \left[\sum_{i=1}^n p_i\dot q_i - H\right] dx\]
+
+\begin{align*}
+	\left(\dd{}{q_i} - \odd{}t \dd{}{\dot q_i}\right) \left[ \sum_{i=1}^n p_i \dot q_i - H\right] = 0 \\
+	\left(\dd{}{p_i} - \odd{}t \dd{}{\dot p_i}\right) \left[ \sum_{i=1}^n p_i \dot q_i - H\right] = 0
+\end{align*}
+
+$F$ and $\tilde{F}$ are equivalent under the Legendre transformation. It makes $q,p$ independent, whereas before it was a trick to pretend they were.
+
+If $L$ does not depend on $t$, then it should be clear from the Legendre transformation that $H$ won't depend on $t$. The system will be \textbf{conservative}. I.e. $H$ is conserved.
+
+
+\section{Hamilton-Jacobi equation}
+Find stationary points of
+\[F\{y\} = \int_{x_0}^{x_1} f(x,y,y') dy\]
+Given particular fixed end points $(x_0,y_0)$ and $(x_1,y_1)$.
+
+Varying the second end-point, we can consider that the value of $F\{y\}$ along the extremal is now a functional of that varying end point, i.e.
+\[F\{y\} = S(x_1,y_1)\]
+
+We know the first variation would consist of an EL component, plus a (free end-point) term like $p \delta y - H \delta x$.
+
+But we are only considering extremal curves here, so the EL component must be zero, hence
+\[\delta S = S(x+\delta x, y + \delta y) - S(x,y) = p \delta y - H \delta x\]
+
+Keep $x$ fixed and only varying $y$, we get
+\[\dd Sy = p\]
+
+Similarly, fixing $y$ and varying $x$ we get
+\[\dd S x = - H(x,y,p)\]
+
+Substituting the former into the latter gives
+\[\dd Sx + H\left(x,y,\dd Sy\right) = 0\]
+This is the \textbf{Hamilton-Jacobi} equation.
+
+
+For some solution $S(x,y,\alpha)$ with constant of integration $\alpha$, the extrema lie along curves where
+\[\dd S \alpha = const\]
+A proof of this is omitted.
+
+
+We can choose arbitrary forms for $S$.
+
+E.g. find extrema of
+\[F\{y\} = \int_a^b y'^2 dx\]
+The conjugate variable and Hamiltonian are given by
+\begin{align*}
+	 p = \dd f{y'} = 2y'\\
+	 H = y' \dd f{y'} - f = y'^2 = \frac14 p^2
+\end{align*}
+
+So the Hamilton-Jacobi equation is
+\begin{align*}
+	\dd Sx + H\left(x,y,\dd Sy\right) = 0\\
+	\dd Sx + \frac14 \left(\dd Sy\right)^2 = 0
+\end{align*}
+Take $S = u(x) + v(y)$ giving
+\[\odd ux + \frac14 \left(\odd vy\right)^2 = 0\]
+Since $u,v$ don't depend on $y,x$ respectively, then $\odd ux$ is a constant, and hence
+\[u(x) = -\alpha^2 x + \gamma\]
+Hence $v = 2 \alpha y + \beta$ and so now we have
+\[S(x,y) = -\alpha^2 x + 2 \alpha y + \gamma + \beta\]
+
+And then using
+\[\dd S \alpha = const \implies 2 y - 2 \alpha x = const\]
+Which is a straight line.
+We would have gotten this by saving this equation normally
+
+
+
+
+When there are multiple dependent variables $q_i$ with independent variable $t$, the HJ equation is
+\[\dd St + H \left(t,q_1,\ldots,q_n, \dd S{q_1},\ldots, \dd S{q_n}\right) = 0\]
+Which is a first order \textbf{partial} DE. Which helps if we can use separation of variables.
+
+
+
+
+We now have a group of equivalent methods
+\begin{itemize}
+	\item EL equations
+	\item Hamilton's equations
+	\item Hamilton-Jacobi equation
+\end{itemize}
+These can lead to other methods
+\begin{itemize}
+	\item Hamilton's principle -> Newton's laws of motion
+	\item When $L$ isn't explicitly dependent on $t$, then the Hamiltonian $H$ is constant in time
+	\begin{itemize}
+		\item Conservation of energy
+		\item Illustration of a symmetry in the problem appearing in the Hamiltonian.
+	\end{itemize}
+\end{itemize}
+
+
+
+\section{Conservation Laws}
+Given the functional
+\[F\{y\} = \int_{x_0}^{x_1} f(x,y,y',\ldots,y^{(n)}) dx\]
+If there is a function $\phi(x,y,y',\ldots, y^{(k)})$ such that
+\[\odd{}x \phi(x,y,y',\ldots,y^{(k)}) = 0\]
+for all extremals of $F$ then this is called a $K^{th}$ order conservation law.
+Use obvious extension for functionals of several dependent variables.
+
+
+
+If $F\{y\}$ doesn't explicitly depend on $x$, then we know the Hamiltonian 
+\[H = y' \dd f{y'} - f\]
+is constant, and hence $\odd Hx = 0$ is a first order conservation law of the system.
+
+For several independent variables, e.g.
+\[F\{z\} = \iint_{\Omega} z(x,y) dxdy\]
+The conservation law is
+\[\nabla \cdot \phi = 0\]
+For some function $\phi(x,y,z,z',\ldots,z^{(k)})$.
+
+These can be extended further but we won't worry about that
+
+
+
+These laws:
+\begin{itemize}
+	\item Are physically insightful (they say something about the system)
+	\item Can simplify finding a solution (reduction of DE order): $\phi(x,y,y',\ldots,y^{(k)}) = const$ is $k$ order DE whereas the EL equations are order $2k$.
+	\item $\phi(x,y,y',\ldots,y^{(k)}) = const$ is often called the \textbf{first integral} of the EL equations
+	\begin{itemize}
+		\item RHS is a constant of integration determined by BCs
+	\end{itemize}
+	\item How do we find conservation laws? Noether's theorem.
+\end{itemize}
+
+Conservation laws arise from finding symmetries in the problem
+\begin{itemize}
+	\item ``symmetries'' are the result of transformations under which the functional is invariant. 
+	\item E.g. Time invariance symmetry results in constant $H$.
+	\item More generally, take a parameterised family of smooth transforms
+	\[X = \theta(x,y; \epsilon), \quad Y = \phi(x,y; \epsilon)\]
+	Where
+	\[x = \theta(x,y;0), \quad y = \phi(x,y;0)\]
+	I.e. the identity transform for $\epsilon = 0$.
+	\item Some (simple) examples are rotations and translations
+\end{itemize}
+
+The Jacobian of this transformation would be
+\[J = \begin{vmatrix}
+	\theta_x & \theta_y \\ \phi_x & \phi_y
+\end{vmatrix} = \theta_x \phi_y - \theta_y \phi_x\]
+It is smooth if $x,y$ have continuous partial derivatives, and non-singular if the Jacobian is non-zero and hence has an inverse transform.
+
+For $\epsilon = 0$ we require the identity transform, $J=1$. And we require a smooth transform so $J$ has to be a smooth function of $\epsilon$. So for small $|\epsilon|$ the transform is non-singular.
+
+\subsection{Example transformations:}
+\begin{itemize}
+	\item Translations, e.g.
+	\begin{align*}
+		X = x + \epsilon, &\quad Y =y\\
+		or \quad X =x , &\quad Y = y + \epsilon
+	\end{align*}
+	Both have $J=1$ and inverse transforms
+	\begin{align*}
+		x = X- \epsilon, &\quad y = Y\\
+		or \quad x = X, &\quad y = Y - \epsilon
+	\end{align*}
+
+	\item Rotations
+
+	\[X = x \cos \epsilon - y \sin \epsilon, \quad Y = x \sin \epsilon + y \cos \epsilon\]
+	Which has Jacobian
+	\[J = \cos^2 \epsilon + \sin^2 \epsilon = 1\]
+	And inverse
+	\[x = X \cos \epsilon + Y \sin \epsilon, \quad y = -X \sin \epsilon + Y \cos \epsilon\]
+	This is pretty easy to derive - just use polar coordinates
+	\[x = r\cos\theta, \quad y= r \sin\theta\]
+	Under a rotation by $\epsilon$ we get
+	\[X = r \cos(\theta + \epsilon), \quad Y = r\sin(\theta + \epsilon)\]
+	And use the trig identities
+	\begin{align*}
+		\cos(u + v) = \cos u \cos v - \sin u \sin v\\
+		\sin(u+v) = \sin u \cos v + \cos u \sin v
+	\end{align*}
+	And plug into $X,Y$
+	\begin{align*}
+		X = r\cos\theta \cos \epsilon - r \sin\theta \sin \epsilon = x \cos \epsilon - y \sin \epsilon\\
+		Y = r \sin\theta \cos \epsilon + r \cos\theta \sin \epsilon = y \cos \epsilon + x\sin \epsilon
+	\end{align*}
+
+
+
+\end{itemize}
+
+\subsection{Transformation of a Function}
+
+Given a function $y(x)$ we can rewrite $Y(X)$ using the inverse transformation, i.e.
+\[\phi^{-1} (X,Y(X); \epsilon) = y(x) = y(\theta^{-1} (X,Y; \epsilon))\]
+
+E.g. the curve $y=x$ under rotations
+\[-X\sin \epsilon + Y \cos \epsilon = X \cos \epsilon + Y \sin \epsilon\]
+Rearrange to get
+\[Y(X) = \frac{\cos \epsilon + \sin \epsilon}{\cos \epsilon - \sin \epsilon} X\]
+
+Can similarly do it with $Y'(X)$.
+
+\subsection{Transform Invariance}
+If
+\[\int_{x_0}^{x_1} f(x,y,y') dx = \int_{X_0}^{X_1} f(X,Y,Y') dX\]
+For all smooth functions $y(x)$ on $[x_0,x_1]$ then we say the functional is invariant under the transformation.
+\begin{itemize}
+	\item Also called \textbf{variational invariance}
+	\item The transform is called a \textbf{variational symmetry}
+	\item Related to conservation laws
+\end{itemize}
+Also note that the EL equations are invariant under the same transform - they will give the same extremal curves.
+
+
+For small $\epsilon$ use Taylor's theorem to write
+\begin{align*}
+	X = \theta(x,y;0) + \epsilon \dd \theta \epsilon\pipe_{(x,y;0)} + \bigo(\epsilon^2)\\
+	Y = \phi(x,y;0) + \epsilon \dd \phi \epsilon\pipe_{(x,y;0)} + \bigo(\epsilon^2)\\
+\end{align*}
+Define the \textbf{infinitesimal generators}
+\[\xi(x,y) = \dd \theta \epsilon \pipe_{(x,y;0)}, \quad \eta(x,y) = \dd\phi \epsilon \pipe_{(x,y;0)}\]
+And then for small $\epsilon$
+\begin{align*}
+	X \simeq x + \epsilon \xi\\
+	Y \simeq y + \epsilon \eta
+\end{align*}
+
+For example, for translations
+\begin{align*}
+	(X,Y) = (x+\epsilon, y) \implies (\xi, \eta) = (1,0)\\
+	or \quad (X,Y) = (x,y+\epsilon) \implies (\xi,\eta) = (0,1)
+\end{align*}
+
+For a rotation
+\[(X,Y) = (x\cos \epsilon - y \sin \epsilon, x \sin \epsilon + y \cos \epsilon)\]
+So
+\begin{align*}
+	\xi = \dd\theta \epsilon\pipe_{\epsilon = 0} = [-x\sin \epsilon - y\cos \epsilon]_{\epsilon = 0} = -y\\
+	\eta = \dd\phi \epsilon\pipe_{\epsilon = 0} = [x\cos \epsilon - y\sin \epsilon]_{\epsilon = 0} = x\\
+\end{align*}
+
+
+\subsection{Noether's Theorem (1d)}
+Suppose the $f(x,y,y')$ is variationally invariant on $[x_0,x_1]$ under a transform with infinitesimal generators $\xi$ and $\eta$ then
+\[\eta p - \xi H = const\]
+Along any extremal of
+\[F\{y\} = \int_{x_0}^{x_1} f(x,y,y') dx\]
+
+So a system with invariance in translations in $x$ we get
+\[H = const\]
+This is shown with functionals with no explicit dependence on $x$ (Beltrami identity)
+
+Similarly a translation in $y$ with no invariance in $y$ gives
+\[p = const\]
+
+
+For more than one dependent variable
+\begin{align*}
+	T &= \theta(t,\vec q; \epsilon)\\
+	Q_k &= \phi_k (t,\vec q; \epsilon)
+\end{align*}
+The infinitesmial generators are
+\begin{align*}
+	\xi &= \dd \theta \epsilon \pipe_{\epsilon = 0}\\
+	\eta_k &= \dd {\phi_k} \epsilon \pipe_{\epsilon = 0}
+\end{align*}
+
+\subsection{Noether's Theorem}
+Suppose $L(t,\vec q, \dot{\vec q})$ is variationally invariant on $[t_0,t_1]$ under a transform with infinitesimal generators $\xi, \eta_k$. Given
+\[p_k = \dd L{\dot q_k}, \quad H = \sum_{k=1}^n p_k \dot q_k - L\]
+Then
+\[\sum_{k=1}^n p_k \eta_k - H \xi = const\]
+Along any extremal of
+\[F\{\vec q\} = \int_{t_0}^{t_1} L(t,\vec q, \dot{\vec q}) dt\]
+
+
+
+
+
+
+Consider a system $(t,q_1,q_2)$ which is invariant in rotation
+\begin{align*}
+	(T,Q_1,Q_2) &= \left(t, q_1 \cos \epsilon - q_2 \sin \epsilon, q_2 \cos \epsilon + q_1 \sin \epsilon\right)
+	(t,q_1,q_2) &= \left(T,Q_1 \cos \epsilon + Q_2 \sin \epsilon, Q_2 \cos \epsilon - Q_1 \sin \epsilon\right)
+\end{align*}
+
+The infinitesimal generators are
+\begin{align*}
+	\xi &= 0\\
+	\eta_1 &= - q_1 \sin \epsilon - q_2 \cos \epsilon |_{\epsilon = 0} = - q_2\\
+	\eta_2 &= - q_2 \sin \epsilon + q_1 \cos \epsilon |_{\epsilon = 0} = q_1
+\end{align*}
+Hence
+\[p_1 \eta_1 + p_2 \eta_2 - H \xi = -p_1 q_2 + p_2 q_1 = const\]
+I.e. angular momentum is conserved
+
+
+
+Some common symmetries:
+in a $3D$ system with kinetic energy $T(\dot{\vec q}) = \frac12 m \dot q\cdot \dot q$ and potential energy $V(t,\vec q)$
+Invariance of $L$ under...
+\begin{itemize}
+	\item time translations corresponds to conservation of Energy
+	\item spatial translations corresponds to conservation of momentum
+	\item rotations corresponds to conservation of angular momentum.
+\end{itemize}
+
+Finding these symmetries however can be tricky.
+A useful result is the Rund-Trautman identity which leads to a simple proof of Noether's theorem (we won't talk about it though)
+
+
+There are more advanced cases:
+\begin{itemize}
+	\item Laplace-Runge-Lenz vector in planetary motion corresponds to rotations of $3D$ sphere in $4D$.
+	\item Symmetries in general relativity
+	\item Symmetries in quantum mechanics
+	\item Symmetries in fields
+\end{itemize}
+
+
+
+
+
+
+\begin{align*}
+	y(x + \epsilon_x, z + \epsilon_z) = y(x,z) + y(x+\delta x,z) + y(x,z + \delta z) + y(x + \delta x, z + \delta z)
+\end{align*}
+
+
+\begin{align*}
+	y(x+ \delta x, z + \delta z) = y(x,z) - y'(x,z)(x - \delta x, z - \delta z)
+\end{align*}
+
+
+
+
+
+
+\section{Summary}
+\subsection{Prelim}
+Integral functionals
+\[F\{y\} = \int_{x_0}^{x_1} f(x,y,y') dx\]
+We could assume a (known) function $y = g(x,\epsilon)$ and we can convert to a function $F(\epsilon)$ and optimise (we did this for the `crude' brachistochrone). But $y(x,\epsilon)$ probably doesn't contain the true extremal.
+
+\subsection{First Variation}
+\[\delta F = \lim_{\epsilon \to 0} \frac{F\{y + \epsilon \eta\} - F\{y\}}{\epsilon}\]
+Gives the Euler-Lagrange equation
+\[\dd fy - \odd{}x \dd f{y'} = 0\]
+For fixed end-point problems, this is sufficient as $\delta x, \delta y$ are $0$ at $x_0,x_1$.
+
+
+
+\newpage
+\subsection{Special cases}
+\begin{itemize}
+	\item $f$ depends only on $y'$
+	\begin{itemize}
+		\item Straight line solutions
+	\end{itemize}
+	\item $f$ is autonomous (no $x$ dependence)
+	\begin{itemize}
+		\item Hamiltonian is conserved: $y' \dd f{y'} - f = const$
+	\end{itemize}
+	\item $f$ doesn't depend on $y$
+	\begin{itemize}
+		\item Momentum is conserved $\dd f{y'} = const$
+	\end{itemize}
+	\item $f = A(x,y)y' + B(x,y)$ (degenerate)
+	\begin{itemize}
+		\item $\dd Ax - \dd By = 0$ is satisfied
+		\item Path only depends on end-points
+	\end{itemize}
+\end{itemize}
+
+\subsection{Higher order}
+\[F\{y\} = \int_{x_0}^{x_1} f(x,y,y',\ldots,y^{(n)}) dx\]
+The Euler-Lagrange equation extends to
+\[\dd fy - \odd{}x \dd f{y'} + \oddn{}x2 \dd f{y''} + \ldots + (-1)^{n}\oddn{}xn \dd{f}{y^{(n)}} = 0\]
+
+\subsection{Several dependent variables}
+\[F\{\vec q\} = \int_{t_0}^{t_1} L(x,\vec q, \dot{\vec q}) dt\]
+We have a system of Euler-Lagrange equations
+\[\dd L{q_k} - \odd{}t \dd L{\dot{q}_k} = 0\]
+For all $k$ 
+
+
+\subsection{Several independent variables}
+\[F\{z\} = \int_{y_0}^{y_1} \int_{x_0}^{x_1} f(x,y,z,z_x,z_y) dxdy\]
+Giving the Euler-Lagrange equations
+\[\dd fz - \dd{}x \dd f{z_x} - \dd{}y \dd f{z_y} = 0\]
+In general these are hard to solve.
+
+
+\subsection{Computational (Direct) Methods}
+Methods to solve the Euler-Lagrange equation
+\subsubsection{Finite Differences}
+Arbitrary set of mesh points $\{x_0,\ldots,x_n\}$
+Approximate
+\[y'(x_i) = \frac{y_{i+1} - y_i}{x_{i+1} - x_i}\]
+And use the rectangle rule
+\[F\{y\} = \int_{x_0}^{x_n} f(x,y,y') dx \approx \sum_{i=0}^{n-1} f\left(x_i,y_i, \frac{\Delta y_i}{\Delta x_i}\right) \Delta x_i = \bar{F}(\vec y)\]
+And $\bar{F}(\bar y)$ is a function of the vector $\vec y$ which can be optimised in the usual way
+
+\subsubsection{Ritz' Method}
+Approximate $y(x)$ with
+\[y(x) = \phi_0(x) + c_1 \phi_1(x) + c_2\phi_2 (x) + \ldots + c_n\phi_n(x)\]
+Such that $\phi_0(x)$ satisfies the end-point conditions, and $\phi_i$, $i\neq 0$ vanishes at the end points. Substitute the approximation into the functional and integrate. This gives a function $F(\vec c)$ which can then be optimised. 
+
+\subsubsection{Kantorovich's Method}
+For more than one indep variable, approximate $z(x,y)$ by
+\[z(x,y) = \phi_0(x,y) + c_1(x) \phi_1(x,y) + \ldots + c_n(x) \phi(x,y)\]
+And sub into the functional, and integrate the $y$ variable. This gives a functional with one independent variable and $n$ dependent variables. Can now use a different approach.
+
+
+\subsection{Constraints}
+Integral constraints
+\[\int_{x_0}^{x_1} g(x,y,y') dx = const\]
+We get the new functional
+\[H\{y\} = F\{y\} + \lambda G\{y\} = \int_{x_0}^{x_1} \left[f(x,y,y') + \lambda g(x,y,y')\right] dx\]
+We then use calculus of variations, Euler-Lagrange equations, etc.
+
+
+\subsection{Free end-points}
+The first variation can be written
+\[\delta F = \left[p \delta y - H \delta x\right]_{x_0}^{x_1} + \int_{x_0}^{x_1} \left(\dd f y - \odd{}x \dd f{y'}\right) \delta y dx\]
+So wherever $x$ or $y$ can vary at an end-point, $H$ or $p$ must vanish at that end point.
+
+These are modular - they are only applied when $x$ and/or $y$ are allowed to vary at the end-point.
+
+
+\subsection{Curvature}
+The curvature is defined as
+\[\kappa = \frac{y''}{(1 + y'^2)^{3/2}}\]
+Euler's elastica is a class of curve originating from the variational problem of minimising the square of line curvature
+\[F\{y\} = \int_{x_0}^{x_1} \kappa^2 ds\]
+
+\subsection{Traversals}
+Given an endpoint is constrained to lie on some curve
+\[\Gamma : (x,y) = (x_\Gamma, y_\Gamma)\]
+Then the traversality condition says that
+\[p \odd{y_\Gamma}{\xi} - H \odd{x_\Gamma}{\xi} = 0\]
+
+With the special case: if the functional is of form
+\[F\{y\} = \int_{x_0}^{x_1} K(x,y) \sqrt{1+y'^2} dx\]
+Then the traversality condition degenerates to orthogonality.
+
+\subsection{Broken extremals}
+\begin{itemize}
+	\item Solve the EL equations
+	\item Look for solutions for each end-condition
+	\item Match up solutions at a corner $x^*$ such that:
+	\begin{itemize}
+		\item The total solution is continuous
+		\[y(x^{*-}) = y^(x^{*+})\]
+		\item Weierstrass-Erdman corner conditions are satisfied
+		\[p|_{x^{*-}} = p|_{x^{*+}}, \quad H|_{x^{*-}} = H|_{x^{*+}}  \]
+		\item Solution will be piecewise continuous in its derivative.
+	\end{itemize}
+\end{itemize}
+
+
+\subsection{Hamilton's Formulation}
+For a problem of form
+\[F\{\vec q\} = \int_{t_0}^{t_1} L(t,\vec q, \vec{\dot q}) dt \]
+Introduces conjugate variable $p_i = \dd L{\dot {q_i}}$.
+The hamiltonian is
+\[H(t,\vec q,\vec p) = \sum_{i=1}^n p_i \dot q_i - L(t,\vec q,\dot{\vec q})\]
+Then Hamilton's Equations (which are equivalent to the EL equations) are
+\[\dd H{p_i} = \odd{q_i}{t}, \quad \dd{H}{q_i} = - \odd{p_i}{t}\]
+We have twice as many equations, but each is first order.
+
+\subsection{Hamilton-Jacobi Equation}
+\[\dd Sx + H\left(x,y, \dd Sy\right) = 0\]
+Solutions are like
+\[S(x,y,\alpha)\]
+Where $\alpha$ is an arbitrary constant, and the extrema ie along the curves
+\[\dd S \alpha = const\]
+
+
+\subsection{Noether's Theorem}
+Consider a parameterised family of smooth transformations
+\[X = \theta(x,y; \epsilon), \quad Y = \phi(x,y; \epsilon)\]
+Where $\epsilon=0$ is the identity transformation:
+\[x = \theta(x,y;0), \quad y = \phi(x,y;0)\]
+Using taylor's theorem we write
+\begin{align*}
+	X &= \theta(x,y;0) + \epsilon \dd{\theta}{\epsilon}\pipe_{x,y;0} + \bigo(\epsilon^2)\\
+	Y &= \phi(x,y;0) + \epsilon \dd{\phi}{\epsilon}\pipe_{x,y;0} + \bigo(\epsilon^2)\\
+\end{align*}
+So
+\[X\approx x + \epsilon \xi, \quad Y \approx y + \epsilon \eta\]
+Where $\xi, \eta$ are the infinitesimal generators.
+
+If $f(x,y,y')$ is variationally invariant on $[x_0,x_1]$ under a transform with infinnitesimal generators $\xi$ and $\eta$ then
+\[\eta p - \xi H = const\]
+Along any extremal of
+\[F\{y\} = \int_{x_0}^{x_1} f(x,y,y') dx\]
+
+
+
+\subsection{Nanostructures}
+We have several graphene based structures
+\begin{itemize}
+	\item Fullerenes (cages spherical or spheroidal)
+	\item Nanotubes (open/closed cylinders)
+	\item Nanocones
+\end{itemize}
+\subsubsection{Continuum approach}
+\[E = \eta_1 \eta_2 \int_{S_2} \int_{S_1} \phi(\rho) dA_1 dA_2\]
+\subsubsection{Lennard-Jones potential}
+\[\Phi(\rho) = -A\rho^{-6} + B \rho^{-12}\]
+Where $\rho$ is the distance between the points on the surfaces
+
+
+\subsection{Special Functions}
+\begin{itemize}
+	\item Gamma function $\Gamma(z)$
+	\item Beta function $B(x,y)$
+	\item Pochhammer symbol $(a)_n$
+	\item Hyper-geometric Function $F(a,b;c;z)$
+	\item Elliptic Integrals $F(\varphi, k)$ and $E(\varphi,k)$ 
+\end{itemize}
+They are useful for evaluating the integrals obtained for the Lennard Jones potential. 
+
+Have to parameterise surfaces first
 
 
 
@@ -3063,16 +4292,7 @@ What about a fixed but not clamped end point, and the other end is free. This ap
 
 
 
-
-
-
-
-
-
-
-
-
-
+	
 
 
 

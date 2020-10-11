@@ -1,0 +1,106 @@
+#R Code for SMI Assignment 1
+#Andrew Martin
+#10/08/2017
+library('readxl')
+library('tidyverse')
+library('rmarkdown')
+library('ggplot2')
+setwd("F:/Documents/Uni/SMI")
+
+
+gumtree = read_xlsx("Gumtree_dogs.xlsx")
+
+
+####Price ----
+##Cleaning -
+#this should be a number so "NA" chars are removed
+gumtree$price[gumtree$price=="NA"]=NA
+class(gumtree$price)
+
+#class is changed to numeric
+gumtree$price=as.numeric(gumtree$price)
+
+#since price is a quantitative, continuous variable, a histogram is appropriate
+
+ggplot(gumtree,aes(x = price)) +
+  geom_histogram(col = "black", fill = "orange") +
+  labs(x = "Price of dog in dollars.")
+#This graph is right - skewed, which suggests price is right skewed
+#it has a single peak which suggests it is unimodal
+
+
+
+##cross ----
+#told to ignore the "Cross" (uppercase) section and use the "cross" (lowercase)
+#interesting note:
+length(which(gumtree$Cross!=gumtree$cross)) #gives 635 -> that means 635 values are different!
+
+#cross is chr which is good
+class(gumtree$cross)
+#nas are changed so R can read them
+gumtree$cross[gumtree$cross=="NA"]=NA
+
+#since cross has two states, yes and no, a bar chart is more appropriate
+ggplot(gumtree,aes(x = cross)) +
+  geom_bar(col = "black", fill = "orange") +
+  labs(x = "Is the dog cross bred?")
+
+#clearly a greater portion is not cross bred
+
+
+
+
+##Pet offered by ----
+gumtree$"Pet Offered By:"[gumtree$"Pet Offered By:"=="NA"]=NA
+
+
+ggplot(gumtree,aes(x = gumtree$'Pet Offered By:')) +
+  geom_bar(col = "black", fill = "orange") +
+  labs(x = "Pet Offered By")
+
+#a majority of the pets were offered by an owner.
+
+##Microchip ----
+gumtree$micro[gumtree$micro=="NA"]=NA
+
+#na.rm is not working here for some reason
+ggplot(gumtree,aes(x = micro)) +
+  geom_bar(col = "black", fill = "orange", na.rm = TRUE) +
+  labs(x = "Has the dog been microchipped")
+
+
+#most fields are NA, but few to no dogs are not microchipped
+
+
+##Vaccination ----
+
+
+gumtree$vacc[gumtree$vacc=="NA"]=NA
+
+#na.rm is not working here for some reason
+ggplot(gumtree,aes(x=vacc))+
+geom_bar(col = "black", fill = "orange", na.rm=TRUE) +
+  labs(x = "Has the dog been vaccinated")
+
+#A very small percentage are labelled as not vaccinated, and most are vaccinated.
+
+
+##Desexing ----
+
+gumtree$desex[gumtree$desex=="NA"]=NA
+
+#na.rm is not working here for some reason
+ggplot(gumtree,aes(x=desex))+
+  geom_bar(col = "black", fill = "orange", na.rm=TRUE) +
+  labs(x = "Has the dog been desexed")
+
+
+##Relinquished ----
+gumtree$relinquished[gumtree$relinquished=="NA"]=NA
+
+ggplot(gumtree,aes(x = relinquished)) +
+  geom_bar(col = "black", fill = "orange", na.rm=TRUE) +
+  labs(x = "Is the dog being relinquished?")
+#Most dogs have been relinquished
+
+

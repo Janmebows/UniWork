@@ -1,0 +1,19 @@
+Rip u
+Input q to quit, h for help, and anything else to start the game
+[0, 0]
+[-1, -1]
+[-1, -2]
+[0, -3]
+[-1, -3]
+waiting/10
+[-1, -3]
+[0, -3]
+[-1, -2]
+[-1, -1]
+[0, 0]
+[0, 0]
+WELL YOU'RE IN TOO DEEP BOY, GOOD LUCK
+[0, 0]
+[-1, -1]
+Numbers for directional movement, a to attack, q to quit and h for help
+[-1, -1]
